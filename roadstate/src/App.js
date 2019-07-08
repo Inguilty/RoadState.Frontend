@@ -1,21 +1,22 @@
 import React from "react";
-import "./App.css";
+import Header from "./common/Header";
 import { Route, Switch } from "react-router-dom";
-import HomePage from "./components/home/HomePage";
-import AboutPage from "./components/about/AboutPage";
-import PageNotFound from "./PageNotFound";
-import Header from "./components/templates/Header";
-import TestComponent from "./components/test/TestComponent";
+import HomePage from "./home/HomePage";
+import AboutPage from "./about/AboutPage";
+import PageNotFound from "./common/PageNotFound";
+import TestForm from "./test/TestForm";
 
-const App = () => (
+const App = props => (
   <div class="container-fluid">
     <Header />
-    <Switch>
-      <Route exact path="/" component={HomePage} />
-      <Route path="/about" component={AboutPage} />
-      <Route path="/test" component={TestComponent} />
-      <Route component={PageNotFound} />
-    </Switch>
+    <div className="jumbotron">
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/about" component={AboutPage} />
+        <Route path="/test" component={TestForm} />
+        <Route component={PageNotFound} />
+      </Switch>
+    </div>
   </div>
 );
 

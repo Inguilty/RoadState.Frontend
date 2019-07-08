@@ -13,6 +13,10 @@ const Header = () => {
       <NavLink to="/about" activeStyle={active}>
         About
       </NavLink>
+      {"|"}
+      <NavLink to="/test" activeStyle={active}>
+        Beta redux component
+      </NavLink>
     </nav>
   );
 };

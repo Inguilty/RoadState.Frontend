@@ -1,10 +1,10 @@
 import React from "react";
-import Header from "./common/Header";
+import Header from "./components/layout/Header";
 import { Route, Switch } from "react-router-dom";
-import HomePage from "./home/HomePage";
-import AboutPage from "./about/AboutPage";
-import PageNotFound from "./common/PageNotFound";
-import TestForm from "./test/TestForm";
+import HomePage from "./components/pages/home";
+import AboutPage from "./components/pages/about";
+import PageNotFound from "./components/pages/pagenotfound";
+import TestForm from "./components/pages/test";
 
 const App = props => (
   <div class="container-fluid">

@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import messages from "../test/sendReducer";
+import messages from "../components/pages/test/sendReducer";
 
 const rootReducer = combineReducers({
   messages

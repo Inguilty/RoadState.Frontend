@@ -1,4 +1,4 @@
-import { SEND_MESSAGE } from "../common/ActionTypes";
+import { SEND_MESSAGE } from "../../../actionTypes/ActionTypes";
 
 export default function sendReducer(state = [], action) {
   switch (action.type) {

@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from "redux";
-import rootReducer from "./rootReducer";
+import rootReducer from "../rootReducer";
 
 export default function configureStore(initialState) {
   const composeEnhancers =

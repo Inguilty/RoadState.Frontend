@@ -1,4 +1,4 @@
-import { SendMessage, SEND_MESSAGE } from "./actions";
+import { sendMessage, SEND_MESSAGE } from "./actions";
 
 describe("TestFormActions", () => {
   it("should create a SEND_MESSAGE action", () => {
@@ -7,6 +7,6 @@ describe("TestFormActions", () => {
       type: SEND_MESSAGE,
       message
     };
-    expect(SendMessage(message)).toEqual(expectedAction);
+    expect(sendMessage(message)).toEqual(expectedAction);
   });
 });

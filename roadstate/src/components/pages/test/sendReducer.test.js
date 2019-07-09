@@ -1,6 +1,5 @@
 import { SendMessage } from "./actions";
 import sendReducer from "./sendReducer";
-import { exportAllDeclaration } from "@babel/types";
 
 it("shoud add a message when passed throughe action with type SEND_MESSAGE", () => {
   const initialState = [];

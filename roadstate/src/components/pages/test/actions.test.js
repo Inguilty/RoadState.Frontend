@@ -1,5 +1,5 @@
-import { SEND_MESSAGE } from "../common/ActionTypes";
 import { SendMessage } from "./actions";
+import { SEND_MESSAGE } from "../../../actionTypes/ActionTypes";
 
 describe("TestFormActions", () => {
   it("should create a SEND_MESSAGE action", () => {

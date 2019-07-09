@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { SendMessage } from "./actions";
+import { sendMessage } from "./actions";
 import PropTypes from "prop-types";
 
 class TestForm extends React.Component {
@@ -17,7 +17,7 @@ class TestForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.SendMessage(this.state.message);
+    this.props.sendMessage(this.state.message);
   };
 
   render() {
@@ -57,7 +57,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  SendMessage
+  sendMessage
 };
 
 export default connect(

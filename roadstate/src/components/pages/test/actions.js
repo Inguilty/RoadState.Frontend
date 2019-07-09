@@ -1,5 +1,6 @@
 export const SEND_MESSAGE = "SEND_MESSAGE";
 
-export function SendMessage(message) {
-  return { type: SEND_MESSAGE, message };
-}
+export const sendMessage = message => ({
+  type: SEND_MESSAGE,
+  message
+});

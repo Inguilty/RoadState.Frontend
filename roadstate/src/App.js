@@ -1,20 +1,22 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import Header from "./components/layout/Header";
 import { Route, Switch } from "react-router-dom";
-import HomePage from "./components/home/HomePage";
-import AboutPage from "./components/about/AboutPage";
-import PageNotFound from "./PageNotFound";
-import Header from "./components/templates/Header";
+import HomePage from "./components/pages/home";
+import AboutPage from "./components/pages/about";
+import PageNotFound from "./components/pages/pagenotfound";
+import TestForm from "./components/pages/test";
 
-const App = () => (
+const App = props => (
   <div class="container-fluid">
     <Header />
-    <Switch>
-      <Route exact path="/" component={HomePage} />
-      <Route path="/about" component={AboutPage} />
-      <Route component={PageNotFound} />
-    </Switch>
+    <div className="jumbotron">
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/about" component={AboutPage} />
+        <Route path="/test" component={TestForm} />
+        <Route component={PageNotFound} />
+      </Switch>
+    </div>
   </div>
 );
 

@@ -1,18 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
-import "leaflet/dist/leaflet.css";
-
 import "./index.css";
-import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import App from "./App";
+import configureStore from "./store/configureStore";
+import { Provider as ReduxProvider } from "react-redux";
+
+const store = configureStore();
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
+  <ReduxProvider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </ReduxProvider>,
   document.getElementById("root")
 );
 

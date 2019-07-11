@@ -14,7 +14,7 @@ export default class ViewMap extends React.Component {
       lat: 51.505,
       lng: -0.09
     },
-    zoom: 13
+    zoom: 12
   };
 
   componentDidMount() {

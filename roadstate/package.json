@@ -37,6 +37,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.5.0",
     "babel-jest": "^24.8.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2"
   }
 }

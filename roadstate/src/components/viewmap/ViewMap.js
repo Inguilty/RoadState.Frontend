@@ -22,8 +22,8 @@ export default class ViewMap extends Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
+        ...this.state,
         location: {
-          ...this.state.location,
           lat: position.coords.latitude,
           lng: position.coords.longitude
         }

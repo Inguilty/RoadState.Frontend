@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-function-bind": "^7.2.0",
+    "@babel/plugin-syntax-import-meta": "^7.2.0",
     "@babel/preset-env": "^7.5.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-stage-0": "^7.0.0",

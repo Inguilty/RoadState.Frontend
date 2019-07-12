@@ -16,22 +16,17 @@ export default class ViewMap extends Component {
       lat: 51.505,
       lng: -0.09
     },
-    zoom: 13,
-    height: "100%",
-    width: "100%"
+    zoom: 13
   };
 
   componentDidMount() {
-    var geoPos;
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
-        location: {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        }
+        ...this.state.location,
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
       });
     });
-    console.log(geoPos);
   }
 
   render() {

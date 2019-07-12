@@ -5,6 +5,7 @@
     "bootstrap": "^4.3.1",
     "bootstrap-react": "^0.3.1",
     "deep-freeze": "0.0.1",
+    "jslint": "^0.12.1",
     "keymirror": "^0.1.1",
     "prop-types": "^15.7.2",
     "react-bootstrap": "^1.0.0-beta.9",

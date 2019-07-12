@@ -13,7 +13,14 @@ export const bugReports = [
     },
     state: 'Very low',
     rating: 1.0,
-    comments: []
+    comments: [
+      {
+        userName: 'Tyota Anya',
+        text: 'Totally agree!',
+        likes: 10,
+        dislikes: 0
+      }
+    ]
   },
   {
     id: 2,

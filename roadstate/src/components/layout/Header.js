@@ -34,6 +34,26 @@ const Header = props => (
             Test react-redux component
           </NavLink>
         </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/signIn">
+            Sign in
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/signUp">
+            Sign up
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/profile">
+            Profile
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/logOut">
+            Log out
+          </NavLink>
+        </li>
       </ul>
     </div>
   </nav>

@@ -6,6 +6,7 @@ import HomePage from "./components/home/HomePage";
 import AboutPage from "./components/about/AboutPage";
 import PageNotFound from "./PageNotFound";
 import Header from "./components/templates/Header";
+import ViewMap from "./components/viewmap/ViewMap";
 
 const App = () => (
   <div class="container-fluid">
@@ -15,6 +16,7 @@ const App = () => (
       <Route path="/about" component={AboutPage} />
       <Route component={PageNotFound} />
     </Switch>
+    <ViewMap />
   </div>
 );
 

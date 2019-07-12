@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { Route, Switch } from "react-router-dom";
 import HomePage from "./components/home/HomePage";
@@ -9,7 +8,7 @@ import Header from "./components/templates/Header";
 import ViewMap from "./components/viewmap/ViewMap";
 
 const App = () => (
-  <div class="container-fluid">
+  <div className="container-fluid">
     <Header />
     <Switch>
       <Route exact path="/" component={HomePage} />

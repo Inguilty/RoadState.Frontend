@@ -17,7 +17,7 @@ export default class ViewMap extends Component {
       lat: 51.505,
       lng: -0.09
     },
-    zoom: 13,
+    zoom: 15,
     isMapInit: false
   };
 
@@ -57,7 +57,13 @@ export default class ViewMap extends Component {
         <Marker icon={myIcon} position={position}>
           <Popup>Text.</Popup>
         </Marker>
-        {this.state.isMapInit && <CreateRoute map={this.map} />}
+        {this.state.isMapInit && (
+          <CreateRoute
+            from={[50.0465, 36.28997]}
+            to={[50.02084, 36.299935]}
+            map={this.map}
+          />
+        )}
       </Map>
     );
   }

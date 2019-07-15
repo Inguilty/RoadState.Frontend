@@ -286,14 +286,10 @@
 }
 
 .icon {
-  background: url("images/Google.png");
+  background: url('images/Google.png');
   height: 32px;
   width: 32px;
   display: block;
-}
-
-.scl-md {
-  margin-left: 80px;
 }
 
 .scl-md:hover {
@@ -301,7 +297,7 @@
 }
 
 #userAvatar {
-  background: url("images/UserNoAvatar.png");
+  background: url('images/UserNoAvatar.png');
   height: 128px;
   width: 128px;
   margin-bottom: 10px;

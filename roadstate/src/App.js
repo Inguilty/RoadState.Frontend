@@ -9,8 +9,18 @@ import SignIn from "./components/pages/authorization/SignIn";
 import SignUp from "./components/pages/authorization/SignUp";
 import LogOut from "./components/pages/authorization/LogOut";
 import ShowProfile from "./components/pages/authorization/ShowProfile";
+import { connect } from "react-redux";
 
 const App = props => (
+  //   constructor(props) {
+  //     super(props);
+
+  //     const { dispatch } = this.props;
+  //     history.listen((location, action) => {
+  //         // clear alert on location change
+  //         dispatch(alertActions.clear());
+  //     });
+  // }
   <div class="container-fluid">
     <Header />
     <div className="jumbotron">
@@ -28,4 +38,13 @@ const App = props => (
   </div>
 );
 
+function mapStateToProps(state) {
+  const { alert } = state;
+  return {
+    alert
+  };
+}
+
+const connectedApp = connect(mapStateToProps)(App);
+// export { connectedApp as App };
 export default App;

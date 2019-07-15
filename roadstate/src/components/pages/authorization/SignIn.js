@@ -1,9 +1,9 @@
-import React from "react";
-import "../authorization/authorization.css";
-import Modal from "react-modal";
-import customStyles from "../authorization/customStyles";
-import { withRouter, NavLink } from "react-router-dom";
-import { Form, FormControl, FormGroup } from "react-bootstrap";
+import React from 'react';
+import '../authorization/authorization.css';
+import Modal from 'react-modal';
+import customStyles from '../authorization/customStyles';
+import { withRouter, NavLink } from 'react-router-dom';
+import { Form, FormControl, FormGroup } from 'react-bootstrap';
 
 class SignInPage extends React.Component {
   state = {
@@ -29,43 +29,45 @@ class SignInPage extends React.Component {
         isOpen={this.state.isModalVisible}
         onRequestClose={this.closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
+        contentLabel='Example Modal'
       >
         <h2>Sign in</h2>
-        <FormGroup class="Form-wrapper">
-          <Form action="/examples/actions/confirmation.php" method="post">
-            <p class="hint-text">Sign in with your google account</p>
+        <FormGroup className='Form-wrapper'>
+          <Form action='/examples/actions/confirmation.php' method='post'>
+            <p className='hint-text'>Sign in with your google account</p>
             <FormGroup>
-              <NavLink href="#" className="btn scl-md">
-                <i class="icon" />
+              <NavLink href='#' classNameName='btn scl-md'>
+                <center>
+                  <i className='icon' />
+                </center>
               </NavLink>
             </FormGroup>
-            <FormGroup class="or-seperator">
+            <FormGroup className='or-seperator'>
               <b>or</b>
             </FormGroup>
-            <FormGroup class="Form-group">
+            <FormGroup className='Form-group'>
               <FormControl
-                type="text"
-                class="Form-control"
-                placeholder="Username"
-                required="required"
+                type='text'
+                className='Form-control'
+                placeholder='Username'
+                required='required'
               />
             </FormGroup>
-            <FormGroup class="Form-group">
+            <FormGroup className='Form-group'>
               <FormControl
-                type="password"
-                class="Form-control"
-                placeholder="Password"
-                required="required"
+                type='password'
+                className='Form-control'
+                placeholder='Password'
+                required='required'
               />
             </FormGroup>
             <FormControl
-              type="submit"
-              className="btn btn-primary btn-block"
-              value="Sign up"
+              type='submit'
+              classNameName='btn btn-primary btn-block'
+              value='Sign up'
             />
-            <FormGroup class="Form-footer">
-              <NavLink href="#">Forgot Your password?</NavLink>
+            <FormGroup className='Form-footer'>
+              <NavLink href='#'>Forgot Your password?</NavLink>
             </FormGroup>
           </Form>
         </FormGroup>

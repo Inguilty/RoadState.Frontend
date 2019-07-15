@@ -1,8 +1,8 @@
-import React from "react";
-import "../authorization/authorization.css";
-import Modal from "react-modal";
-import customStyles from "../authorization/customStyles";
-import { withRouter, NavLink } from "react-router-dom";
+import React from 'react';
+import '../authorization/authorization.css';
+import Modal from 'react-modal';
+import customStyles from '../authorization/customStyles';
+import { withRouter, NavLink } from 'react-router-dom';
 import {
   Form,
   FormControl,
@@ -11,7 +11,7 @@ import {
   FormLabel,
   Row,
   Col
-} from "react-bootstrap";
+} from 'react-bootstrap';
 export const IMAGE_MAX_SIZE = 16777215;
 
 class SignUpPage extends React.Component {
@@ -45,103 +45,103 @@ class SignUpPage extends React.Component {
         isOpen={this.state.isModalVisible}
         onRequestClose={this.closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
+        contentLabel='Example Modal'
       >
         <h2>Sign up</h2>
-        <FormGroup className="Form-wrapper">
-          <Form action="#" method="post">
-            <p className="hint-text">
+        <FormGroup className='Form-wrapper'>
+          <Form action='#' method='post'>
+            <p className='hint-text'>
               * - Fill in this Form to create your account!
             </p>
 
-            <FormGroup className="input-group">
-              <FormGroup className="input-group-prepend">
-                <span className="input-group-text" id="inputGroupFileAddon01">
+            <FormGroup className='input-group'>
+              <FormGroup className='input-group-prepend'>
+                <span className='input-group-text' id='inputGroupFileAddon01'>
                   Avatar
                 </span>
               </FormGroup>
-              <FormGroup className="custom-file">
+              <FormGroup className='custom-file'>
                 <FormControl
-                  type="file"
-                  name="imagePath"
-                  accept="image/*"
+                  type='file'
+                  name='imagePath'
+                  accept='image/*'
                   onChange={this.handleFileChanging}
-                  className="custom-file-input"
-                  id="inputGroupFile01"
-                  aria-describedby="inputGroupFileAddon01"
+                  className='custom-file-input'
+                  id='inputGroupFile01'
+                  aria-describedby='inputGroupFileAddon01'
                 />
 
                 <FormLabel
-                  className="custom-file-label"
-                  htmlFor="inputGroupFile01"
+                  className='custom-file-label'
+                  htmlFor='inputGroupFile01'
                 >
                   Choose file
                 </FormLabel>
               </FormGroup>
             </FormGroup>
 
-            <FormGroup className="Form-group">
+            <FormGroup className='Form-group'>
               <FormControl
-                name="UserName"
-                type="text"
-                maxlength="30"
+                name='UserName'
+                type='text'
+                maxlength='30'
                 style={{ width: 365 }}
-                placeholder="Username*"
+                placeholder='Username*'
                 required
               />
             </FormGroup>
-            <FormGroup className="Form-group">
+            <FormGroup className='Form-group'>
               <FormControl
-                name="FromEmailAddress"
-                type="email"
-                maxlength="60"
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                name='FromEmailAddress'
+                type='email'
+                maxlength='60'
+                pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$'
                 style={{ width: 365 }}
-                placeholder="Email*"
+                placeholder='Email*'
                 required
               />
             </FormGroup>
-            <FormGroup className="Form-group">
+            <FormGroup className='Form-group'>
               <FormControl
-                name="Password"
-                type="password"
-                maxlength="40"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                name='Password'
+                type='password'
+                maxlength='40'
+                pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
+                title='Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters'
                 style={{ width: 365 }}
-                placeholder="Password*"
+                placeholder='Password*'
                 required
               />
             </FormGroup>
-            <FormGroup className="Form-group">
+            <FormGroup className='Form-group'>
               <FormControl
-                name="ConfirmPassword"
-                type="password"
-                maxlength="40"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                name='ConfirmPassword'
+                type='password'
+                maxlength='40'
+                pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
+                title='Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters'
                 style={{ width: 365 }}
-                placeholder="Confirm your password*"
+                placeholder='Confirm your password*'
                 required
               />
             </FormGroup>
 
             <Row>
-              <Col sm="1">
-                <FormCheck type="checkbox" required="required" />
+              <Col sm='1'>
+                <FormCheck type='checkbox' required='required' />
               </Col>
               <Col>
-                <FormLabel className="checkbox-inline">
-                  {" "}
-                  I accept the{" "}
-                  <NavLink href="#">Terms &amp; Conditions</NavLink>
+                <FormLabel className='checkbox-inline'>
+                  {' '}
+                  I accept the{' '}
+                  <NavLink href='#'>Terms &amp; Conditions</NavLink>
                 </FormLabel>
               </Col>
             </Row>
             <FormControl
-              type="submit"
-              className="btn btn-primary btn-block"
-              value="Sign up"
+              type='submit'
+              className='btn btn-primary btn-block'
+              value='Sign up'
             />
           </Form>
         </FormGroup>

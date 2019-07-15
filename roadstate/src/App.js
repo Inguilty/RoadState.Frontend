@@ -11,7 +11,7 @@ import LogOut from "./components/pages/authorization/LogOut";
 import ShowProfile from "./components/pages/authorization/ShowProfile";
 
 const App = props => (
-  <div class="container-fluid">
+  <div className="container-fluid">
     <Header />
     <div className="jumbotron">
       <Switch>
@@ -23,8 +23,8 @@ const App = props => (
         <Route path="/logOut" component={LogOut} />
         <Route path="/profile" component={ShowProfile} />
         <Route component={PageNotFound} />
-      </Switch>
-    </div>
+      </Switch>    
+    </div> 
   </div>
 );
 

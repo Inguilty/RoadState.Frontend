@@ -8,7 +8,7 @@ export function configureFakeBackend() {
       // wrap in timeout to simulate server api call
       setTimeout(() => {
         // authenticate
-        if (url.endsWith('/signIn') && opts.method === 'POST') {
+        if (url.endsWith('/users/authenticate') && opts.method === 'POST') {
           // get parameters from post request
           let params = JSON.parse(opts.body);
 
@@ -87,7 +87,7 @@ export function configureFakeBackend() {
         }
 
         // register user
-        if (url.endsWith('/signUp') && opts.method === 'POST') {
+        if (url.endsWith('/users/register') && opts.method === 'POST') {
           // get new user object from post body
           let newUser = JSON.parse(opts.body);
 

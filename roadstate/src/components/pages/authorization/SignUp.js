@@ -12,6 +12,7 @@ import {
   Row,
   Col
 } from 'react-bootstrap';
+import { userActions } from '../../../store/actions';
 export const IMAGE_MAX_SIZE = 16777215;
 
 class SignUpPage extends React.Component {
@@ -23,7 +24,14 @@ class SignUpPage extends React.Component {
   };
 
   state = {
-    isModalVisible: false
+    isModalVisible: false,
+    user: {
+      firstName: '',
+      lastName: '',
+      username: '',
+      password: ''
+    },
+    submitted: false
   };
 
   componentDidMount() {
@@ -37,6 +45,28 @@ class SignUpPage extends React.Component {
   closeModal = () => {
     this.setState({ isModalVisible: false });
     this.props.history.goBack();
+  };
+
+  handleChange = event => {
+    const { name, value } = event.target;
+    const { user } = this.state;
+    this.setState({
+      user: {
+        ...user,
+        [name]: value
+      }
+    });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    this.setState({ submitted: true });
+    const { user } = this.state;
+    const { dispatch } = this.props;
+    if (user.firstName && user.lastName && user.username && user.password) {
+      dispatch(userActions.register(user));
+    }
   };
 
   render() {

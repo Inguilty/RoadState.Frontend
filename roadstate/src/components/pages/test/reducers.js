@@ -1,5 +1,5 @@
-import { LOAD_BUG_REPORT_SUCCESS } from "./actions";
-import { SEND_MESSAGE } from "./actions";
+import { LOAD_BUG_REPORT_SUCCESS, SEND_MESSAGE } from './actions';
+
 
 const loadBugReportReducer = (state = [], action) => {
   switch (action.type) {

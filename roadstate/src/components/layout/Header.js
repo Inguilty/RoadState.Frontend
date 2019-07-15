@@ -1,7 +1,7 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
-const Header = props => (
+const Header = () => (
   <nav className="navbar navbar-expand-lg navbar-light bg-light">
     <NavLink className="navbar-brand" to="/" exact>
       RoadState
@@ -21,7 +21,9 @@ const Header = props => (
       <ul className="navbar-nav mr-auto">
         <li className="nav-item active">
           <NavLink className="nav-link" to="/" exact>
-            Home <span className="sr-only">(current)</span>
+            Home
+            {' '}
+            <span className="sr-only">(current)</span>
           </NavLink>
         </li>
         <li className="nav-item">

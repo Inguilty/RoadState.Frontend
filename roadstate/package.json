@@ -23,7 +23,7 @@
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src"
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": "react-app"

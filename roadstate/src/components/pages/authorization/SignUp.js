@@ -1,5 +1,6 @@
 import React from 'react';
 import './authorization.css';
+import { PropTypes } from 'prop-types';
 import Modal from 'react-modal';
 import { withRouter, NavLink } from 'react-router-dom';
 import {
@@ -16,13 +17,6 @@ import customStyles from './customStyles';
 export const IMAGE_MAX_SIZE = 16777215;
 
 class SignUpPage extends React.Component {
-  handleFileChanging = (e) => {
-    if (e.target.files[0].size > IMAGE_MAX_SIZE) {
-      e.target.value = null;
-      this.handleImageAlertShow();
-    }
-  };
-
   state = {
     isModalVisible: false,
   };
@@ -31,19 +25,28 @@ class SignUpPage extends React.Component {
     this.openModal();
   }
 
+  handleFileChanging = (e) => {
+    if (e.target.files[0].size > IMAGE_MAX_SIZE) {
+      e.target.value = null;
+      this.handleImageAlertShow();
+    }
+  };
+
   openModal = () => {
     this.setState({ isModalVisible: true });
   };
 
   closeModal = () => {
+    const { history } = this.props;
     this.setState({ isModalVisible: false });
-    this.props.history.goBack();
+    history.goBack();
   };
 
   render() {
+    const { isModalVisible } = this.state;
     return (
       <Modal
-        isOpen={this.state.isModalVisible}
+        isOpen={isModalVisible}
         onRequestClose={this.closeModal}
         style={customStyles}
         contentLabel="Example Modal"
@@ -151,5 +154,9 @@ class SignUpPage extends React.Component {
     );
   }
 }
+
+SignUpPage.propTypes = {
+  history: PropTypes.objectOf.isRequired,
+};
 
 export default withRouter(SignUpPage);

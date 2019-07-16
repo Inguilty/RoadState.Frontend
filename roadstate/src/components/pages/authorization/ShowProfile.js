@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { NavLink, withRouter } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
 import './authorization.css';
 import {
   Form, FormControl, FormGroup, FormLabel,
@@ -25,16 +26,18 @@ class ShowProfile extends React.Component {
   };
 
   closeModal = () => {
+    const { history } = this.props;
     this.setState({ isModalVisible: false });
-    this.props.history.goBack();
+    history.goBack();
   };
 
   updateProfile() {}
 
   render() {
+    const { isModalVisible } = this.state;
     return (
       <Modal
-        isOpen={this.state.isModalVisible}
+        isOpen={isModalVisible}
         onRequestClose={this.closeModal}
         style={customStyles}
         contentLabel="Example Modal"
@@ -142,5 +145,9 @@ class ShowProfile extends React.Component {
     );
   }
 }
+
+ShowProfile.propTypes = {
+  history: PropTypes.objectOf.isRequired,
+};
 
 export default withRouter(ShowProfile);

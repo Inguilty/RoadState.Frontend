@@ -1,20 +1,22 @@
-import React from "react";
-import Modal from "react-modal";
-import { NavLink } from "react-router-dom";
-import "../authorization/authorization.css";
-import customStyles from "../authorization/customStyles";
-import { Form, FormControl, FormGroup, FormLabel } from "react-bootstrap";
-import { withRouter } from "react-router-dom";
+import React from 'react';
+import Modal from 'react-modal';
+import { NavLink, withRouter } from 'react-router-dom';
+import './authorization.css';
+import {
+  Form, FormControl, FormGroup, FormLabel,
+} from 'react-bootstrap';
+import customStyles from './customStyles';
+
 
 class ShowProfile extends React.Component {
   state = {
-    isModalVisible: false
+    isModalVisible: false,
   };
+
   componentDidMount() {
     this.getProfile();
     this.openModal();
   }
-  updateProfile() {}
 
   getProfile() {}
 
@@ -26,6 +28,8 @@ class ShowProfile extends React.Component {
     this.setState({ isModalVisible: false });
     this.props.history.goBack();
   };
+
+  updateProfile() {}
 
   render() {
     return (

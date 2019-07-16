@@ -1,13 +1,13 @@
-import React from "react";
-import "../authorization/authorization.css";
-import Modal from "react-modal";
-import customStyles from "../authorization/customStyles";
-import { withRouter, NavLink } from "react-router-dom";
-import { Form, FormControl, FormGroup } from "react-bootstrap";
+import React from 'react';
+import './authorization.css';
+import Modal from 'react-modal';
+import { withRouter, NavLink } from 'react-router-dom';
+import { Form, FormControl, FormGroup } from 'react-bootstrap';
+import customStyles from './customStyles';
 
 class SignInPage extends React.Component {
   state = {
-    isModalVisible: false
+    isModalVisible: false,
   };
 
   componentDidMount() {
@@ -34,10 +34,10 @@ class SignInPage extends React.Component {
         <h2>Sign in</h2>
         <FormGroup class="Form-wrapper">
           <Form action="/examples/actions/confirmation.php" method="post">
-            <p class="hint-text">Sign in with your google account</p>
+            <p className="hint-text">Sign in with your google account</p>
             <FormGroup>
               <NavLink href="#" className="btn scl-md">
-                <i class="icon" />
+                <i className="icon" />
               </NavLink>
             </FormGroup>
             <FormGroup class="or-seperator">

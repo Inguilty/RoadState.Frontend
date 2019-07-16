@@ -36,7 +36,7 @@ export default class ViewMap extends Component {
   render() {
     const position = [this.state.location.lat, this.state.location.lng];
     return (
-      <Map center={position} zoom={this.state.zoom} style={{ height: '100vh' }}>
+      <Map center={position} zoom={this.state.zoom} style={{ height: '100vh', zIndex: '-5' }}>
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

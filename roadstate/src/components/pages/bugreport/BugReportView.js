@@ -19,7 +19,7 @@ import {
 } from 'react-icons/fa';
 import ModalDialog from 'react-bootstrap/ModalDialog';
 
-const RenderEmptyImage = () => (
+const EmptyImage = () => (
   <Card>
     <Card.Img
       variant='top'
@@ -29,8 +29,7 @@ const RenderEmptyImage = () => (
   </Card>
 );
 
-const RenderPhotosCarousel = props => {
-  debugger;
+const PhotosCarousel = props => {
   return (
     <Carousel>
       {props.photos.map(photo => (
@@ -48,12 +47,7 @@ const RenderPhotosCarousel = props => {
   );
 };
 
-const RenderComments = props => {
-  const toString = {}.toString;
-  console.log('Render comments prop types:' + toString.call(props.comments));
-  if (props.comments !== undefined && props.comments.length !== 0) {
-    console.log(props.comments.length);
-  }
+const Comments = props => {
   return (
     <>
       {props.comments.map(comment => (
@@ -83,7 +77,7 @@ const RenderComments = props => {
     </>
   );
 };
-const RenderEmptyComments = () => (
+const EmptyComments = () => (
   <Card>
     <Card.Body>
       <Card.Title>No comments yet!</Card.Title>
@@ -91,7 +85,7 @@ const RenderEmptyComments = () => (
   </Card>
 );
 
-const ViewBugReport = ({ bugReport, handleChange, handleSubmit }) => {
+const BugReportView = ({ bugReport, handleChange, handleSubmit }) => {
   const [isModalOpened, setModalOpened] = useState(false);
 
   const handleClose = () => setModalOpened(false);
@@ -106,9 +100,9 @@ const ViewBugReport = ({ bugReport, handleChange, handleSubmit }) => {
         <ModalDialog scrollable={true} centered={true}>
           <Modal.Header closeButton>
             {bugReport.photos !== undefined && bugReport.photos.length !== 0 ? (
-              <RenderPhotosCarousel photos={bugReport.photos} />
+              <PhotosCarousel photos={bugReport.photos} />
             ) : (
-              <RenderEmptyImage />
+              <EmptyImage />
             )}
           </Modal.Header>
           <Modal.Body>
@@ -176,9 +170,9 @@ const ViewBugReport = ({ bugReport, handleChange, handleSubmit }) => {
               <br />
               {bugReport.comments !== undefined &&
               bugReport.comments.length !== 0 ? (
-                <RenderComments comments={bugReport.comments} />
+                <Comments comments={bugReport.comments} />
               ) : (
-                <RenderEmptyComments />
+                <EmptyComments />
               )}
             </Container>
             <br />
@@ -205,13 +199,13 @@ const ViewBugReport = ({ bugReport, handleChange, handleSubmit }) => {
     </div>
   );
 };
-ViewBugReport.propTypes = {
+BugReportView.propTypes = {
   bugReport: PropTypes.object.isRequired,
   isModalOpened: PropTypes.bool.isRequired
 };
 
-RenderPhotosCarousel.propTypes = {
+PhotosCarousel.propTypes = {
   photos: PropTypes.array.isRequired
 };
 
-export default ViewBugReport;
+export default BugReportView;

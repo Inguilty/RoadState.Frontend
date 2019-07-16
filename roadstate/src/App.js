@@ -5,7 +5,7 @@ import HomePage from './components/pages/home';
 import AboutPage from './components/pages/about';
 import PageNotFound from './components/pages/pagenotfound';
 import TestForm from './components/pages/test';
-import ViewBugReportComponent from './components/pages/viewbugreport/ViewBugReportComponent';
+import BugReport from './components/pages/bugreport/BugReport';
 
 const App = props => (
   <div className='container-fluid'>
@@ -15,7 +15,7 @@ const App = props => (
         <Route exact path='/' component={HomePage} />
         <Route path='/about' component={AboutPage} />
         <Route path='/test' component={TestForm} />
-        <Route path='/view' component={ViewBugReportComponent} />
+        <Route path='/view' component={BugReport} />
         <Route component={PageNotFound} />
       </Switch>
     </div>

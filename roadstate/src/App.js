@@ -9,6 +9,8 @@ import SignIn from './components/pages/authorization/SignIn';
 import SignUp from './components/pages/authorization/SignUp';
 import LogOut from './components/pages/authorization/LogOut';
 import ShowProfile from './components/pages/authorization/ShowProfile';
+import ViewMap from './components/viewmap/ViewMap';
+
 
 const App = () => (
   <div className="container-fluid">
@@ -25,6 +27,7 @@ const App = () => (
         <Route component={PageNotFound} />
       </Switch>
     </div>
+    <ViewMap />
   </div>
 );
 

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Map, TileLayer } from 'react-leaflet';
 import Itinerary from '../createroute/Itinerary';
 
 // var myIcon = L.icon({
@@ -21,7 +20,7 @@ export default class ViewMap extends Component {
       lat: 51.505,
       lng: -0.09
     },
-    zoom: 15,
+    zoom: 14,
     isMapInit: false,
     hasLocation: false,
     from: [50.0659, 36.28997],

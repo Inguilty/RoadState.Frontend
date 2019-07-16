@@ -1,35 +1,41 @@
 import React from 'react';
-import { Modal, Button, Form, Col, Alert } from 'react-bootstrap';
+import {
+  Modal, Button, Form, Col, Alert,
+} from 'react-bootstrap';
 
 export const IMAGE_MAX_SIZE = 16777216; // Maximum size of the image is 16 MB
 export const IMAGE_MAX_NUMBER = 5; // The maximum number on images that user can attach to the Bug report
 
 class CreateBugReportForm extends React.Component {
-  state = { isFormValid: false, isImageValid: false, errorImageName: '', imageErrorType: '' };
+  state = {
+    isFormValid: false, isImageValid: false, errorImageName: '', imageErrorType: '',
+  };
 
   handleClose = () => this.props.onClose();
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
     this.setState({ isFormValid: true });
-    //ToDo: Send required objects
+    // ToDo: Send required objects
   };
 
-  handleFileChanging = event => {
-    if(event.target.files.length > 5){
-      this.setState({ imageErrorType: "maxNumber" });
+  handleFileChanging = (event) => {
+    if (event.target.files.length > 5) {
+      this.setState({ imageErrorType: 'maxNumber' });
       event.target.value = null;
       this.handleImageAlertShow();
       return true;
     }
-    Array.from(event.target.files).forEach(image => {
+    Array.from(event.target.files).forEach((image) => {
       if (image.size > IMAGE_MAX_SIZE) {
-        this.setState({ errorImageName: image.name,
-                        imageErrorType: "maxSize" });
+        this.setState({
+          errorImageName: image.name,
+          imageErrorType: 'maxSize',
+        });
         event.target.value = null;
         this.handleImageAlertShow();
         return true;
@@ -41,16 +47,16 @@ class CreateBugReportForm extends React.Component {
 
   handleImageAlertShow = () => this.setState({ isImageValid: true });
 
-  convertBytesToMB = (a) => Math.floor(a/1048576);
-  
+  convertBytesToMB = a => Math.floor(a / 1048576);
+
   render() {
     let alertText = '';
     switch (this.state.imageErrorType) {
       case 'maxSize':
-        alertText = 'Maximum image size should not exceed ' + this.convertBytesToMB(IMAGE_MAX_SIZE) + ' MB.';
+        alertText = `Maximum image size should not exceed ${this.convertBytesToMB(IMAGE_MAX_SIZE)} MB.`;
         break;
       case 'maxNumber':
-        alertText = 'The maximum number of photos you can upload is ' + IMAGE_MAX_NUMBER + '.';
+        alertText = `The maximum number of photos you can upload is ${IMAGE_MAX_NUMBER}.`;
         break;
       default:
         alertText = '';

@@ -6,7 +6,7 @@ import user from "../components/pages/user/reducers";
 const rootReducer = combineReducers({
   messages,
   bugReport,
-  user
+  user,
 });
 
 export default rootReducer;

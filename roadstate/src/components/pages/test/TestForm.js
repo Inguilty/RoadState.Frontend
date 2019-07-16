@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { sendMessage } from './actions';
+import { bindActionCreators } from 'redux';
+import * as testActions from './actions';
 
 class TestForm extends React.Component {
   state = {
@@ -11,33 +12,45 @@ class TestForm extends React.Component {
   };
 
   handleChange = (event) => {
-    const message = { ...this.state.message, text: event.target.value };
-    this.setState({ message });
+    const { message } = this.state;
+    const messageClone = { ...message, text: event.target.value };
+    this.setState(
+      {
+        message: messageClone,
+      },
+      () => console.log('success'),
+    );
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.sendMessage(this.state.message);
+    const { sendMessage } = this.props;
+    const { message } = this.state;
+    sendMessage(message);
   };
 
   render() {
+    const { message } = this.state;
+    const { messages } = this.props;
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="form-group">
-          <label htmlFor="testinput">Your message</label>
-          <input
-            className="form-control"
-            type="text"
-            id="testinput"
-            onChange={this.handleChange}
-            placeholder="Enter message"
-            value={this.state.message.text}
-          />
+          <label htmlFor="testinput">
+            Your message
+            <input
+              className="form-control"
+              type="text"
+              id="testinput"
+              onChange={this.handleChange}
+              placeholder="Enter message"
+              value={message.text}
+            />
+          </label>
           <button type="submit" className="btn btn-success">
             Send your message!
           </button>
-          {this.props.messages.map(message => (
-            <div key={message.text}>{message.text}</div>
+          {messages.map(currentMessage => (
+            <div key={currentMessage.text}>{currentMessage.text}</div>
           ))}
         </div>
       </form>
@@ -46,8 +59,8 @@ class TestForm extends React.Component {
 }
 
 TestForm.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  messages: PropTypes.array.isRequired,
+  messages: PropTypes.arrayOf.isRequired,
+  sendMessage: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -56,11 +69,9 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {
-  sendMessage,
-};
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  (dispatch) => {
+    bindActionCreators(testActions, dispatch);
+  },
 )(TestForm);

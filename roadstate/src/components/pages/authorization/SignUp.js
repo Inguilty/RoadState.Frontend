@@ -2,18 +2,24 @@ import React from 'react';
 import '../authorization/authorization.css';
 import Modal from 'react-modal';
 import customStyles from '../authorization/customStyles';
-import { withRouter, NavLink } from 'react-router-dom';
-import {
-  Form,
-  FormControl,
-  FormGroup,
-  FormCheck,
-  FormLabel,
-  Row,
-  Col
-} from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import { FormControl, FormGroup, FormLabel, Row, Col } from 'react-bootstrap';
 import { userActions } from '../../../store/actions';
+import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
 export const IMAGE_MAX_SIZE = 16777215;
+const initialState = {
+  avatar: [],
+  username: '',
+  email: '',
+  password: '',
+  confirmPasword: '',
+  acceptedTerms: false
+};
 
 class SignUpPage extends React.Component {
   handleFileChanging = e => {
@@ -25,12 +31,6 @@ class SignUpPage extends React.Component {
 
   state = {
     isModalVisible: false,
-    user: {
-      firstName: '',
-      lastName: '',
-      username: '',
-      password: ''
-    },
     submitted: false
   };
 
@@ -47,137 +47,235 @@ class SignUpPage extends React.Component {
     this.props.history.goBack();
   };
 
-  handleChange = event => {
-    const { name, value } = event.target;
-    const { user } = this.state;
-    this.setState({
-      user: {
-        ...user,
-        [name]: value
-      }
-    });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-
-    this.setState({ submitted: true });
-    const { user } = this.state;
-    const { dispatch } = this.props;
-    if (user.firstName && user.lastName && user.username && user.password) {
-      dispatch(userActions.register(user));
-    }
-  };
-
   render() {
     return (
-      <Modal
-        isOpen={this.state.isModalVisible}
-        onRequestClose={this.closeModal}
-        style={customStyles}
-        contentLabel='Example Modal'
+      <Formik
+        initialValues={initialState}
+        validationSchema={Yup.object().shape({
+          username: Yup.string().required('Username is required!'),
+          email: Yup.string()
+            .email('Email is invalid')
+            .required('Email is required'),
+          password: Yup.string()
+            .min(8, 'Password must be at least 8 characters')
+            .required('Password is required'),
+          confirmPasword: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .required('Confirm password is required'),
+          acceptedTerms: Yup.bool()
+            // .oneOf([true], 'You must accept terms of condition!')
+            .test(
+              'consent',
+              'You have to agree with our Terms and Conditions!',
+              value => value === true
+            )
+            .required('You must accept terms and conditions!')
+        })}
+        onSubmit={(values, { setSubmitting }) => {
+          const user = {
+            avatar: values.avatar,
+            username: values.username,
+            email: values.email,
+            password: values.password
+          };
+          console.log('11111111111111111111111111111111111111');
+          this.props.history.goBack();
+          // const { dispatch } = this.props;
+          // if (
+          //   user.username &&
+          //   user.email &&
+          //   user.password &&
+          //   fields.acceptedTerms
+          // ) {
+          //   dispatch(userActions.register(user));
+          // }
+        }}
       >
-        <h2>Sign up</h2>
-        <FormGroup className='Form-wrapper'>
-          <Form action='#' method='post'>
-            <p className='hint-text'>
-              * - Fill in this Form to create your account!
-            </p>
+        {({ errors, touched, handleSubmit }) => (
+          <Modal
+            isOpen={this.state.isModalVisible}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+            contentLabel='Example Modal'
+          >
+            <h2>Sign up</h2>
+            <FormGroup className='Form-wrapper'>
+              <p className='hint-text'>
+                * - Fill in this Form to create your account!
+              </p>
+              <Form onSubmit={handleSubmit}>
+                <FormGroup className='input-group'>
+                  <FormGroup className='input-group-prepend'>
+                    <span
+                      className='input-group-text'
+                      id='inputGroupFileAddon01'
+                    >
+                      Avatar
+                    </span>
+                  </FormGroup>
+                  <FormGroup className='custom-file'>
+                    <form-control
+                      type='file'
+                      name='imagePath'
+                      accept='image/*'
+                      onChange={this.handleFileChanging}
+                      className='custom-file-input'
+                      id='inputGroupFile01'
+                      aria-describedby='inputGroupFileAddon01'
+                    />
 
-            <FormGroup className='input-group'>
-              <FormGroup className='input-group-prepend'>
-                <span className='input-group-text' id='inputGroupFileAddon01'>
-                  Avatar
-                </span>
-              </FormGroup>
-              <FormGroup className='custom-file'>
+                    <FormLabel
+                      className='custom-file-label'
+                      htmlFor='inputGroupFile01'
+                    >
+                      Choose file
+                    </FormLabel>
+                  </FormGroup>
+                </FormGroup>
+
+                <FormGroup className='form-group'>
+                  <Field
+                    name='username'
+                    type='text'
+                    style={{ width: 365 }}
+                    placeholder='Username*'
+                    className={
+                      'form-control' +
+                      (errors.username && touched.username ? ' is-invalid' : '')
+                    }
+                  />
+                  <ErrorMessage
+                    name='username'
+                    component='div'
+                    className='invalid-feedback'
+                  />
+                </FormGroup>
+
+                <FormGroup className='form-group'>
+                  <Field
+                    name='email'
+                    type='email'
+                    placeholder='Email*'
+                    className={
+                      'form-control' +
+                      (errors.email && touched.email ? ' is-invalid' : '')
+                    }
+                  />
+                  <ErrorMessage
+                    name='email'
+                    component='div'
+                    className='invalid-feedback'
+                  />
+                </FormGroup>
+
+                <FormGroup className='form-group'>
+                  <Field
+                    name='password'
+                    type='password'
+                    // pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
+                    style={{ width: 365 }}
+                    placeholder='Password*'
+                    className={
+                      'form-control' +
+                      (errors.password && touched.password ? ' is-invalid' : '')
+                    }
+                  />
+                  <ErrorMessage
+                    name='password'
+                    component='div'
+                    className='invalid-feedback'
+                  />
+                </FormGroup>
+
+                <FormGroup className='form-group'>
+                  <Field
+                    name='confirmPasword'
+                    type='password'
+                    // pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
+                    style={{ width: 365 }}
+                    placeholder='Confirm password*'
+                    className={
+                      'form-control' +
+                      (errors.confirmPasword && touched.confirmPasword
+                        ? ' is-invalid'
+                        : '')
+                    }
+                  />
+                  <ErrorMessage
+                    name='confirmPasword'
+                    component='div'
+                    className='invalid-feedback'
+                  />
+                </FormGroup>
+
+                {/* <Row className='form-group'>
+                  <Col sm='1'>
+                    <Field
+                      name='acceptedTerms'
+                      type='checkbox'
+                      className={
+                        'form-checkbox' +
+                        (errors.acceptedTerms && touched.acceptedTerms
+                          ? ' is-invalid'
+                          : '')
+                      }
+                    />
+                  </Col>
+                  <Col>
+                    <FormLabel className='checkbox-inline'>
+                      {' '}
+                      I accept the{' '}
+                      <NavLink href='#'>Terms &amp; Conditions</NavLink>
+                    </FormLabel>
+                  </Col>
+                  <ErrorMessage
+                    name='acceptedTerms'
+                    component='div'
+                    className='invalid-feedback'
+                  />
+                </Row> */}
+
+                <label className='form-field' htmlFor='acceptedTerms'>
+                  <span>Consent:</span>
+                  <input
+                    name='acceptedTerms'
+                    type='checkbox'
+                    // onChange={handleChange}
+                  />
+                </label>
+                <div className='form-field-error'>{errors.consent}</div>
+
                 <FormControl
-                  type='file'
-                  name='imagePath'
-                  accept='image/*'
-                  onChange={this.handleFileChanging}
-                  className='custom-file-input'
-                  id='inputGroupFile01'
-                  aria-describedby='inputGroupFileAddon01'
+                  type='submit'
+                  // disabled={
+                  //   !{ errors, touched }.dirty &&
+                  //   !{ errors, touched }.isSubmitting
+                  // }
+                  className='btn btn-primary btn-block'
+                  value='Sign up'
                 />
-
-                <FormLabel
-                  className='custom-file-label'
-                  htmlFor='inputGroupFile01'
-                >
-                  Choose file
-                </FormLabel>
-              </FormGroup>
+                {
+                  <center>
+                    <FontAwesomeIcon
+                      icon={faSpinner}
+                      className='fa fa-spinner fa-spin'
+                    />
+                  </center>
+                }
+              </Form>
             </FormGroup>
-
-            <FormGroup className='Form-group'>
-              <FormControl
-                name='UserName'
-                type='text'
-                maxlength='30'
-                style={{ width: 365 }}
-                placeholder='Username*'
-                required
-              />
-            </FormGroup>
-            <FormGroup className='Form-group'>
-              <FormControl
-                name='FromEmailAddress'
-                type='email'
-                maxlength='60'
-                pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$'
-                style={{ width: 365 }}
-                placeholder='Email*'
-                required
-              />
-            </FormGroup>
-            <FormGroup className='Form-group'>
-              <FormControl
-                name='Password'
-                type='password'
-                maxlength='40'
-                pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
-                title='Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters'
-                style={{ width: 365 }}
-                placeholder='Password*'
-                required
-              />
-            </FormGroup>
-            <FormGroup className='Form-group'>
-              <FormControl
-                name='ConfirmPassword'
-                type='password'
-                maxlength='40'
-                pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
-                title='Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters'
-                style={{ width: 365 }}
-                placeholder='Confirm your password*'
-                required
-              />
-            </FormGroup>
-
-            <Row>
-              <Col sm='1'>
-                <FormCheck type='checkbox' required='required' />
-              </Col>
-              <Col>
-                <FormLabel className='checkbox-inline'>
-                  {' '}
-                  I accept the{' '}
-                  <NavLink href='#'>Terms &amp; Conditions</NavLink>
-                </FormLabel>
-              </Col>
-            </Row>
-            <FormControl
-              type='submit'
-              className='btn btn-primary btn-block'
-              value='Sign up'
-            />
-          </Form>
-        </FormGroup>
-      </Modal>
+          </Modal>
+        )}
+      </Formik>
     );
   }
 }
 
-export default withRouter(SignUpPage);
+function mapStateToProps(state) {
+  const { registering } = state.registration;
+  return {
+    registering
+  };
+}
+
+export default connect(mapStateToProps)(SignUpPage);

@@ -8,6 +8,7 @@
     "bootstrap": "^4.3.1",
     "bootstrap-react": "^0.3.1",
     "deep-freeze": "0.0.1",
+    "formik": "^1.5.8",
     "jslint": "^0.12.1",
     "keymirror": "^0.1.1",
     "prop-types": "^15.7.2",
@@ -20,7 +21,8 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "react-scripts start",

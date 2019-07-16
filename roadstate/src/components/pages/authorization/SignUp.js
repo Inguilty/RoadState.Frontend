@@ -21,17 +21,51 @@ const initialState = {
   acceptedTerms: false
 };
 
+const schema = Yup.object().shape({
+  username: Yup.string().required('Username is required!'),
+  email: Yup.string()
+    .email('Email is invalid')
+    .required('Email is required'),
+  password: Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required')
+    .matches(
+      /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
+      'You must enter at least 1 number, 1 upper and lowercase letter.'
+    ),
+  confirmPasword: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Confirm password is required'),
+  acceptedTerms: Yup.bool().required('You must accept terms and conditions!')
+});
+
 class SignUpPage extends React.Component {
   handleFileChanging = e => {
     if (e.target.files[0].size > IMAGE_MAX_SIZE) {
       e.target.value = null;
-      this.handleImageAlertShow();
+      return;
     }
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        image: file,
+        imagePreviewUrl: reader.result
+      });
+    };
+
+    reader.readAsDataURL(file);
+    // this.setState(image, e.target.files[0]);
   };
 
   state = {
     isModalVisible: false,
-    submitted: false
+    submitted: false,
+    image: '',
+    imagePreviewUrl: ''
   };
 
   componentDidMount() {
@@ -48,29 +82,15 @@ class SignUpPage extends React.Component {
   };
 
   render() {
+    let { imagePreviewUrl } = this.state;
+    let $imagePreview = null;
+    if (imagePreviewUrl) {
+      $imagePreview = <img src={imagePreviewUrl} />;
+    }
     return (
       <Formik
         initialValues={initialState}
-        validationSchema={Yup.object().shape({
-          username: Yup.string().required('Username is required!'),
-          email: Yup.string()
-            .email('Email is invalid')
-            .required('Email is required'),
-          password: Yup.string()
-            .min(8, 'Password must be at least 8 characters')
-            .required('Password is required'),
-          confirmPasword: Yup.string()
-            .oneOf([Yup.ref('password'), null], 'Passwords must match')
-            .required('Confirm password is required'),
-          acceptedTerms: Yup.bool()
-            // .oneOf([true], 'You must accept terms of condition!')
-            .test(
-              'consent',
-              'You have to agree with our Terms and Conditions!',
-              value => value === true
-            )
-            .required('You must accept terms and conditions!')
-        })}
+        validationSchema={schema}
         onSubmit={(values, { setSubmitting }) => {
           const user = {
             avatar: values.avatar,
@@ -78,17 +98,17 @@ class SignUpPage extends React.Component {
             email: values.email,
             password: values.password
           };
-          console.log('11111111111111111111111111111111111111');
+
           this.props.history.goBack();
-          // const { dispatch } = this.props;
-          // if (
-          //   user.username &&
-          //   user.email &&
-          //   user.password &&
-          //   fields.acceptedTerms
-          // ) {
-          //   dispatch(userActions.register(user));
-          // }
+          const { dispatch } = this.props;
+          if (
+            user.username &&
+            user.email &&
+            user.password &&
+            values.acceptedTerms
+          ) {
+            dispatch(userActions.register(user));
+          }
         }}
       >
         {({ errors, touched, handleSubmit }) => (
@@ -100,6 +120,11 @@ class SignUpPage extends React.Component {
           >
             <h2>Sign up</h2>
             <FormGroup className='Form-wrapper'>
+              {/* {(imagePreview !==null)
+              <center>
+                <div className='imgPreview'>{$imagePreview}</div>
+              </center>
+              } */}
               <p className='hint-text'>
                 * - Fill in this Form to create your account!
               </p>
@@ -114,7 +139,7 @@ class SignUpPage extends React.Component {
                     </span>
                   </FormGroup>
                   <FormGroup className='custom-file'>
-                    <form-control
+                    <FormControl
                       type='file'
                       name='imagePath'
                       accept='image/*'
@@ -172,7 +197,6 @@ class SignUpPage extends React.Component {
                   <Field
                     name='password'
                     type='password'
-                    // pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
                     style={{ width: 365 }}
                     placeholder='Password*'
                     className={
@@ -191,7 +215,6 @@ class SignUpPage extends React.Component {
                   <Field
                     name='confirmPasword'
                     type='password'
-                    // pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
                     style={{ width: 365 }}
                     placeholder='Confirm password*'
                     className={
@@ -208,7 +231,7 @@ class SignUpPage extends React.Component {
                   />
                 </FormGroup>
 
-                {/* <Row className='form-group'>
+                <Row className='form-group'>
                   <Col sm='1'>
                     <Field
                       name='acceptedTerms'
@@ -233,24 +256,10 @@ class SignUpPage extends React.Component {
                     component='div'
                     className='invalid-feedback'
                   />
-                </Row> */}
-
-                <label className='form-field' htmlFor='acceptedTerms'>
-                  <span>Consent:</span>
-                  <input
-                    name='acceptedTerms'
-                    type='checkbox'
-                    // onChange={handleChange}
-                  />
-                </label>
-                <div className='form-field-error'>{errors.consent}</div>
+                </Row>
 
                 <FormControl
                   type='submit'
-                  // disabled={
-                  //   !{ errors, touched }.dirty &&
-                  //   !{ errors, touched }.isSubmitting
-                  // }
                   className='btn btn-primary btn-block'
                   value='Sign up'
                 />

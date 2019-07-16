@@ -1,6 +1,4 @@
 import React from 'react';
-import * as bugReportActions from './actions';
-import * as userActions from '../user/actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
@@ -13,31 +11,65 @@ import {
   Button,
   Modal,
   Container,
-  Form
+  Form,
 } from 'react-bootstrap';
 import {
   FaThumbsUp,
   FaThumbsDown,
   FaCheck,
   FaStar,
-  FaComment
+  FaComment,
 } from 'react-icons/fa';
+import * as bugReportActions from './actions';
+import * as userActions from '../user/actions';
 
 const likeEnum = {
   LIKE: true,
-  DISLIKE: false
+  DISLIKE: false,
 };
 const agreeEnum = {
   AGREE: true,
-  DISAGREE: false
+  DISAGREE: false,
 };
 export const roadStateConstant = 0.1;
 
 class BugReport extends React.Component {
+  state = {
+    bugReport: {
+      id: null,
+      photos: [],
+      comments: [],
+      state: '',
+      rating: null,
+      description: '',
+      location: {
+        x: null,
+        y: null,
+      },
+    },
+    comment: {
+      id: null,
+      userName: '',
+      text: '',
+      likes: 0,
+      dislikes: 0,
+    },
+    isModalOpened: false,
+    user: {
+      id: '',
+      userName: '',
+      defaultLocation: [],
+      registrationDate: '1971-01-01',
+      pollList: [],
+      likeList: [],
+    },
+  };
+
   componentDidMount = async () => {
     const { bugReportActions, userActions } = this.props;
     await bugReportActions.loadBugReportAsync(1);
     await userActions.loadUserAsync('da39a3ee5e6b4b0d3255bfef95601890afd80709');
+    debugger;
     const { bugReport, user } = this.props;
     const { comment } = this.state;
     const bugReportClone = JSON.parse(JSON.stringify(bugReport));
@@ -59,39 +91,6 @@ class BugReport extends React.Component {
     this.setState({
       user: { ...userClone }
     });
-  };
-
-  componentDidUpdate = () => {};
-
-  state = {
-    bugReport: {
-      id: null,
-      photos: [],
-      comments: [],
-      state: '',
-      rating: null,
-      description: '',
-      location: {
-        x: null,
-        y: null
-      }
-    },
-    comment: {
-      id: null,
-      userName: '',
-      text: '',
-      likes: 0,
-      dislikes: 0
-    },
-    isModalOpened: false,
-    user: {
-      id: '',
-      userName: '',
-      defaultLocation: [],
-      registrationDate: '1971-01-01',
-      pollList: [],
-      likeList: []
-    }
   };
 
   handleLikeButton = event => {
@@ -286,14 +285,19 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-const mapDispatchToProps = dispatch => ({
-  bugReportActions: bindActionCreators(bugReportActions, dispatch),
-  userActions: bindActionCreators(userActions, dispatch)
-});
+BugReport.propTypes = {
+  bugReportActions: PropTypes.objectOf.isRequired,
+  userActions: PropTypes.objectOf.isRequired,
+  bugReport: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+}
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  (dispatch) => {
+    bindActionCreators(bugReportActions, dispatch);
+    bindActionCreators(userActions, dispatch);
+  }
 )(BugReport);
 
 export const NoPhotosAvailable = () => (
@@ -512,8 +516,3 @@ export const CommentForm = ({ handleSubmit, handleChange }) => (
     </Card.Body>
   </Card>
 );
-
-BugReport.propTypes = {
-  bugReport: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
-};

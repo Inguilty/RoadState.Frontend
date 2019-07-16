@@ -20,7 +20,12 @@ class HomePage extends React.Component {
   handleClick = (event) => {
     const { bugReport } = this.state;
     const id = +event.currentTarget.id;
-    const cloneComments = bugReport.comments.map(x => (x.id === id ? { ...x, likes: x.likes + 1 } : x));
+    const cloneComments = bugReport.comments.map(x => (x.id === id
+      ? {
+        ...x, //
+        likes: x.likes + 1,
+      }
+      : x));
     this.setState(
       {
         bugReport: {
@@ -38,7 +43,7 @@ class HomePage extends React.Component {
       <div>
         {bugReport.comments.map(comment => (
           <dl>
-            <button onClick={this.handleClick} id={comment.id}>
+            <button type="button" onClick={this.handleClick} id={comment.id}>
               Like comment
               {' '}
               {comment.id}

@@ -1,14 +1,4 @@
-import { LOAD_BUG_REPORT_SUCCESS, SEND_MESSAGE } from './actions';
-
-
-const loadBugReportReducer = (state = [], action) => {
-  switch (action.type) {
-    case LOAD_BUG_REPORT_SUCCESS:
-      return action.bugReport;
-    default:
-      return state;
-  }
-};
+import { SEND_MESSAGE } from './actions';
 
 function sendReducer(state = [], action) {
   switch (action.type) {
@@ -18,4 +8,4 @@ function sendReducer(state = [], action) {
       return state;
   }
 }
-export default (loadBugReportReducer, sendReducer);
+export default sendReducer;

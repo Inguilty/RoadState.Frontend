@@ -24,9 +24,9 @@ class TestForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { sendMessage } = this.props;
+    debugger;
     const { message } = this.state;
-    sendMessage(message);
+    testActions.sendMessage(message);
   };
 
   render() {
@@ -60,7 +60,7 @@ class TestForm extends React.Component {
 
 TestForm.propTypes = {
   messages: PropTypes.arrayOf.isRequired,
-  sendMessage: PropTypes.func.isRequired,
+  testActions: PropTypes.objectOf.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -71,7 +71,7 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  (dispatch) => {
-    bindActionCreators(testActions, dispatch);
-  },
+  dispatch => ({
+    testActions: bindActionCreators(testActions, dispatch),
+  }),
 )(TestForm);

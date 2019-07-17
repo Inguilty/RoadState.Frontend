@@ -1,8 +1,7 @@
 export const bugReports = [
   {
     id: 1,
-    description:
-      'Fucking road has not been repairing for 20 years, see this fucking bullshit!',
+    description: 'Fucking road has not been repairing for 20 years, see this fucking bullshit!',
     photos: [],
     location: {
       longtitude: 36.0,
@@ -32,11 +31,11 @@ export const users = [
     userName: 'Just a visitor',
     defaultLocation: {
       latitude: 36.1,
-      longtitude: 50.0
+      longtitude: 50.0,
     },
     registrationDate: new Date().toISOString(),
     pollList: [],
-    likeList: []
+    likeList: [],
   },
   {
     id: 'af6b0b609b7900b89ac395d7c5e4b1a513625bac',
@@ -44,6 +43,6 @@ export const users = [
     defaultLocation: [],
     registrationDate: new Date().toISOString(),
     pollList: [],
-    likeList: []
-  }
+    likeList: [],
+  },
 ];

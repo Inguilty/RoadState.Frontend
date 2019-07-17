@@ -32,8 +32,8 @@ const Header = () => (
           </NavLink>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" to="/test">
-            Test react-redux component
+          <NavLink className="nav-link" to="view">
+            View bug report
           </NavLink>
         </li>
         <li className="nav-item">

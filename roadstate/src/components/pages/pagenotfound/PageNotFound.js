@@ -12,9 +12,7 @@ const PageNotFound = () => (
         </div>
         <div className="error-actions">
           <NavLink className="btn btn-lg" to="/" exact>
-            <span className="glyphicon glyphicon-home">
-              Return to home page
-            </span>
+            <span className="glyphicon glyphicon-home">Return to home page</span>
           </NavLink>
         </div>
       </div>

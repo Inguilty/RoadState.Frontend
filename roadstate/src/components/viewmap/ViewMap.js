@@ -7,7 +7,7 @@ export default class ViewMap extends Component {
   state = {
     location: {
       lat: 51.505,
-      lng: -0.09
+      lng: -0.09,
     },
     zoom: 14,
     isMapInit: false,
@@ -16,22 +16,22 @@ export default class ViewMap extends Component {
   };
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(position => {
+    navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
         location: {
           ...this.state.location,
           lat: position.coords.latitude,
-          lng: position.coords.longitude
-        }
+          lng: position.coords.longitude,
+        },
       });
     });
   }
 
-  saveMap = map => {
+  saveMap = (map) => {
     this.map = map;
     this.setState({
       ...this.state.isMapInit,
-      isMapInit: true
+      isMapInit: true,
     });
   };
 
@@ -47,7 +47,7 @@ export default class ViewMap extends Component {
       >
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {this.state.isMapInit && (
           <Route

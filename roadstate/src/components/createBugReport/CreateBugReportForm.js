@@ -7,9 +7,16 @@ import {
 export const MAX_BUG_REPORT_IMAGE_SIZE = 16 * 1024 * 1024;
 export const MAX_BUG_REPORT_IMAGES_NUMBER = 5;
 
+const convertBytesToMB = a => Math.floor(a / (1024 * 1024));
+
+const errorImageMessages = {
+  maxSize: `Maximum size of the image should not exceed ${convertBytesToMB(MAX_BUG_REPORT_IMAGE_SIZE)} MB.`,
+  maxNumber: `The maximum number of photos you can upload is ${MAX_BUG_REPORT_IMAGES_NUMBER}.`,
+};
+
 class CreateBugReportForm extends React.Component {
   state = {
-    isFormValid: false, isImageValid: false, errorImageName: '', imageErrorType: '',
+    isFormValid: false, isImageValid: false, imageErrorType: '',
   };
 
   handleClose = () => {
@@ -38,7 +45,6 @@ class CreateBugReportForm extends React.Component {
       .filter(image => image.size > MAX_BUG_REPORT_IMAGE_SIZE);
     if (errorImages.length > 0) {
       this.setState({
-        errorImageName: errorImages[0].name,
         imageErrorType: 'maxSize',
       });
       event.target.value = null;
@@ -51,20 +57,12 @@ class CreateBugReportForm extends React.Component {
 
   handleImageAlertShow = () => this.setState({ isImageValid: true });
 
-  convertBytesToMB = a => Math.floor(a / 1048576);
-
   render() {
     const {
       isFormValid,
       isImageValid,
-      errorImageName,
       imageErrorType,
     } = this.state;
-
-    const errorImageMessages = {
-      maxSize: `Maximum size of ${errorImageName} should not exceed ${this.convertBytesToMB(MAX_BUG_REPORT_IMAGE_SIZE)} MB.`,
-      maxNumber: `The maximum number of photos you can upload is ${MAX_BUG_REPORT_IMAGES_NUMBER}.`,
-    };
 
     const { isActive } = this.props;
     const alertText = errorImageMessages[imageErrorType];

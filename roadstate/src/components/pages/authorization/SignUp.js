@@ -3,7 +3,14 @@ import '../authorization/authorization.css';
 import Modal from 'react-modal';
 import customStyles from '../authorization/customStyles';
 import { NavLink } from 'react-router-dom';
-import { FormControl, FormGroup, FormLabel, Row, Col } from 'react-bootstrap';
+import {
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Row,
+  Col,
+  Image
+} from 'react-bootstrap';
 import { userActions } from '../../../store/actions';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -36,11 +43,15 @@ const schema = Yup.object().shape({
   confirmPasword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     .required('Confirm password is required'),
-  acceptedTerms: Yup.bool().required('You must accept terms and conditions!')
+  acceptedTerms: Yup.bool()
+  // .required('You must accept terms and conditions!')
 });
 
 class SignUpPage extends React.Component {
   handleFileChanging = e => {
+    if (e.target.files[0] === undefined) {
+      return;
+    }
     if (e.target.files[0].size > IMAGE_MAX_SIZE) {
       e.target.value = null;
       return;
@@ -58,12 +69,10 @@ class SignUpPage extends React.Component {
     };
 
     reader.readAsDataURL(file);
-    // this.setState(image, e.target.files[0]);
   };
 
   state = {
     isModalVisible: false,
-    submitted: false,
     image: '',
     imagePreviewUrl: ''
   };
@@ -82,10 +91,11 @@ class SignUpPage extends React.Component {
   };
 
   render() {
+    const { registering } = this.props;
     let { imagePreviewUrl } = this.state;
     let $imagePreview = null;
     if (imagePreviewUrl) {
-      $imagePreview = <img src={imagePreviewUrl} />;
+      $imagePreview = <Image id='userAvatar' src={imagePreviewUrl} />;
     }
     return (
       <Formik
@@ -99,7 +109,7 @@ class SignUpPage extends React.Component {
             password: values.password
           };
 
-          this.props.history.goBack();
+          // this.props.history.goBack();
           const { dispatch } = this.props;
           if (
             user.username &&
@@ -116,15 +126,12 @@ class SignUpPage extends React.Component {
             isOpen={this.state.isModalVisible}
             onRequestClose={this.closeModal}
             style={customStyles}
-            contentLabel='Example Modal'
           >
             <h2>Sign up</h2>
             <FormGroup className='Form-wrapper'>
-              {/* {(imagePreview !==null)
               <center>
-                <div className='imgPreview'>{$imagePreview}</div>
+                <div>{$imagePreview}</div>
               </center>
-              } */}
               <p className='hint-text'>
                 * - Fill in this Form to create your account!
               </p>
@@ -263,14 +270,14 @@ class SignUpPage extends React.Component {
                   className='btn btn-primary btn-block'
                   value='Sign up'
                 />
-                {
+                {registering && (
                   <center>
                     <FontAwesomeIcon
                       icon={faSpinner}
                       className='fa fa-spinner fa-spin'
                     />
                   </center>
-                }
+                )}
               </Form>
             </FormGroup>
           </Modal>

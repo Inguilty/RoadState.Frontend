@@ -9,38 +9,22 @@ import SignIn from './components/pages/authorization/SignIn';
 import SignUp from './components/pages/authorization/SignUp';
 import LogOut from './components/pages/authorization/LogOut';
 import ShowProfile from './components/pages/authorization/ShowProfile';
-import { connect } from 'react-redux';
-import { history } from './helpers';
-import { alertActions } from './store/actions';
+import PrivateRoute from './components/PrivateRoute';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const { dispatch } = this.props;
-    history.listen((location, action) => {
-      // clear alert on location change
-      dispatch(alertActions.clear());
-    });
-  }
-
   render() {
-    const { alert } = this.props;
     return (
       <div class='container-fluid'>
         <Header />
         <div className='jumbotron'>
-          {/* {alert.message && (
-            <div className={`alert ${alert.type}`}>{alert.message}</div>
-          )} */}
           <Switch>
             <Route exact path='/' component={HomePage} />
             <Route path='/about' component={AboutPage} />
             <Route path='/test' component={TestForm} />
             <Route path='/signIn' component={SignIn} />
             <Route path='/signUp' component={SignUp} />
-            <Route path='/logOut' component={LogOut} />
-            <Route path='/profile' component={ShowProfile} />
+            <PrivateRoute path='/logOut' component={LogOut} />
+            <PrivateRoute path='/profile' component={ShowProfile} />
             <Route component={PageNotFound} />
           </Switch>
         </div>
@@ -48,13 +32,4 @@ class App extends React.Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  const { alert } = state;
-  return {
-    alert
-  };
-}
-
-export default connect(mapStateToProps)(App);
-// export default App;
+export default App;

@@ -297,7 +297,19 @@
 }
 
 #userAvatar {
+  /* background: url('images/UserNoAvatar.png'); */
+  border: 1px solid black;
+  border-radius: 50%;
+  height: 128px;
+  width: 128px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+#userNoAvatar {
   background: url('images/UserNoAvatar.png');
+  border: 1px solid black;
+  border-radius: 50%;
   height: 128px;
   width: 128px;
   margin-bottom: 10px;

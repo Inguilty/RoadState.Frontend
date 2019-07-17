@@ -13,7 +13,7 @@ const loadBugReportReducer = (state = initialState, action) => {
     case ADD_COMMENT_TO_BUG_REPORT:
       return {
         ...state,
-        bugReport: { ...state.bugReport, comments: [...state.bugReport.comments, action.comment] },
+        comments: action.comments,
         loading: false,
       };
     default:

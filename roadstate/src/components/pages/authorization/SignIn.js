@@ -1,6 +1,7 @@
 import React from 'react';
 import './authorization.css';
 import Modal from 'react-modal';
+import { PropTypes } from 'prop-types';
 import { withRouter, NavLink } from 'react-router-dom';
 import { Form, FormControl, FormGroup } from 'react-bootstrap';
 import customStyles from './customStyles';
@@ -19,14 +20,16 @@ class SignInPage extends React.Component {
   };
 
   closeModal = () => {
+    const { history } = this.props;
     this.setState({ isModalVisible: false });
-    this.props.history.goBack();
+    history.goBack();
   };
 
   render() {
+    const { isModalVisible } = this.state;
     return (
       <Modal
-        isOpen={this.state.isModalVisible}
+        isOpen={isModalVisible}
         onRequestClose={this.closeModal}
         style={customStyles}
         contentLabel="Example Modal"
@@ -73,5 +76,9 @@ class SignInPage extends React.Component {
     );
   }
 }
+
+SignInPage.propTypes = {
+  history: PropTypes.objectOf.isRequired,
+};
 
 export default withRouter(SignInPage);

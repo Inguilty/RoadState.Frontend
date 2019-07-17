@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const PageNotFound = props => (
+const PageNotFound = () => (
   <div className="row">
     <div className="col-md-12">
       <div className="error-template">
@@ -12,9 +12,7 @@ const PageNotFound = props => (
         </div>
         <div className="error-actions">
           <NavLink className="btn btn-lg" to="/" exact>
-            <span className="glyphicon glyphicon-home">
-              Return to home page
-            </span>
+            <span className="glyphicon glyphicon-home">Return to home page</span>
           </NavLink>
         </div>
       </div>

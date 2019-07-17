@@ -1,8 +1,7 @@
-import React from "react";
-import "../authorization/authorization.css";
-import Modal from "react-modal";
-import customStyles from "../authorization/customStyles";
-import { withRouter, NavLink } from "react-router-dom";
+import React from 'react';
+import './authorization.css';
+import Modal from 'react-modal';
+import { withRouter, NavLink } from 'react-router-dom';
 import {
   Form,
   FormControl,
@@ -10,12 +9,14 @@ import {
   FormCheck,
   FormLabel,
   Row,
-  Col
-} from "react-bootstrap";
+  Col,
+} from 'react-bootstrap';
+import customStyles from './customStyles';
+
 export const IMAGE_MAX_SIZE = 16777215;
 
 class SignUpPage extends React.Component {
-  handleFileChanging = e => {
+  handleFileChanging = (e) => {
     if (e.target.files[0].size > IMAGE_MAX_SIZE) {
       e.target.value = null;
       this.handleImageAlertShow();
@@ -23,7 +24,7 @@ class SignUpPage extends React.Component {
   };
 
   state = {
-    isModalVisible: false
+    isModalVisible: false,
   };
 
   componentDidMount() {
@@ -132,8 +133,9 @@ class SignUpPage extends React.Component {
               </Col>
               <Col>
                 <FormLabel className="checkbox-inline">
-                  {" "}
-                  I accept the{" "}
+                  {' '}
+                  I accept the
+                  {' '}
                   <NavLink href="#">Terms &amp; Conditions</NavLink>
                 </FormLabel>
               </Col>

@@ -1,15 +1,15 @@
-import { sendMessage } from "./actions";
-import sendReducer from "./reducers";
-import deepFreeze from "deep-freeze";
+import deepFreeze from 'deep-freeze';
+import { sendMessage } from './actions';
+import sendReducer from './reducers';
 
-it("shoud add a message when passed throughe action with type SEND_MESSAGE", () => {
+it('shoud add a message when passed throughe action with type SEND_MESSAGE', () => {
   const initialState = [];
   deepFreeze(initialState);
 
-  const newMessage = { text: "My first message!" };
+  const newMessage = { text: 'My first message!' };
   const sendAction = sendMessage(newMessage);
   const newState = sendReducer(initialState, sendAction);
 
   expect(newState.length).toEqual(1);
-  expect(newState[0].text).toEqual("My first message!");
+  expect(newState[0].text).toEqual('My first message!');
 });

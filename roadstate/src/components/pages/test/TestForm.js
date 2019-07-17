@@ -1,21 +1,21 @@
-import React from "react";
-import { connect } from "react-redux";
-import { sendMessage } from "./actions";
-import PropTypes from "prop-types";
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { sendMessage } from './actions';
 
 class TestForm extends React.Component {
   state = {
     message: {
-      text: ""
-    }
+      text: '',
+    },
   };
 
-  handleChange = event => {
+  handleChange = (event) => {
     const message = { ...this.state.message, text: event.target.value };
     this.setState({ message });
   };
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
     this.props.sendMessage(this.state.message);
   };
@@ -24,7 +24,7 @@ class TestForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="form-group">
-          <label for="testinput">Your message</label>
+          <label htmlFor="testinput">Your message</label>
           <input
             className="form-control"
             type="text"
@@ -47,20 +47,20 @@ class TestForm extends React.Component {
 
 TestForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  messages: PropTypes.array.isRequired
+  messages: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    messages: state.messages
+    messages: state.messages,
   };
 }
 
 const mapDispatchToProps = {
-  sendMessage
+  sendMessage,
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(TestForm);

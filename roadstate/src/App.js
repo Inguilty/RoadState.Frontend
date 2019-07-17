@@ -11,8 +11,8 @@ import LogOut from './components/pages/authorization/LogOut';
 import ShowProfile from './components/pages/authorization/ShowProfile';
 import ViewMap from './components/viewmap/ViewMap';
 
-const App = props => (
-  <div class='container-fluid'>
+const App = () => (
+  <div className='container-fluid'>
     <Header />
     <div className='jumbotron'>
       <Switch>

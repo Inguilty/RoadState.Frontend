@@ -6,11 +6,11 @@ export const bugReports = [
     photos: [],
     location: {
       longtitude: 36.0,
-      latitude: 50.0
+      latitude: 50.0,
     },
     state: 'Very low',
     rating: 1.0,
-    comments: []
+    comments: [],
   },
   {
     id: 2,
@@ -18,10 +18,10 @@ export const bugReports = [
     photos: [],
     location: {
       longtitude: 36.0,
-      latitude: 50.0
+      latitude: 50.0,
     },
     state: 'Very high',
     rating: 10.0,
-    comments: []
-  }
+    comments: [],
+  },
 ];

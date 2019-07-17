@@ -1,17 +1,28 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import {
   Modal, Button, Form, Col, Alert,
 } from 'react-bootstrap';
 
-export const IMAGE_MAX_SIZE = 16777216; // Maximum size of the image is 16 MB
-export const IMAGE_MAX_NUMBER = 5; // The maximum number on images that user can attach to the Bug report
+export const MAX_BUG_REPORT_IMAGE_SIZE = 16 * 1024 * 1024;
+export const MAX_BUG_REPORT_IMAGES_NUMBER = 5;
+
+const convertBytesToMB = a => Math.floor(a / (1024 * 1024));
+
+const errorImageMessages = {
+  maxSize: `Maximum size of the image should not exceed ${convertBytesToMB(MAX_BUG_REPORT_IMAGE_SIZE)} MB.`,
+  maxNumber: `The maximum number of photos you can upload is ${MAX_BUG_REPORT_IMAGES_NUMBER}.`,
+};
 
 class CreateBugReportForm extends React.Component {
   state = {
-    isFormValid: false, isImageValid: false, errorImageName: '', imageErrorType: '',
+    isFormValid: false, isImageValid: false, imageErrorType: '',
   };
 
-  handleClose = () => this.props.onClose();
+  handleClose = () => {
+    const { onClose } = this.props;
+    onClose();
+  }
 
   handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -30,51 +41,45 @@ class CreateBugReportForm extends React.Component {
       this.handleImageAlertShow();
       return true;
     }
-    Array.from(event.target.files).forEach((image) => {
-      if (image.size > IMAGE_MAX_SIZE) {
-        this.setState({
-          errorImageName: image.name,
-          imageErrorType: 'maxSize',
-        });
-        event.target.value = null;
-        this.handleImageAlertShow();
-        return true;
-      }
-    });
+    const errorImages = Array.from(event.target.files)
+      .filter(image => image.size > MAX_BUG_REPORT_IMAGE_SIZE);
+    if (errorImages.length > 0) {
+      this.setState({
+        imageErrorType: 'maxSize',
+      });
+      event.target.value = null;
+      this.handleImageAlertShow();
+    }
+    return true;
   };
 
   handleImageAlertDismiss = () => this.setState({ isImageValid: false });
 
   handleImageAlertShow = () => this.setState({ isImageValid: true });
 
-  convertBytesToMB = a => Math.floor(a / 1048576);
-
   render() {
-    let alertText = '';
-    switch (this.state.imageErrorType) {
-      case 'maxSize':
-        alertText = `Maximum image size should not exceed ${this.convertBytesToMB(IMAGE_MAX_SIZE)} MB.`;
-        break;
-      case 'maxNumber':
-        alertText = `The maximum number of photos you can upload is ${IMAGE_MAX_NUMBER}.`;
-        break;
-      default:
-        alertText = '';
-    }
+    const {
+      isFormValid,
+      isImageValid,
+      imageErrorType,
+    } = this.state;
+
+    const { isActive } = this.props;
+    const alertText = errorImageMessages[imageErrorType];
 
     return (
-      <Modal show={this.props.isActive} onHide={this.handleClose}>
+      <Modal show={isActive} onHide={this.handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Create Bug Report</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form
             noValidate
-            validated={this.state.isFormValid}
+            validated={isFormValid}
             onSubmit={e => this.handleSubmit(e)}
           >
             <Alert
-              show={this.state.isImageValid}
+              show={isImageValid}
               variant="danger"
               onClose={this.handleImageAlertDismiss}
               dismissible
@@ -133,4 +138,10 @@ class CreateBugReportForm extends React.Component {
     );
   }
 }
+
+CreateBugReportForm.propTypes = {
+  isActive: PropTypes.objectOf.isRequired,
+  onClose: PropTypes.objectOf.isRequired,
+};
+
 export default CreateBugReportForm;

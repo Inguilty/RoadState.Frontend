@@ -9,11 +9,12 @@ class CreateBugReport extends React.Component {
   handleShow = () => this.setState({ isModalActive: true });
 
   render() {
+    const { isModalActive } = this.state;
     return (
       <div>
         {/* Put here element that will call handleShow() property */}
         <CreateBugReportForm
-          isActive={this.state.isModalActive}
+          isActive={isModalActive}
           onClose={this.handleClose}
         />
       </div>

@@ -10,7 +10,9 @@ export default class ViewMap extends Component {
       lng: -0.09
     },
     zoom: 15,
-    isMapInit: false
+    isMapInit: false,
+    from: [50.0659, 36.28997],
+    to: [50.02049, 36.299935],
   };
 
   componentDidMount() {
@@ -34,7 +36,8 @@ export default class ViewMap extends Component {
   };
 
   render() {
-    const position = [this.state.location.lat, this.state.location.lng];
+    const { from, to, location } = this.state;
+    const position = [location.lat, location.lng];
     return (
       <Map
         center={position}
@@ -48,8 +51,8 @@ export default class ViewMap extends Component {
         />
         {this.state.isMapInit && (
           <Itinerary
-            from={[50.0659, 36.28997]}
-            to={[50.02049, 36.299935]}
+            from={from}
+            to={to}
             map={this.map}
           />
         )}

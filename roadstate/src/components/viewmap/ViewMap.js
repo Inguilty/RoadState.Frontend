@@ -16,10 +16,11 @@ export default class ViewMap extends Component {
   };
 
   componentDidMount() {
+    const prevState = this.state;
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
         location: {
-          ...this.state.location,
+          ...prevState.location,
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         },
@@ -29,19 +30,18 @@ export default class ViewMap extends Component {
 
   saveMap = (map) => {
     this.map = map;
-    this.setState({
-      ...this.state.isMapInit,
-      isMapInit: true,
-    });
+    this.setState({ isMapInit: true });
   };
 
   render() {
-    const { from, to, location } = this.state;
+    const {
+      from, to, location, zoom, isMapInit,
+    } = this.state;
     const position = [location.lat, location.lng];
     return (
       <Map
         center={position}
-        zoom={this.state.zoom}
+        zoom={zoom}
         style={{ height: '100vh', zIndex: '0' }}
         ref={this.saveMap}
       >
@@ -49,7 +49,7 @@ export default class ViewMap extends Component {
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {this.state.isMapInit && (
+        {isMapInit && (
           <Route
             from={from}
             to={to}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { Map, TileLayer } from 'react-leaflet';
-import Itinerary from '../createroute/Itinerary';
+import Route from '../createroute/Route';
 
 export default class ViewMap extends Component {
   state = {
@@ -50,7 +50,7 @@ export default class ViewMap extends Component {
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
         {this.state.isMapInit && (
-          <Itinerary
+          <Route
             from={from}
             to={to}
             map={this.map}

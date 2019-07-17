@@ -9,7 +9,7 @@ export default class ViewMap extends Component {
       lat: 51.505,
       lng: -0.09
     },
-    zoom: 15,
+    zoom: 14,
     isMapInit: false,
     from: [50.0659, 36.28997],
     to: [50.02049, 36.299935],

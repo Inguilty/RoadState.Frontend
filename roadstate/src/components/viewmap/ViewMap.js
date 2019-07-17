@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { Map, TileLayer } from 'react-leaflet';
-import Route from '../createroute/Route';
+import Route from '../route/Route';
 
 export default class ViewMap extends Component {
   state = {

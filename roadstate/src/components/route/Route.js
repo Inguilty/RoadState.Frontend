@@ -4,7 +4,7 @@ import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/examples/Control.Geocoder';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
-class Itinerary extends MapLayer {
+class Route extends MapLayer {
   createLeafletElement() {
     const { from, to, map } = this.props;
 
@@ -35,4 +35,4 @@ class Itinerary extends MapLayer {
   }
 }
 
-export default withLeaflet(Itinerary);
+export default withLeaflet(Route);

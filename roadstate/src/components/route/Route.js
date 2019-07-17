@@ -30,6 +30,11 @@ class Route extends MapLayer {
       collapsible: true,
     }).addTo(map.leafletElement);
 
+    var routeCoord = [];
+    leafletElement.on('routeselected', function (routes) {
+      routeCoord.push(...routes.route.coordinates);
+    }, this);
+
     leafletElement.hide();
     return leafletElement.getPlan();
   }

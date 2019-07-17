@@ -28,6 +28,8 @@ class BugReport extends React.Component {
     this.setState({ isModalOpened: false });
   };
 
+  temporaryStub = () => {};
+
   render() {
     const { isModalOpened } = this.state;
     return (
@@ -39,14 +41,14 @@ class BugReport extends React.Component {
               <NoPhotosAvailable />
             </Modal.Header>
             <Modal.Body>
-              <Poll handleAgreeButton={() => alert('Stub')} id={1} user={null} />
+              <Poll handleAgreeButton={this.temporaryStub} id={1} user={null} />
               <br />
               <BodyContainer description="Test" state="Very low" rating={1} commentsCount={0} />
               <br />
               <NoComments />
             </Modal.Body>
             <Modal.Footer>
-              <CommentForm handleChange={() => alert('Stub')} handleSubmit={() => alert('Stub')} />
+              <CommentForm handleChange={this.temporaryStub} handleSubmit={this.temporaryStub} />
             </Modal.Footer>
           </Modal.Dialog>
         </Modal>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
 import Header from './components/layout/Header';
+import { Route, Switch } from 'react-router-dom';
 import HomePage from './components/pages/home';
 import AboutPage from './components/pages/about';
 import PageNotFound from './components/pages/pagenotfound';
@@ -12,9 +12,9 @@ import ShowProfile from './components/pages/authorization/ShowProfile';
 import ViewMap from './components/viewmap/ViewMap';
 
 const App = () => (
-  <div className="container-fluid">
+  <div className='container-fluid'>
     <Header />
-    <div className="jumbotron">
+    <div className='jumbotron'>
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />

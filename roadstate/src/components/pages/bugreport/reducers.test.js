@@ -6,7 +6,6 @@ describe('bugReportReducer', () => {
   const expectedInitialState = {
     loading: false,
     bugReport: null,
-    comments: [],
   };
   it('should return an initial state', () => {
     expect(loadBugReportReducer(undefined, {})).toEqual(expectedInitialState);

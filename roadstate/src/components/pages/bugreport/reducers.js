@@ -1,21 +1,16 @@
-import { LOAD_BUG_REPORT_SUCCESS, ADD_COMMENT_TO_BUG_REPORT } from './actions';
+import { LOAD_BUG_REPORT_SUCCESS, LOAD_BUG_REPORT_REQUEST } from './actions';
 
 const initialState = {
   loading: false,
   bugReport: null,
-  comments: [],
 };
 
 const loadBugReportReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOAD_BUG_REPORT_REQUEST:
+      return { ...state, loading: true };
     case LOAD_BUG_REPORT_SUCCESS:
       return { ...state, bugReport: action.bugReport, loading: false };
-    case ADD_COMMENT_TO_BUG_REPORT:
-      return {
-        ...state,
-        comments: action.comments,
-        loading: false,
-      };
     default:
       return state;
   }

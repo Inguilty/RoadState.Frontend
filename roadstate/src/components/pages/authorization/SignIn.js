@@ -147,8 +147,6 @@ class SignIn extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(SignIn);
-
 function mapStateToProps(state) {
   const { loggingIn } = state.authentication;
   return {
@@ -156,7 +154,4 @@ function mapStateToProps(state) {
   };
 }
 
-// export default connect(
-//   mapStateToProps,
-//   { loginDispatched: userActions.login }
-// )(SignIn);
+export default connect(mapStateToProps)(SignIn);

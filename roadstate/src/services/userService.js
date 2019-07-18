@@ -1,5 +1,4 @@
 import config from 'react-global-configuration';
-import { authHeader } from '../helpers';
 
 export const userService = {
   login,
@@ -35,8 +34,7 @@ function logout() {
 
 function getAll() {
   const requestOptions = {
-    method: 'GET',
-    headers: authHeader()
+    method: 'GET'
   };
 
   return fetch(`${config.apiUrl}/users`, requestOptions).then(handleResponse);
@@ -44,8 +42,7 @@ function getAll() {
 
 function getById(id) {
   const requestOptions = {
-    method: 'GET',
-    headers: authHeader()
+    method: 'GET'
   };
 
   return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(
@@ -68,7 +65,6 @@ function register(user) {
 function update(user) {
   const requestOptions = {
     method: 'PUT',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(user)
   };
 
@@ -80,8 +76,7 @@ function update(user) {
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
   const requestOptions = {
-    method: 'DELETE',
-    headers: authHeader()
+    method: 'DELETE'
   };
 
   return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(

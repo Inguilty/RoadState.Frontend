@@ -71,7 +71,6 @@ class SignUp extends React.Component {
       email: e.email,
       password: e.password
     };
-    debugger;
     const { dispatch } = this.props;
     if (user.username && user.email && user.password && e.acceptedTerms) {
       dispatch(userActions.register(user));

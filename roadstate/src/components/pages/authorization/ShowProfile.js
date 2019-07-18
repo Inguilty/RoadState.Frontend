@@ -12,16 +12,11 @@ import * as Yup from 'yup';
 class ShowProfile extends React.Component {
   state = {
     isModalVisible: false,
-    image: '',
-    imagePreviewUrl: ''
+    image: this.props.user.avatar,
+    imagePreviewUrl: this.props.user.avatarUrl
   };
   componentDidMount() {
     this.openModal();
-  }
-
-  getProfile() {
-    const { dispatch } = this.props;
-    // return dispatch(userActions.getUserById(user.id));
   }
 
   openModal = () => {
@@ -61,12 +56,15 @@ class ShowProfile extends React.Component {
   });
 
   handleSubmit = e => {
-    const user = {
+    const { update, user } = this.props;
+    const updatedUser = {
+      ...user,
       avatar: e.avatar,
+      avatarUrl: e.avatarUrl,
       password: e.newPassword
     };
     const { dispatch } = this.props;
-    if (user.password && user.newPassword && user.confirmNewPassword) {
+    if (e.password && e.newPassword && e.confirmNewPassword) {
       dispatch(userActions.update(user));
     }
     this.closeModal();
@@ -97,16 +95,8 @@ class ShowProfile extends React.Component {
     reader.readAsDataURL(file);
   };
 
-  setStates = user => {
-    // this.setState({ imagePreviewUrl: user.avatarUrl });
-    // this.setState({ image: user.avatar });
-  };
-
   render() {
-    // debugger;
     const { user } = this.props;
-    this.setStates(user);
-
     let { imagePreviewUrl } = this.state;
     let $imagePreview = null;
     if (imagePreviewUrl) {
@@ -127,9 +117,6 @@ class ShowProfile extends React.Component {
           >
             <FormGroup className='Form-wrapper'>
               <Form action='#' method='post'>
-                {/* <center>
-                  <i id='userAvatar' />
-                </center> */}
                 <center>
                   <div>{$imagePreview}</div>
                 </center>
@@ -144,7 +131,7 @@ class ShowProfile extends React.Component {
                     </span>
                   </FormGroup>
                   <FormGroup className='custom-file'>
-                    <input
+                    <FormControl
                       type='file'
                       name='imagePath'
                       accept='image/*'
@@ -165,7 +152,7 @@ class ShowProfile extends React.Component {
 
                 <FormGroup className='Form-group'>
                   <FormControl
-                    name='UserName'
+                    name='username'
                     type='text'
                     style={{ width: 365 }}
                     placeholder={user.username}
@@ -174,7 +161,7 @@ class ShowProfile extends React.Component {
                 </FormGroup>
                 <FormGroup className='Form-group'>
                   <FormControl
-                    name='FromEmailAddress'
+                    name='email'
                     type='text'
                     style={{ width: 365 }}
                     placeholder={user.email}
@@ -185,35 +172,59 @@ class ShowProfile extends React.Component {
                   <span>Do you want to change password?</span>
                 </FormGroup>
                 <FormGroup className='Form-group'>
-                  <FormControl
-                    name='oldPassword'
+                  <Field
+                    name='password'
                     type='password'
-                    maxlength='40'
-                    title='Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters'
                     style={{ width: 365 }}
                     placeholder='Old password'
+                    className={
+                      'form-control' +
+                      (errors.password && touched.password ? ' is-invalid' : '')
+                    }
+                  />
+                  <ErrorMessage
+                    name='password'
+                    component='div'
+                    className='invalid-feedback'
                   />
                 </FormGroup>
-                <FormGroup className='Form-group'>
-                  <FormControl
+
+                <FormGroup className='form-group'>
+                  <Field
                     name='newPassword'
                     type='password'
-                    maxlength='40'
-                    pattern='(?=./d)(?=.[a-z])(?=.[A-Z]).{8,}'
-                    title='Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters'
                     style={{ width: 365 }}
-                    placeholder='New Password'
+                    placeholder='New password'
+                    className={
+                      'form-control' +
+                      (errors.newPassword && touched.newPassword
+                        ? ' is-invalid'
+                        : '')
+                    }
+                  />
+                  <ErrorMessage
+                    name='password'
+                    component='div'
+                    className='invalid-feedback'
                   />
                 </FormGroup>
-                <FormGroup className='Form-group'>
-                  <FormControl
-                    name='ConfirmNewPassword'
+                <FormGroup className='form-group'>
+                  <Field
+                    name='confirmNewPasword'
                     type='password'
-                    maxlength='40'
-                    pattern='(?=./d)(?=.[a-z])(?=.[A-Z]).{8,}'
-                    title='Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters'
                     style={{ width: 365 }}
-                    placeholder='Confirm your new password'
+                    placeholder='Confirm new password'
+                    className={
+                      'form-control' +
+                      (errors.confirmPasword && touched.confirmPasword
+                        ? ' is-invalid'
+                        : '')
+                    }
+                  />
+                  <ErrorMessage
+                    name='confirmPasword'
+                    component='div'
+                    className='invalid-feedback'
                   />
                 </FormGroup>
                 <FormGroup className='Form-group'>
@@ -223,7 +234,7 @@ class ShowProfile extends React.Component {
                 <FormControl
                   type='submit'
                   className='btn btn-primary btn-block'
-                  value='Accept'
+                  value='Update'
                 />
               </Form>
             </FormGroup>
@@ -235,7 +246,8 @@ class ShowProfile extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.authentication.user
+  user: state.authentication.user,
+  update: userActions.update
 });
 
 export default connect(mapStateToProps)(ShowProfile);

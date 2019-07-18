@@ -1,12 +1,12 @@
 import { userConstants } from '../constants';
 import { userService } from '../../services';
 import { history } from '../../helpers';
-import { async } from 'q';
 
 export const userActions = {
   login,
   logout,
-  register
+  register,
+  update
 };
 
 function login(username, password) {
@@ -16,15 +16,12 @@ function login(username, password) {
     userService.login(username, password).then(
       user => {
         dispatch(success(user));
-        history.push('/profile');
+        history.push('/');
       },
       error => {
         dispatch(failure(error.toString()));
       }
     );
-    // dispatch({ type: userConstants.LOGIN_REQUEST });
-    // const result = { status: '200OK', data: 'aaa' };
-    // dispatch({ type: userConstants.LOGIN_SUCCESS, userId: result.data });
   };
 
   function request(user) {
@@ -38,29 +35,31 @@ function login(username, password) {
   }
 }
 
-// function logout() {
-//   // userService.logout();
-//   // return { type: userConstants.LOGOUT };
-//   dispatch => {
-//     dispatch({ type: LOGOUT_REQUEST });
-//     // const response = await sth
-//     dispatch({ type: LOGOUT_SUCCESS });
-//   };
-//   const LOGOUT_REQUEST = 'authorization/LOGOUT_REQUEST';
-//   const LOGOUT_SUCCESS = '/authorization/LOGOUT_SUCCESS';
-// }
-
 function logout() {
   return async dispatch => {
     dispatch({ type: userConstants.LOGOUT_REQUEST });
     userService.logout();
-    // const response = await sth
     dispatch({ type: userConstants.LOGOUT_SUCCESS });
   };
 }
 
+function update(user) {
+  return async dispatch => {
+    dispatch(request(user));
+    userService.update(user).then(user => {
+      dispatch(success(user));
+    });
+  };
+  function request(user) {
+    return { type: userConstants.UPDATE_REQUEST, user };
+  }
+  function success(user) {
+    return { type: userConstants.RUPDATE_SUCCESS, user };
+  }
+}
+
 function register(user) {
-  return dispatch => {
+  return async dispatch => {
     dispatch(request(user));
 
     userService.register(user).then(

@@ -8,9 +8,7 @@ class Header extends React.Component {
     this.props.dispatch(this.props.logOut);
   };
   render() {
-    debugger;
     const { user } = this.props;
-    debugger;
     return (
       <nav className='navbar navbar-expand-lg navbar-light bg-light'>
         <NavLink className='navbar-brand' to='/' exact>

@@ -1,27 +1,49 @@
 import loadBugReportReducer from './reducers';
-import { LOAD_BUG_REPORT_REQUEST, LOAD_BUG_REPORT_SUCCESS } from './actions';
-import { getBugReport } from '../../../__mock__/api';
+import {
+  LOAD_BUG_REPORT_REQUEST,
+  LOAD_BUG_REPORT_SUCCESS,
+  LOAD_BUG_REPORT_FAILURE,
+} from './actions';
+import * as api from '../../../api';
 
 describe('bugReportReducer', () => {
-  const expectedInitialState = {
+  const initialState = {
     loading: false,
     bugReport: null,
+    callbackError: false,
   };
-  it('should return an initial state', () => {
-    expect(loadBugReportReducer(undefined, {})).toEqual(expectedInitialState);
-  });
+  describe('LOAD_BUG_REPORT_REQUEST', () => {
+    it('should change the loading status', () => {
+      const expectedState = { ...initialState, loading: true };
+      const action = { type: LOAD_BUG_REPORT_REQUEST };
 
-  it('should change load status', () => {
-    expect(loadBugReportReducer(undefined, { type: LOAD_BUG_REPORT_REQUEST })).toEqual({
-      ...expectedInitialState,
-      loading: true,
+      const currentState = loadBugReportReducer(initialState, action);
+
+      expect(currentState).toEqual(expectedState);
     });
   });
-  it('should return bug report', async () => {
-    const bugReport = await getBugReport(1);
-    expect(loadBugReportReducer(undefined, { type: LOAD_BUG_REPORT_SUCCESS, bugReport })).toEqual({
-      ...expectedInitialState,
-      bugReport,
+
+  describe('LOAD_BUG_REPORT_SUCCESS', () => {
+    it('should return bugReport object inside the state', async () => {
+      const id = 1;
+      const bugReport = (await api.loadBugReport(id)).response;
+      const action = { type: LOAD_BUG_REPORT_SUCCESS, bugReport };
+      const expectedState = { ...initialState, loading: false, bugReport };
+
+      const currentState = loadBugReportReducer(initialState, action);
+
+      expect(currentState).toEqual(expectedState);
+    });
+  });
+
+  describe('LOAD_BUG_REPORT_FAILURE', () => {
+    it('should change the callbackError status', () => {
+      const action = { type: LOAD_BUG_REPORT_FAILURE };
+      const expectedState = { ...initialState, callbackError: true, loading: false };
+
+      const currentState = loadBugReportReducer(initialState, action);
+
+      expect(currentState).toEqual(expectedState);
     });
   });
 });

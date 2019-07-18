@@ -59,8 +59,9 @@ class SignUp extends React.Component {
   };
 
   closeModal = () => {
+    const { history } = this.props;
     this.setState({ isModalVisible: false });
-    this.props.history.goBack();
+    history.goBack();
   };
 
   handleSubmit = e => {
@@ -284,7 +285,6 @@ class SignUp extends React.Component {
     );
   }
 }
-
 function mapStateToProps(state) {
   const { registering } = state.registration;
   return {

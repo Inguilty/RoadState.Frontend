@@ -15,6 +15,7 @@ class ShowProfile extends React.Component {
     image: this.props.user.avatar,
     imagePreviewUrl: this.props.user.avatarUrl
   };
+
   componentDidMount() {
     this.openModal();
   }
@@ -24,8 +25,9 @@ class ShowProfile extends React.Component {
   };
 
   closeModal = () => {
+    const { history } = this.props;
     this.setState({ isModalVisible: false });
-    this.props.history.goBack();
+    history.goBack();
   };
 
   initialState = {

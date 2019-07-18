@@ -25,8 +25,9 @@ class SignIn extends React.Component {
   };
 
   closeModal = () => {
+    const { history } = this.props;
     this.setState({ isModalVisible: false });
-    this.props.history.goBack();
+    history.goBack();
   };
 
   initialState = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const PageNotFound = props => (
+const PageNotFound = () => (
   <div className='row'>
     <div className='col-md-12'>
       <div className='error-template'>

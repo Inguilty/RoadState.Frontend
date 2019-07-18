@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import customStyles from '../authorization/customStyles';
 import { NavLink } from 'react-router-dom';
 import { FormControl, FormGroup } from 'react-bootstrap';
-import { userActions } from '../../../store/actions';
+import { userActions } from './actions';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -40,11 +40,6 @@ class SignIn extends React.Component {
   });
 
   handleSubmit = e => {
-    // const { dispatch, loginDispatch } = this.props;
-    // if (e.username && e.password) {
-    //   loginDispatch(e.userName, e.password);
-    // }
-    // this.closeModal();
     const user = {
       username: e.username,
       password: e.password

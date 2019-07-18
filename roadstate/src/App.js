@@ -8,8 +8,8 @@ import TestForm from './components/pages/test';
 import SignIn from './components/pages/authorization/SignIn';
 import SignUp from './components/pages/authorization/SignUp';
 import ShowProfile from './components/pages/authorization/ShowProfile';
-import PrivateRoute from './components/PrivateRoute.js';
-import UnauthorizedRoute from './components/UnauthorizedRoute';
+import PrivateRoute from './components/routes/PrivateRoute';
+import UnauthorizedRoute from './components/routes/UnauthorizedRoute';
 
 class App extends React.Component {
   render() {

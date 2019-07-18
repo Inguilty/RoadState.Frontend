@@ -11,7 +11,7 @@ import {
   Col,
   Image
 } from 'react-bootstrap';
-import { userActions } from '../../../store/actions';
+import { userActions } from './actions';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -79,7 +79,6 @@ class SignUp extends React.Component {
   };
 
   initialState = {
-    avatar: '',
     username: '',
     email: '',
     password: '',
@@ -105,7 +104,6 @@ class SignUp extends React.Component {
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Confirm password is required'),
     acceptedTerms: Yup.bool()
-    // .required('You must accept terms and conditions!')
   });
 
   render() {

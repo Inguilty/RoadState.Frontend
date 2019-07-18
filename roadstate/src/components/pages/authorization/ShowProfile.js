@@ -5,7 +5,7 @@ import '../authorization/authorization.css';
 import customStyles from '../authorization/customStyles';
 import { FormControl, FormGroup, FormLabel, Image } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { userActions } from '../../../store/actions';
+import { userActions } from './actions';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
@@ -29,7 +29,6 @@ class ShowProfile extends React.Component {
   };
 
   initialState = {
-    id: '',
     username: '',
     email: '',
     password: '',
@@ -65,7 +64,7 @@ class ShowProfile extends React.Component {
     };
     const { dispatch } = this.props;
     if (e.password && e.newPassword && e.confirmNewPassword) {
-      dispatch(userActions.update(user));
+      dispatch(update(updatedUser));
     }
     this.closeModal();
   };

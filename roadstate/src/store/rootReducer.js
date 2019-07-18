@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
   authentication,
   updateUser,
   bugReport,
-  user
+  user,
 });
 
 export default rootReducer;

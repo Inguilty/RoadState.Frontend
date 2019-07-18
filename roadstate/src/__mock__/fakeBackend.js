@@ -25,9 +25,11 @@ export function configureFakeBackend() {
             let user = filteredUsers[0];
             let responseJson = {
               id: user.id,
+              avatar: user.avatar,
+              avatarUrl: user.avatarUrl,
               username: user.username,
-              firstName: user.firstName,
-              lastName: user.lastName,
+              email: user.email,
+              password: user.password,
               token: 'fake-jwt-token'
             };
             resolve({
@@ -37,50 +39,6 @@ export function configureFakeBackend() {
           } else {
             // else return error
             reject('Username or password is incorrect');
-          }
-
-          return;
-        }
-
-        // get users
-        if (url.endsWith('/users') && opts.method === 'GET') {
-          // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
-          if (
-            opts.headers &&
-            opts.headers.Authorization === 'Bearer fake-jwt-token'
-          ) {
-            resolve({
-              ok: true,
-              text: () => Promise.resolve(JSON.stringify(users))
-            });
-          } else {
-            // return 401 not authorised if token is null or invalid
-            reject('Unauthorised');
-          }
-
-          return;
-        }
-
-        // get user by id
-        if (url.match(/\/users\/\d+$/) && opts.method === 'GET') {
-          // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
-          if (
-            opts.headers &&
-            opts.headers.Authorization === 'Bearer fake-jwt-token'
-          ) {
-            // find user by id in users array
-            let urlParts = url.split('/');
-            let id = parseInt(urlParts[urlParts.length - 1]);
-            let matchedUsers = users.filter(user => {
-              return user.id === id;
-            });
-            let user = matchedUsers.length ? matchedUsers[0] : null;
-
-            // respond 200 OK with user
-            resolve({ ok: true, text: () => JSON.stringify(user) });
-          } else {
-            // return 401 not authorised if token is null or invalid
-            reject('Unauthorised');
           }
 
           return;
@@ -109,36 +67,6 @@ export function configureFakeBackend() {
 
           // respond 200 OK
           resolve({ ok: true, text: () => Promise.resolve() });
-
-          return;
-        }
-
-        // delete user
-        if (url.match(/\/users\/\d+$/) && opts.method === 'DELETE') {
-          // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
-          if (
-            opts.headers &&
-            opts.headers.Authorization === 'Bearer fake-jwt-token'
-          ) {
-            // find user by id in users array
-            let urlParts = url.split('/');
-            let id = parseInt(urlParts[urlParts.length - 1]);
-            for (let i = 0; i < users.length; i++) {
-              let user = users[i];
-              if (user.id === id) {
-                // delete user
-                users.splice(i, 1);
-                localStorage.setItem('users', JSON.stringify(users));
-                break;
-              }
-            }
-
-            // respond 200 OK
-            resolve({ ok: true, text: () => Promise.resolve() });
-          } else {
-            // return 401 not authorised if token is null or invalid
-            reject('Unauthorised');
-          }
 
           return;
         }

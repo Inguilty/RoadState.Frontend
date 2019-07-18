@@ -18,41 +18,14 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-export const IMAGE_MAX_SIZE = 16777215;
-const initialState = {
-  avatar: [],
-  username: '',
-  email: '',
-  password: '',
-  confirmPasword: '',
-  acceptedTerms: false
-};
+class SignUp extends React.Component {
+  IMAGE_MAX_SIZE = () => 16777215;
 
-const schema = Yup.object().shape({
-  username: Yup.string().required('Username is required!'),
-  email: Yup.string()
-    .email('Email is invalid')
-    .required('Email is required'),
-  password: Yup.string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required')
-    .matches(
-      /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
-      'You must enter at least 1 number, 1 upper and lowercase letter.'
-    ),
-  confirmPasword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm password is required'),
-  acceptedTerms: Yup.bool()
-  // .required('You must accept terms and conditions!')
-});
-
-class SignUpPage extends React.Component {
   handleFileChanging = e => {
     if (e.target.files[0] === undefined) {
       return;
     }
-    if (e.target.files[0].size > IMAGE_MAX_SIZE) {
+    if (e.target.files[0].size > this.IMAGE_MAX_SIZE) {
       e.target.value = null;
       return;
     }
@@ -90,6 +63,52 @@ class SignUpPage extends React.Component {
     this.props.history.goBack();
   };
 
+  handleSubmit = e => {
+    const user = {
+      avatar: this.state.image,
+      avatarUrl: this.state.imagePreviewUrl,
+      username: e.username,
+      email: e.email,
+      password: e.password
+    };
+    debugger;
+    const { dispatch } = this.props;
+    if (user.username && user.email && user.password && e.acceptedTerms) {
+      dispatch(userActions.register(user));
+    }
+    this.closeModal();
+  };
+
+  initialState = {
+    avatar: '',
+    username: '',
+    email: '',
+    password: '',
+    confirmPasword: '',
+    acceptedTerms: false
+  };
+
+  schema = Yup.object().shape({
+    username: Yup.string()
+      .required('Username is required!')
+      .min(6, 'Username must be at least 6 characters'),
+    email: Yup.string()
+      .email('Email is invalid')
+      .required('Email is required'),
+    password: Yup.string()
+      .min(8, 'Password must be at least 8 characters')
+      .required('Password is required')
+      .matches(
+        /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
+        'You must enter at least 1 number, 1 upper and lowercase letter.'
+      ),
+    confirmPasword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Confirm password is required'),
+    acceptedTerms: Yup.bool()
+    // .required('You must accept terms and conditions!')
+  });
+
   render() {
     const { registering } = this.props;
     let { imagePreviewUrl } = this.state;
@@ -99,27 +118,9 @@ class SignUpPage extends React.Component {
     }
     return (
       <Formik
-        initialValues={initialState}
-        validationSchema={schema}
-        onSubmit={(values, { setSubmitting }) => {
-          const user = {
-            avatar: values.avatar,
-            username: values.username,
-            email: values.email,
-            password: values.password
-          };
-
-          // this.props.history.goBack();
-          const { dispatch } = this.props;
-          if (
-            user.username &&
-            user.email &&
-            user.password &&
-            values.acceptedTerms
-          ) {
-            dispatch(userActions.register(user));
-          }
-        }}
+        initialValues={this.initialState}
+        validationSchema={this.schema}
+        onSubmit={this.handleSubmit}
       >
         {({ errors, touched, handleSubmit }) => (
           <Modal
@@ -294,4 +295,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SignUpPage);
+export default connect(mapStateToProps)(SignUp);

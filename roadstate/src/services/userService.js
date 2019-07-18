@@ -1,5 +1,5 @@
-import config from "react-global-configuration";
-import { authHeader } from "../helpers";
+import config from 'react-global-configuration';
+import { authHeader } from '../helpers';
 
 export const userService = {
   login,
@@ -13,8 +13,8 @@ export const userService = {
 
 function login(username, password) {
   const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password })
   };
 
@@ -22,7 +22,7 @@ function login(username, password) {
     .then(handleResponse)
     .then(user => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));
 
       return user;
     });
@@ -30,12 +30,12 @@ function login(username, password) {
 
 function logout() {
   // remove user from local storage to log user out
-  localStorage.removeItem("user");
+  localStorage.removeItem('user');
 }
 
 function getAll() {
   const requestOptions = {
-    method: "GET",
+    method: 'GET',
     headers: authHeader()
   };
 
@@ -44,7 +44,7 @@ function getAll() {
 
 function getById(id) {
   const requestOptions = {
-    method: "GET",
+    method: 'GET',
     headers: authHeader()
   };
 
@@ -55,8 +55,8 @@ function getById(id) {
 
 function register(user) {
   const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(user)
   };
 
@@ -67,8 +67,8 @@ function register(user) {
 
 function update(user) {
   const requestOptions = {
-    method: "PUT",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
+    method: 'PUT',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(user)
   };
 
@@ -80,7 +80,7 @@ function update(user) {
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
   const requestOptions = {
-    method: "DELETE",
+    method: 'DELETE',
     headers: authHeader()
   };
 

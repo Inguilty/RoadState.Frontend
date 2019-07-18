@@ -6,23 +6,12 @@ import { NavLink } from 'react-router-dom';
 import { FormControl, FormGroup } from 'react-bootstrap';
 import { userActions } from '../../../store/actions';
 import { connect } from 'react-redux';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-const initialState = {
-  username: '',
-  password: ''
-};
-
-const schema = Yup.object().shape({
-  username: Yup.string().required('Username is required!'),
-  password: Yup.string().required('Password is required')
-});
-
-class SignInPage extends React.Component {
+class SignIn extends React.Component {
   state = {
     isModalVisible: false
   };
@@ -40,28 +29,40 @@ class SignInPage extends React.Component {
     this.props.history.goBack();
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  initialState = {
+    username: '',
+    password: ''
+  };
 
-    const { username, password } = this.state;
+  schema = Yup.object().shape({
+    username: Yup.string().required('Username is required!'),
+    password: Yup.string().required('Password is required')
+  });
+
+  handleSubmit = e => {
+    // const { dispatch, loginDispatch } = this.props;
+    // if (e.username && e.password) {
+    //   loginDispatch(e.userName, e.password);
+    // }
+    // this.closeModal();
+    const user = {
+      username: e.username,
+      password: e.password
+    };
     const { dispatch } = this.props;
-    if (username && password) {
-      dispatch(userActions.login(username, password));
+    if (user.username && user.password) {
+      dispatch(userActions.login(user.username, user.password));
     }
+    this.closeModal();
   };
 
   render() {
     const { loggingIn } = this.props;
     return (
       <Formik
-        initialValues={initialState}
-        validationSchema={schema}
-        onSubmit={(values, { setSubmitting }) => {
-          const { dispatch } = this.props;
-          if (values.username && values.password) {
-            dispatch(userActions.login(values.username, values.password));
-          }
-        }}
+        initialValues={this.initialState}
+        validationSchema={this.schema}
+        onSubmit={this.handleSubmit}
       >
         {({ errors, touched, handleSubmit }) => (
           <Modal
@@ -146,6 +147,8 @@ class SignInPage extends React.Component {
   }
 }
 
+export default connect(mapStateToProps)(SignIn);
+
 function mapStateToProps(state) {
   const { loggingIn } = state.authentication;
   return {
@@ -153,4 +156,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SignInPage);
+// export default connect(
+//   mapStateToProps,
+//   { loginDispatched: userActions.login }
+// )(SignIn);

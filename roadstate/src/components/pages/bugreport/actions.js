@@ -9,7 +9,7 @@ export const loadBugReport = id => async (dispatch) => {
   if (bugReport.status === 200) {
     dispatch({
       type: LOAD_BUG_REPORT_SUCCESS,
-      bugReport: bugReport.response,
+      bugReport: bugReport.data,
     });
   } else {
     dispatch({

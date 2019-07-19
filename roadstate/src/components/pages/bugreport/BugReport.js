@@ -1,5 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import {
   Card,
   Carousel,
@@ -14,11 +15,17 @@ import {
 import {
   FaThumbsUp, FaThumbsDown, FaCheck, FaStar, FaComment,
 } from 'react-icons/fa';
+import * as bugReportActions from './actions';
 
 class BugReport extends React.Component {
   state = {
     isModalOpened: false,
   };
+
+  componentDidMount() {
+    const { loadBugReportDispatched } = this.props;
+    loadBugReportDispatched(1);
+  }
 
   handleShow = () => {
     this.setState({ isModalOpened: true });
@@ -32,9 +39,11 @@ class BugReport extends React.Component {
 
   render() {
     const { isModalOpened } = this.state;
+    const { loading, bugReport } = this.props;
+    if (loading || !bugReport) return <p>Loading...</p>;
     return (
       <Container>
-        <ModalCaller id={1} handleShow={this.handleShow} />
+        <ModalCaller id={bugReport.id} handleShow={this.handleShow} />
         <Modal show={isModalOpened} onHide={this.handleClose}>
           <Modal.Dialog scrollable>
             <Modal.Header>
@@ -43,7 +52,12 @@ class BugReport extends React.Component {
             <Modal.Body>
               <Poll handleAgreeButton={this.temporaryStub} id={1} user={null} />
               <br />
-              <BodyContainer description="Test" state="Very low" rating={1} commentsCount={0} />
+              <BodyContainer
+                description={bugReport.description}
+                state={bugReport.problemLevel}
+                rating={bugReport.reliabilityLevel}
+                commentsCount={0}
+              />
               <br />
               <NoComments />
             </Modal.Body>
@@ -56,7 +70,22 @@ class BugReport extends React.Component {
     );
   }
 }
-export default BugReport;
+
+const mapStateToProps = state => ({
+  loading: state.bugReportReducer.loading,
+  bugReport: state.bugReportReducer.bugReport,
+});
+
+export default connect(
+  mapStateToProps,
+  { loadBugReportDispatched: bugReportActions.loadBugReport },
+)(BugReport);
+
+BugReport.propTypes = {
+  loadBugReportDispatched: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  bugReport: PropTypes.objectOf.isRequired,
+};
 
 export const NoPhotosAvailable = () => (
   <Card key="emptyImage">

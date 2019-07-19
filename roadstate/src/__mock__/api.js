@@ -1,6 +1,9 @@
 import { bugReports, users } from './mockData';
 
-export const getBugReport = async id => bugReports.find(x => x.id === id);
+export const getBugReport = (response, apiCallback) => () => {
+  apiCallback();
+  return Promise.resolve(response);
+};
 
 export const getCurrentUser = async id => users.find(x => x.id === id);
 

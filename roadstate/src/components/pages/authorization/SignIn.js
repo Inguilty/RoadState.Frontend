@@ -1,19 +1,21 @@
 import React from 'react';
-import '../authorization/authorization.css';
+import './authorization.css';
 import Modal from 'react-modal';
-import customStyles from '../authorization/customStyles';
 import { NavLink } from 'react-router-dom';
 import { FormControl, FormGroup } from 'react-bootstrap';
-import { userActions } from './actions';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import {
+  Formik, Field, Form, ErrorMessage,
+} from 'formik';
 import * as Yup from 'yup';
+import { userActions } from './userActions';
+import customStyles from './customStyles';
 
 class SignIn extends React.Component {
   state = {
-    isModalVisible: false
+    isModalVisible: false,
   };
 
   componentDidMount() {
@@ -32,18 +34,18 @@ class SignIn extends React.Component {
 
   initialState = {
     username: '',
-    password: ''
+    password: '',
   };
 
   schema = Yup.object().shape({
     username: Yup.string().required('Username is required!'),
-    password: Yup.string().required('Password is required')
+    password: Yup.string().required('Password is required'),
   });
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     const user = {
       username: e.username,
-      password: e.password
+      password: e.password,
     };
     const { dispatch } = this.props;
     if (user.username && user.password) {
@@ -67,72 +69,58 @@ class SignIn extends React.Component {
             style={customStyles}
           >
             <h2>Sign in</h2>
-            <FormGroup className='Form-wrapper'>
+            <FormGroup className="Form-wrapper">
               <Form onSubmit={handleSubmit}>
-                <p className='hint-text'>Sign in with your google account</p>
+                <p className="hint-text">Sign in with your google account</p>
                 <FormGroup>
                   <center>
-                    <NavLink href='#' className='btn scl-md'>
-                      <i class='icon' />
+                    <NavLink href="#" className="btn scl-md">
+                      <i className="icon" />
                     </NavLink>
                   </center>
                 </FormGroup>
-                <FormGroup className='or-seperator'>
+                <FormGroup className="or-seperator">
                   <b>or</b>
                 </FormGroup>
 
-                <FormGroup className='form-group'>
+                <FormGroup className="form-group">
                   <Field
-                    name='username'
-                    type='text'
+                    name="username"
+                    type="text"
                     style={{ width: 365 }}
-                    placeholder='Username'
-                    className={
-                      'form-control' +
-                      (errors.username && touched.username ? ' is-invalid' : '')
-                    }
+                    placeholder="Username"
+                    className={`form-control${
+                      errors.username && touched.username ? ' is-invalid' : ''
+                    }`}
                   />
-                  <ErrorMessage
-                    name='username'
-                    component='div'
-                    className='invalid-feedback'
-                  />
+                  <ErrorMessage name="username" component="div" className="invalid-feedback" />
                 </FormGroup>
 
-                <FormGroup className='form-group'>
+                <FormGroup className="form-group">
                   <Field
-                    name='password'
-                    type='password'
+                    name="password"
+                    type="password"
                     style={{ width: 365 }}
-                    placeholder='Password'
-                    className={
-                      'form-control' +
-                      (errors.password && touched.password ? ' is-invalid' : '')
-                    }
+                    placeholder="Password"
+                    className={`form-control${
+                      errors.password && touched.password ? ' is-invalid' : ''
+                    }`}
                   />
-                  <ErrorMessage
-                    name='password'
-                    component='div'
-                    className='invalid-feedback'
-                  />
+                  <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
 
-                <FormControl
-                  type='submit'
-                  className='btn btn-primary btn-block'
-                  value='Sign in'
-                />
+                <FormControl type="submit" className="btn btn-primary btn-block" value="Sign in" />
                 {loggingIn && (
                   <center>
-                    <FontAwesomeIcon
-                      icon={faSpinner}
-                      className='fa fa-spinner fa-spin'
-                    />
+                    <FontAwesomeIcon icon={faSpinner} className="fa fa-spinner fa-spin" />
                   </center>
                 )}
-                <FormGroup className='Form-footer'>
-                  <NavLink href='#'>Forgot Your password?</NavLink> Have no
-                  account? <NavLink to='/signUp'>Sign up</NavLink>
+                <FormGroup className="Form-footer">
+                  <NavLink href="#">Forgot Your password?</NavLink>
+                  {' '}
+Have no account?
+                  {' '}
+                  <NavLink to="/signUp">Sign up</NavLink>
                 </FormGroup>
               </Form>
             </FormGroup>
@@ -146,7 +134,7 @@ class SignIn extends React.Component {
 function mapStateToProps(state) {
   const { loggingIn } = state.authentication;
   return {
-    loggingIn
+    loggingIn,
   };
 }
 

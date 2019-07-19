@@ -1,69 +1,74 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { userActions } from '../pages/authorization/actions';
+import { userActions } from '../pages/authorization/userActions';
 
 class Header extends React.Component {
   handleLogout = () => {
-    this.props.dispatch(this.props.logOut);
+    const { dispatch, logOut } = this.props;
+    // dispatch(logOut);
   };
+
   render() {
-    const { user } = this.props;
+    debugger;
+    const { userId } = this.props;
     return (
-      <nav className='navbar navbar-expand-lg navbar-light bg-light'>
-        <NavLink className='navbar-brand' to='/' exact>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <NavLink className="navbar-brand" to="/" exact>
           RoadState
         </NavLink>
         <button
-          className='navbar-toggler'
-          type='button'
-          data-toggle='collapse'
-          data-target='#navbarSupportedContent'
-          aria-controls='navbarSupportedContent'
-          aria-expanded='false'
-          aria-label='Toggle navigation'
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-          <span className='navbar-toggler-icon' />
+          <span className="navbar-toggler-icon" />
         </button>
-        <div className='collapse navbar-collapse' id='navbarSupportedContent'>
-          <ul className='navbar-nav mr-auto'>
-            <li className='nav-item active'>
-              <NavLink className='nav-link' to='/' exact>
-                Home <span className='sr-only'>(current)</span>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item active">
+              <NavLink className="nav-link" to="/" exact>
+                Home
+                {' '}
+                <span className="sr-only">(current)</span>
               </NavLink>
             </li>
-            <li className='nav-item'>
-              <NavLink className='nav-link' to='/about'>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/about">
                 About
               </NavLink>
             </li>
-            <li className='nav-item'>
-              <NavLink className='nav-link' to='/test'>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/test">
                 Test react-redux component
               </NavLink>
             </li>
 
-            {!user === false ? (
+            {!userId === false ? (
               <>
-                <li className='nav-item'>
-                  <NavLink className='nav-link' to='/profile'>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/profile">
                     Profile
                   </NavLink>
                 </li>
-                <li className='nav-item' onClick={this.handleLogout}>
-                  <NavLink className='nav-link'>Log out</NavLink>
+                <li className="nav-item" onClick={this.handleLogout}>
+                  <NavLink className="nav-link">Log out</NavLink>
                 </li>
               </>
             ) : (
               <>
-                <li className='nav-item'>
-                  <NavLink className='nav-link' to='/signIn'>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/signIn">
                     Sign in
                   </NavLink>
                 </li>
 
-                <li className='nav-item'>
-                  <NavLink className='nav-link' to='/signUp'>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/signUp">
                     Sign up
                   </NavLink>
                 </li>
@@ -78,7 +83,12 @@ class Header extends React.Component {
 
 const mapStateToProps = state => ({
   user: state.authentication.user,
-  logOut: userActions.logout()
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = () => ({
+  logOut: userActions.logout(),
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header);

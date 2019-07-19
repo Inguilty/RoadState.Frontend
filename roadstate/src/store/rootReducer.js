@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
-import { registration } from '../components/pages/authorization/reducers/registration';
-import { authentication } from '../components/pages/authorization/reducers/authentication';
-import { updateUser } from '../components/pages/authorization/reducers/updateUser';
+import { registrationReducer } from '../components/pages/authorization/registrationReducer';
+import { authorizationReducer } from '../components/pages/authorization/authorizationReducer';
+import { updateUserReducer } from '../components/pages/authorization/updateUserReducer';
 import bugReport from '../components/pages/bugreport/reducers';
 import user from '../components/pages/user/reducers';
 
 const rootReducer = combineReducers({
-  registration,
-  authentication,
-  updateUser,
+  registrationReducer,
+  authorizationReducer,
+  updateUserReducer,
   bugReport,
   user,
 });

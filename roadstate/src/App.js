@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from './components/layout/Header';
 import { Route, Switch } from 'react-router-dom';
+import Header from './components/layout/Header';
 import HomePage from './components/pages/home';
 import AboutPage from './components/pages/about';
 import PageNotFound from './components/pages/pagenotfound';
@@ -13,15 +13,15 @@ import UnauthorizedRoute from './components/routes/UnauthorizedRoute';
 class App extends React.Component {
   render() {
     return (
-      <div class='container-fluid'>
+      <div className="container-fluid">
         <Header />
-        <div className='jumbotron'>
+        <div className="jumbotron">
           <Switch>
-            <Route exact path='/' component={HomePage} />
-            <Route path='/about' component={AboutPage} />
-            <UnauthorizedRoute path='/signIn' component={SignIn} />
-            <UnauthorizedRoute path='/signUp' component={SignUp} />
-            <PrivateRoute path='/profile' component={ShowProfile} />
+            <Route exact path="/" component={HomePage} />
+            <Route path="/about" component={AboutPage} />
+            <Route path="/signIn" component={SignIn} />
+            <Route path="/signUp" component={SignUp} />
+            <Route path="/profile" component={ShowProfile} />
             <Route component={PageNotFound} />
           </Switch>
         </div>

@@ -1,21 +1,19 @@
-import { userConstants } from '../constants';
+import * as userConstants from './userActions';
 
-let user = JSON.parse(localStorage.getItem('user'));
-const initialState = user ? { loggedIn: true, user } : {};
+const initialState = { loggedIn: false, user: null };
 
-export function authentication(state = initialState, action) {
+export function authorizationReducer(state = initialState, action) {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {
         ...state,
         loggingIn: true,
-        user: action.user
       };
     case userConstants.LOGIN_SUCCESS:
       return {
         ...state,
         loggedIn: true,
-        user: action.user
+        user: action.user,
       };
     case userConstants.LOGIN_FAILURE:
       return state;

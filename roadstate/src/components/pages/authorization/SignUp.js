@@ -1,27 +1,33 @@
 import React from 'react';
-import '../authorization/authorization.css';
+import './authorization.css';
 import Modal from 'react-modal';
-import customStyles from '../authorization/customStyles';
 import { NavLink } from 'react-router-dom';
 import {
-  FormControl,
-  FormGroup,
-  FormLabel,
-  Row,
-  Col,
-  Image
+  FormControl, FormGroup, FormLabel, Row, Col, Image,
 } from 'react-bootstrap';
-import { userActions } from './actions';
+
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import {
+  Formik, Field, Form, ErrorMessage,
+} from 'formik';
 import * as Yup from 'yup';
+import { userActions } from './userActions';
+import customStyles from './customStyles';
 
 class SignUp extends React.Component {
-  IMAGE_MAX_SIZE = () => 16777215;
+  state = {
+    isModalVisible: false,
+    image: '',
+    imagePreviewUrl: '',
+  };
 
-  handleFileChanging = e => {
+  componentDidMount() {
+    this.openModal();
+  }
+
+  handleFileChanging = (e) => {
     if (e.target.files[0] === undefined) {
       return;
     }
@@ -31,28 +37,20 @@ class SignUp extends React.Component {
     }
     e.preventDefault();
 
-    let reader = new FileReader();
-    let file = e.target.files[0];
+    const reader = new FileReader();
+    const file = e.target.files[0];
 
     reader.onloadend = () => {
       this.setState({
         image: file,
-        imagePreviewUrl: reader.result
+        imagePreviewUrl: reader.result,
       });
     };
 
     reader.readAsDataURL(file);
   };
 
-  state = {
-    isModalVisible: false,
-    image: '',
-    imagePreviewUrl: ''
-  };
-
-  componentDidMount() {
-    this.openModal();
-  }
+  IMAGE_MAX_SIZE = () => 16777215;
 
   openModal = () => {
     this.setState({ isModalVisible: true });
@@ -64,13 +62,13 @@ class SignUp extends React.Component {
     history.goBack();
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     const user = {
       avatar: this.state.image,
       avatarUrl: this.state.imagePreviewUrl,
       username: e.username,
       email: e.email,
-      password: e.password
+      password: e.password,
     };
     const { dispatch } = this.props;
     if (user.username && user.email && user.password && e.acceptedTerms) {
@@ -84,7 +82,7 @@ class SignUp extends React.Component {
     email: '',
     password: '',
     confirmPasword: '',
-    acceptedTerms: false
+    acceptedTerms: false,
   };
 
   schema = Yup.object().shape({
@@ -99,20 +97,20 @@ class SignUp extends React.Component {
       .required('Password is required')
       .matches(
         /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
-        'You must enter at least 1 number, 1 upper and lowercase letter.'
+        'You must enter at least 1 number, 1 upper and lowercase letter.',
       ),
     confirmPasword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Confirm password is required'),
-    acceptedTerms: Yup.bool()
+    acceptedTerms: Yup.bool(),
   });
 
   render() {
     const { registering } = this.props;
-    let { imagePreviewUrl } = this.state;
+    const { imagePreviewUrl } = this.state;
     let $imagePreview = null;
     if (imagePreviewUrl) {
-      $imagePreview = <Image id='userAvatar' src={imagePreviewUrl} />;
+      $imagePreview = <Image id="userAvatar" src={imagePreviewUrl} />;
     }
     return (
       <Formik
@@ -127,154 +125,113 @@ class SignUp extends React.Component {
             style={customStyles}
           >
             <h2>Sign up</h2>
-            <FormGroup className='Form-wrapper'>
+            <FormGroup className="Form-wrapper">
               <center>
                 <div>{$imagePreview}</div>
               </center>
-              <p className='hint-text'>
-                * - Fill in this Form to create your account!
-              </p>
+              <p className="hint-text">* - Fill in this Form to create your account!</p>
               <Form onSubmit={handleSubmit}>
-                <FormGroup className='input-group'>
-                  <FormGroup className='input-group-prepend'>
-                    <span
-                      className='input-group-text'
-                      id='inputGroupFileAddon01'
-                    >
+                <FormGroup className="input-group">
+                  <FormGroup className="input-group-prepend">
+                    <span className="input-group-text" id="inputGroupFileAddon01">
                       Avatar
                     </span>
                   </FormGroup>
-                  <FormGroup className='custom-file'>
+                  <FormGroup className="custom-file">
                     <FormControl
-                      type='file'
-                      name='imagePath'
-                      accept='image/*'
+                      type="file"
+                      name="imagePath"
+                      accept="image/*"
                       onChange={this.handleFileChanging}
-                      className='custom-file-input'
-                      id='inputGroupFile01'
-                      aria-describedby='inputGroupFileAddon01'
+                      className="custom-file-input"
+                      id="inputGroupFile01"
+                      aria-describedby="inputGroupFileAddon01"
                     />
 
-                    <FormLabel
-                      className='custom-file-label'
-                      htmlFor='inputGroupFile01'
-                    >
+                    <FormLabel className="custom-file-label" htmlFor="inputGroupFile01">
                       Choose file
                     </FormLabel>
                   </FormGroup>
                 </FormGroup>
 
-                <FormGroup className='form-group'>
+                <FormGroup className="form-group">
                   <Field
-                    name='username'
-                    type='text'
+                    name="username"
+                    type="text"
                     style={{ width: 365 }}
-                    placeholder='Username*'
-                    className={
-                      'form-control' +
-                      (errors.username && touched.username ? ' is-invalid' : '')
-                    }
+                    placeholder="Username*"
+                    className={`form-control${
+                      errors.username && touched.username ? ' is-invalid' : ''
+                    }`}
                   />
-                  <ErrorMessage
-                    name='username'
-                    component='div'
-                    className='invalid-feedback'
-                  />
+                  <ErrorMessage name="username" component="div" className="invalid-feedback" />
                 </FormGroup>
 
-                <FormGroup className='form-group'>
+                <FormGroup className="form-group">
                   <Field
-                    name='email'
-                    type='email'
-                    placeholder='Email*'
-                    className={
-                      'form-control' +
-                      (errors.email && touched.email ? ' is-invalid' : '')
-                    }
+                    name="email"
+                    type="email"
+                    placeholder="Email*"
+                    className={`form-control${errors.email && touched.email ? ' is-invalid' : ''}`}
                   />
-                  <ErrorMessage
-                    name='email'
-                    component='div'
-                    className='invalid-feedback'
-                  />
+                  <ErrorMessage name="email" component="div" className="invalid-feedback" />
                 </FormGroup>
 
-                <FormGroup className='form-group'>
+                <FormGroup className="form-group">
                   <Field
-                    name='password'
-                    type='password'
+                    name="password"
+                    type="password"
                     style={{ width: 365 }}
-                    placeholder='Password*'
-                    className={
-                      'form-control' +
-                      (errors.password && touched.password ? ' is-invalid' : '')
-                    }
+                    placeholder="Password*"
+                    className={`form-control${
+                      errors.password && touched.password ? ' is-invalid' : ''
+                    }`}
                   />
-                  <ErrorMessage
-                    name='password'
-                    component='div'
-                    className='invalid-feedback'
-                  />
+                  <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
 
-                <FormGroup className='form-group'>
+                <FormGroup className="form-group">
                   <Field
-                    name='confirmPasword'
-                    type='password'
+                    name="confirmPasword"
+                    type="password"
                     style={{ width: 365 }}
-                    placeholder='Confirm password*'
-                    className={
-                      'form-control' +
-                      (errors.confirmPasword && touched.confirmPasword
-                        ? ' is-invalid'
-                        : '')
-                    }
+                    placeholder="Confirm password*"
+                    className={`form-control${
+                      errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage
-                    name='confirmPasword'
-                    component='div'
-                    className='invalid-feedback'
+                    name="confirmPasword"
+                    component="div"
+                    className="invalid-feedback"
                   />
                 </FormGroup>
 
-                <Row className='form-group'>
-                  <Col sm='1'>
+                <Row className="form-group">
+                  <Col sm="1">
                     <Field
-                      name='acceptedTerms'
-                      type='checkbox'
-                      className={
-                        'form-checkbox' +
-                        (errors.acceptedTerms && touched.acceptedTerms
-                          ? ' is-invalid'
-                          : '')
-                      }
+                      name="acceptedTerms"
+                      type="checkbox"
+                      className={`form-checkbox${
+                        errors.acceptedTerms && touched.acceptedTerms ? ' is-invalid' : ''
+                      }`}
                     />
                   </Col>
                   <Col>
-                    <FormLabel className='checkbox-inline'>
+                    <FormLabel className="checkbox-inline">
                       {' '}
-                      I accept the{' '}
-                      <NavLink href='#'>Terms &amp; Conditions</NavLink>
+                      I accept the
+                      {' '}
+                      <NavLink href="#">Terms &amp; Conditions</NavLink>
                     </FormLabel>
                   </Col>
-                  <ErrorMessage
-                    name='acceptedTerms'
-                    component='div'
-                    className='invalid-feedback'
-                  />
+                  <ErrorMessage name="acceptedTerms" component="div" className="invalid-feedback" />
                 </Row>
 
-                <FormControl
-                  type='submit'
-                  className='btn btn-primary btn-block'
-                  value='Sign up'
-                />
+                <FormControl type="submit" className="btn btn-primary btn-block" value="Sign up" />
                 {registering && (
                   <center>
-                    <FontAwesomeIcon
-                      icon={faSpinner}
-                      className='fa fa-spinner fa-spin'
-                    />
+                    <FontAwesomeIcon icon={faSpinner} className="fa fa-spinner fa-spin" />
                   </center>
                 )}
               </Form>
@@ -288,7 +245,7 @@ class SignUp extends React.Component {
 function mapStateToProps(state) {
   const { registering } = state.registration;
   return {
-    registering
+    registering,
   };
 }
 

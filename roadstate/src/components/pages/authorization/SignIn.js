@@ -132,9 +132,9 @@ const mapStateToProps = state => ({
   loggingIn: state.authorizationReducer.loggingIn,
 });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = {
   login: userActions.login,
-});
+};
 
 export default connect(
   mapStateToProps,

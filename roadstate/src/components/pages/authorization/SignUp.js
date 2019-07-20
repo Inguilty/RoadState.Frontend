@@ -262,9 +262,9 @@ SignUp.propTypes = {
 
 const mapStateToProps = state => ({ isRegistering: state.registerReducer });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = {
   register: userActions.register,
-});
+};
 
 export default connect(
   mapStateToProps,

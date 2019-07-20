@@ -101,7 +101,7 @@ class ShowProfile extends React.Component {
   handleImageAlertShow = () => this.setState({ isImageValid: true });
 
   render() {
-    // debugger;
+    debugger;
     const {
       isModalVisible, isImageValid, imageErrorType, imagePreviewUrl,
     } = this.state;
@@ -245,12 +245,12 @@ ShowProfile.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.updatedUser.user,
+  user: state.authorizationReducer.user,
 });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = {
   update: userActions.update,
-});
+};
 
 export default connect(
   mapStateToProps,

@@ -4,7 +4,7 @@ export const LOGIN_REQUEST = 'USERS_LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'USERS_LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'USERS_LOGIN_FAILURE';
 const login = (username, password) => async (dispatch) => {
-  debugger;
+  // debugger;
   dispatch({ type: LOGIN_REQUEST });
   const user = await userService.login(username, password);
   if (user.status === 200) {
@@ -39,7 +39,6 @@ export const REGISTER_REQUEST = 'USERS_REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'USERS_REGISTER_SUCCESS';
 export const REGISTER_FAILURE = 'USERS_REGISTER_FAILURE';
 const register = user => async (dispatch) => {
-  debugger;
   dispatch({ type: REGISTER_REQUEST, user });
   const registeredUser = await userService.register(user);
   if (registeredUser.status === 200) {

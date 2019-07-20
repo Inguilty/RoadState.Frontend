@@ -85,17 +85,17 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  userLoggedIn: PropTypes.bool.isRequired,
+  userLoggedIn: PropTypes.objectOf.isRequired,
   logOut: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  userLoggedIn: state.authorizationReducer.loggingIn,
+  userLoggedIn: state.authorizationReducer.user,
 });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = {
   logOut: userActions.logout(),
-});
+};
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

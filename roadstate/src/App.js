@@ -19,7 +19,7 @@ const App = () => (
         <Route path="/about" component={AboutPage} />
         <UnauthorizedRoute path="/signIn" component={SignIn} />
         <UnauthorizedRoute path="/signUp" component={SignUp} />
-        <PrivateRoute path="/profile" component={ShowProfile} />
+        <Route path="/profile" component={ShowProfile} />
         <Route component={PageNotFound} />
       </Switch>
     </div>

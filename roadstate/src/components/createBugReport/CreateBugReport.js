@@ -11,7 +11,7 @@ class CreateBugReport extends React.Component {
 
   render() {
     const { isModalActive } = this.state;
-    const { locLog, locLat } = this.props;
+    const { locLong, locLat } = this.props;
     return (
       <div>
         {/* Put here element that will call handleShow() property */}
@@ -19,7 +19,7 @@ class CreateBugReport extends React.Component {
         <CreateBugReportForm
           isActive={isModalActive}
           onClose={this.handleClose}
-          locLog={locLog}
+          locLong={locLong}
           locLat={locLat}
         />
       </div>
@@ -28,7 +28,7 @@ class CreateBugReport extends React.Component {
 }
 
 CreateBugReport.propTypes = {
-  locLog: PropTypes.objectOf.isRequired,
+  locLong: PropTypes.objectOf.isRequired,
   locLat: PropTypes.objectOf.isRequired,
 };
 

@@ -12,3 +12,12 @@ export const postComment = async (id, comment, userId) => {
     console.log(error);
   }
 };
+
+export const createBugReport = createBR => new Promise((resolve) => {
+  console.log(createBR);
+  setTimeout(() => {
+    resolve({
+      status: 200,
+    });
+  }, 2000);
+});

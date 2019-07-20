@@ -26,7 +26,7 @@ const App = () => (
         <Route path="/view" component={BugReport} />
         <Route component={PageNotFound} />
       </Switch>
-      <CreateBugReport />
+      <CreateBugReport locLong="1" locLat="2" />
     </div>
     <ViewMap />
   </div>

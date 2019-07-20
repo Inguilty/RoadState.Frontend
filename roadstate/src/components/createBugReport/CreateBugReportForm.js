@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import {
   Modal, Button, Col, Alert, FormGroup, Row, FormControl,
@@ -8,6 +9,7 @@ import {
   Formik, Field, Form, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
+import * as createBRactions from './actions';
 
 export const MAX_BUG_REPORT_IMAGE_SIZE = 16 * 1024 * 1024;
 export const MAX_BUG_REPORT_IMAGES_NUMBER = 5;
@@ -23,13 +25,12 @@ const errorImageMessages = {
 
 class CreateBugReportForm extends React.Component {
   state = {
-    isImageValid: false, isImageAlert: false, imageErrorType: '',
+    isImageValid: false, isImageAlert: false, imageErrorType: '', photos: {},
   };
 
   initialState = {
     probLvl: '',
     desc: '',
-    photos: {},
   };
 
   schema = Yup.object().shape({
@@ -46,15 +47,33 @@ class CreateBugReportForm extends React.Component {
     is ${MAX_BUG_REPORT_IMAGES_NUMBER}.`) */
   });
 
+  componentDidUpdate(prevProps) {
+    const { isLoading } = this.props;
+    if (prevProps.isLoading !== isLoading) {
+      if (isLoading) {
+        this.btnSub.setAttribute('disabled', 'disabled');
+        this.btnClose.setAttribute('disabled', 'disabled');
+      } else {
+        this.btnSub.removeAttribute('disabled');
+        this.btnClose.removeAttribute('disabled');
+      }
+    }
+  }
+
   handleClose = () => {
     const { onClose } = this.props;
     onClose();
   }
 
-  handleSubmit = () => {
-    const { isImageValid } = this.state;
+  handleSubmit = (e) => {
+    const { isImageValid, photos } = this.state;
+    const { probLvl, desc } = e;
+    const { createBugReport, locLong, locLat } = this.props;
+
     if (isImageValid === true) {
-      alert('Success');
+      createBugReport({
+        probLvl, desc, photos, locLong, locLat,
+      });
       // ToDo: Send required objects
     }
   };
@@ -87,7 +106,7 @@ class CreateBugReportForm extends React.Component {
       this.handleImageAlertShow();
       return true;
     }
-    this.setState({ isImageValid: true });
+    this.setState({ isImageValid: true, photos: event.target.files });
     return true;
   };
 
@@ -111,8 +130,8 @@ class CreateBugReportForm extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ errors, touched }) => (
-          <Modal show={isActive} onHide={this.handleClose}>
-            <Modal.Header closeButton>
+          <Modal backdrop="static" keyboard="false" show={isActive} onHide={this.handleClose}>
+            <Modal.Header>
               <Modal.Title>Create Bug Report</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -170,7 +189,6 @@ class CreateBugReportForm extends React.Component {
                   <FormControl
                     required
                     multiple
-                    name="photos"
                     type="file"
                     accept="image/*"
                     className={
@@ -182,12 +200,18 @@ class CreateBugReportForm extends React.Component {
                 <br />
                 <Row>
                   <Col sm={{ offset: 2 }}>
-                    <Button type="submit" variant="primary" size="lg">
+                    <Button
+                      ref={(btnSub) => { this.btnSub = btnSub; }}
+                      type="submit"
+                      variant="primary"
+                      size="lg"
+                    >
                       Save
                     </Button>
                   </Col>
                   <Col sm={{ offset: 2 }}>
                     <Button
+                      ref={(btnClose) => { this.btnClose = btnClose; }}
                       variant="secondary"
                       size="lg"
                       onClick={this.handleClose}
@@ -206,10 +230,26 @@ class CreateBugReportForm extends React.Component {
 }
 
 CreateBugReportForm.propTypes = {
-  isActive: PropTypes.objectOf.isRequired,
+  locLong: PropTypes.number.isRequired,
+  locLat: PropTypes.number.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   onClose: PropTypes.objectOf.isRequired,
+  createBugReport: PropTypes.func.isRequired,
   /* locLog: PropTypes.objectOf.isRequired,
   locLat: PropTypes.objectOf.isRequired, */
 };
 
-export default CreateBugReportForm;
+const mapStateToProps = state => ({
+  isLoading: state.createBugReport.isLoading,
+  isFailed: state.createBugReport.isFailed,
+});
+
+const mapDispatchToProps = {
+  createBugReport: createBRactions.createBugReport,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CreateBugReportForm);

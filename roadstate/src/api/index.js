@@ -13,3 +13,5 @@ export const loadBugReport = id => new Promise((resolve) => {
     });
   }, 2000);
 });
+
+export const createBugReport = bugReport => axios.post(`${BASE_URL}/createBugReport`, { bugReport });

@@ -47,7 +47,7 @@ class BugReport extends React.Component {
   render() {
     const { isModalOpened } = this.state;
     const { bugReport, loadingBugReport, loadingBugReportRating } = this.props;
-    while (loadingBugReport === true) {
+    if (loadingBugReport === true) {
       return (
         <Row>
           <Col md={{ offset: 5 }}>
@@ -276,7 +276,7 @@ function BugReportRate({
   id,
   loadingBugReportRating,
 }) {
-  while (loadingBugReportRating === true) {
+  if (loadingBugReportRating === true) {
     return (
       <Row>
         <Col md={{ offset: 5 }}>

@@ -102,11 +102,15 @@ function mapDispatchToProps(dispatch) {
 }
 
 BugReport.propTypes = {
-  loadingBugReport: PropTypes.objectOf.isRequired,
-  loadingBugReportRating: PropTypes.objectOf.isRequired,
-  bugReport: PropTypes.objectOf.isRequired,
+  loadingBugReport: PropTypes.bool.isRequired,
+  loadingBugReportRating: PropTypes.bool.isRequired,
+  bugReport: PropTypes.objectOf(PropTypes.any),
   rateBugReport: PropTypes.func.isRequired,
   loadBugReport: PropTypes.func.isRequired,
+};
+
+BugReport.defaultProps = {
+  bugReport: null,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BugReport);
@@ -254,10 +258,16 @@ export const Poll = ({
 );
 
 Poll.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.number,
   handlePollButton: PropTypes.func.isRequired,
-  bugReport: PropTypes.objectOf.isRequired,
-  loadingBugReportRating: PropTypes.objectOf.isRequired,
+  bugReport: PropTypes.objectOf(PropTypes.any),
+  loadingBugReportRating: PropTypes.bool,
+};
+
+Poll.defaultProps = {
+  id: 0,
+  bugReport: null,
+  loadingBugReportRating: false,
 };
 
 function BugReportRate({
@@ -284,8 +294,13 @@ function BugReportRate({
 BugReportRate.propTypes = {
   id: PropTypes.number.isRequired,
   handlePollButton: PropTypes.func.isRequired,
-  bugReport: PropTypes.objectOf.isRequired,
-  loadingBugReportRating: PropTypes.objectOf.isRequired,
+  bugReport: PropTypes.objectOf(PropTypes.any),
+  loadingBugReportRating: PropTypes.bool,
+};
+
+BugReportRate.defaultProps = {
+  bugReport: null,
+  loadingBugReportRating: false,
 };
 
 function BugReportRated({ bugReport }) {
@@ -299,7 +314,11 @@ function BugReportRated({ bugReport }) {
 }
 
 BugReportRated.propTypes = {
-  bugReport: PropTypes.objectOf.isRequired,
+  bugReport: PropTypes.objectOf(PropTypes.any),
+};
+
+BugReportRated.defaultProps = {
+  bugReport: null,
 };
 
 function BugReportUnrated({ handlePollButton, id }) {

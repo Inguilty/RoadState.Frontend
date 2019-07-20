@@ -15,6 +15,7 @@ import {
   FaThumbsUp, FaThumbsDown, FaCheck, FaStar, FaComment,
 } from 'react-icons/fa';
 import { connect } from 'react-redux';
+import { Spinner } from '../../spinner/spinner';
 import * as bugReportActions from './actions';
 
 class BugReport extends React.Component {
@@ -105,16 +106,6 @@ BugReport.propTypes = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BugReport);
-
-export const Spinner = offsetSize => (
-  <Row>
-    <Col md={{ offset: offsetSize }}>
-      <div className="spinner-border" role="status">
-        <span className="sr-only">Loading...</span>
-      </div>
-    </Col>
-  </Row>
-);
 
 export const NoPhotosAvailable = () => (
   <Card key="emptyImage">

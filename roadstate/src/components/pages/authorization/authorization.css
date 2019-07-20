@@ -355,3 +355,7 @@
   border-top: 5px solid gray;
   border-bottom: 5px solid gray;
 }
+
+.Field {
+  width: 365px;
+}

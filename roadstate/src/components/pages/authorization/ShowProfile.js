@@ -1,9 +1,10 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { NavLink } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
 import './authorization.css';
 import {
-  FormControl, FormGroup, FormLabel, Image,
+  FormControl, FormGroup, FormLabel, Image, Alert,
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import {
@@ -13,34 +14,18 @@ import * as Yup from 'yup';
 import { userActions } from './userActions';
 import customStyles from './customStyles';
 
+export const IMAGE_MAX_SIZE = 16 * 1024 * 1024;
+export const convertBytesToMB = a => Math.floor(a / (1024 * 1024));
+export const errorMessages = {
+  maxSize: `Maximum size of the image should not exceed ${convertBytesToMB(IMAGE_MAX_SIZE)} MB.`,
+};
+
 class ShowProfile extends React.Component {
   state = {
     isModalVisible: false,
-    image: '',
     imagePreviewUrl: '',
-  };
-
-  componentDidMount() {
-    this.openModal();
-  }
-
-  openModal = () => {
-    this.setState({ isModalVisible: true });
-  };
-
-  closeModal = () => {
-    const { history } = this.props;
-    this.setState({ isModalVisible: false });
-    history.goBack();
-  };
-
-  initialState = {
-    username: '',
-    email: '',
-    password: '',
-    newPassword: '',
-    confirmNewPassword: '',
-    avatar: '',
+    isImageValid: false,
+    imageErrorType: '',
   };
 
   schema = Yup.object().shape({
@@ -57,6 +42,20 @@ class ShowProfile extends React.Component {
     confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
   });
 
+  componentDidMount() {
+    this.openModal();
+  }
+
+  openModal = () => {
+    this.setState({ isModalVisible: true });
+  };
+
+  closeModal = () => {
+    const { history } = this.props;
+    this.setState({ isModalVisible: false });
+    history.goBack();
+  };
+
   handleSubmit = (e) => {
     const { update, user } = this.props;
     const updatedUser = {
@@ -65,20 +64,21 @@ class ShowProfile extends React.Component {
       avatarUrl: e.avatarUrl,
       password: e.newPassword,
     };
-    const { dispatch } = this.props;
     if (e.password && e.newPassword && e.confirmNewPassword) {
-      dispatch(update(updatedUser));
+      update(updatedUser);
     }
     this.closeModal();
   };
-
-  IMAGE_MAX_SIZE = () => 16777215;
 
   handleFileChanging = (e) => {
     if (e.target.files[0] === undefined) {
       return;
     }
-    if (e.target.files[0].size > this.IMAGE_MAX_SIZE) {
+    if (e.target.files[0].size > IMAGE_MAX_SIZE) {
+      this.setState({
+        imageErrorType: 'maxSize',
+      });
+      this.handleImageAlertShow();
       e.target.value = null;
       return;
     }
@@ -89,7 +89,6 @@ class ShowProfile extends React.Component {
 
     reader.onloadend = () => {
       this.setState({
-        image: file,
         imagePreviewUrl: reader.result,
       });
     };
@@ -97,31 +96,52 @@ class ShowProfile extends React.Component {
     reader.readAsDataURL(file);
   };
 
+  handleImageAlertDismiss = () => this.setState({ isImageValid: false });
+
+  handleImageAlertShow = () => this.setState({ isImageValid: true });
+
   render() {
     // debugger;
-    const { userId } = this.props;
-    const { imagePreviewUrl } = this.state;
-    let $imagePreview = null;
-    if (imagePreviewUrl) {
-      $imagePreview = <Image id="userAvatar" src={imagePreviewUrl} />;
-    }
+    const {
+      isModalVisible, isImageValid, imageErrorType, imagePreviewUrl,
+    } = this.state;
+    const imageAlertText = errorMessages[imageErrorType];
+    const { user } = this.props;
+
+    const userImage = imagePreviewUrl && <Image id="userAvatar" src={imagePreviewUrl} />;
     return (
       <Formik
-        initialValues={this.initialState}
+        initialValues={{
+          username: '',
+          email: '',
+          password: '',
+          newPassword: '',
+          confirmNewPassword: '',
+          avatar: '',
+        }}
         validationSchema={this.schema}
         onSubmit={this.handleSubmit}
       >
         {({ errors, touched, handleSubmit }) => (
           <Modal
-            isOpen={this.state.isModalVisible}
+            isOpen={isModalVisible}
             onRequestClose={this.closeModal}
             style={customStyles}
             contentLabel="Example Modal"
           >
             <FormGroup className="Form-wrapper">
-              <Form action="#" method="post">
+              <Form onSubmit={handleSubmit}>
+                <Alert
+                  show={isImageValid}
+                  variant="danger"
+                  onClose={this.handleImageAlertDismiss}
+                  dismissible
+                >
+                  <Alert.Heading>Image upload error!</Alert.Heading>
+                  {imageAlertText}
+                </Alert>
                 <center>
-                  <div>{$imagePreview}</div>
+                  <div>{userImage}</div>
                 </center>
                 <span>Do you want to change your avatar?</span>
                 <FormGroup className="input-group">
@@ -151,7 +171,6 @@ class ShowProfile extends React.Component {
                   <FormControl
                     name="username"
                     type="text"
-                    style={{ width: 365 }}
                     // placeholder={user.username}
                     readOnly
                   />
@@ -160,7 +179,6 @@ class ShowProfile extends React.Component {
                   <FormControl
                     name="email"
                     type="text"
-                    style={{ width: 365 }}
                     // placeholder={user.email}
                     readOnly
                   />
@@ -172,7 +190,6 @@ class ShowProfile extends React.Component {
                   <Field
                     name="password"
                     type="password"
-                    style={{ width: 365 }}
                     placeholder="Old password"
                     className={`form-control${
                       errors.password && touched.password ? ' is-invalid' : ''
@@ -185,7 +202,6 @@ class ShowProfile extends React.Component {
                   <Field
                     name="newPassword"
                     type="password"
-                    style={{ width: 365 }}
                     placeholder="New password"
                     className={`form-control${
                       errors.newPassword && touched.newPassword ? ' is-invalid' : ''
@@ -197,7 +213,6 @@ class ShowProfile extends React.Component {
                   <Field
                     name="confirmNewPasword"
                     type="password"
-                    style={{ width: 365 }}
                     placeholder="Confirm new password"
                     className={`form-control${
                       errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''
@@ -223,9 +238,21 @@ class ShowProfile extends React.Component {
   }
 }
 
+ShowProfile.propTypes = {
+  user: PropTypes.objectOf.isRequired,
+  update: PropTypes.func.isRequired,
+  history: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = state => ({
-  user: state.authentication.user,
+  user: state.updatedUser.user,
+});
+
+const mapDispatchToProps = () => ({
   update: userActions.update,
 });
 
-export default connect(mapStateToProps)(ShowProfile);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ShowProfile);

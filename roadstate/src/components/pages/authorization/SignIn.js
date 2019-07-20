@@ -2,6 +2,7 @@ import React from 'react';
 import './authorization.css';
 import Modal from 'react-modal';
 import { NavLink } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
 import { FormControl, FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,6 +19,11 @@ class SignIn extends React.Component {
     isModalVisible: false,
   };
 
+  schema = Yup.object().shape({
+    username: Yup.string().required('Username is required!'),
+    password: Yup.string().required('Password is required'),
+  });
+
   componentDidMount() {
     this.openModal();
   }
@@ -32,42 +38,28 @@ class SignIn extends React.Component {
     history.goBack();
   };
 
-  initialState = {
-    username: '',
-    password: '',
-  };
-
-  schema = Yup.object().shape({
-    username: Yup.string().required('Username is required!'),
-    password: Yup.string().required('Password is required'),
-  });
-
   handleSubmit = (e) => {
-    const user = {
-      username: e.username,
-      password: e.password,
-    };
-    const { dispatch } = this.props;
-    if (user.username && user.password) {
-      dispatch(userActions.login(user.username, user.password));
+    const { login } = this.props;
+    if (e.username && e.password) {
+      login(e.username, e.password);
     }
     this.closeModal();
   };
 
   render() {
     const { loggingIn } = this.props;
+    const { isModalVisible } = this.state;
     return (
       <Formik
-        initialValues={this.initialState}
+        initialValues={{
+          username: '',
+          password: '',
+        }}
         validationSchema={this.schema}
         onSubmit={this.handleSubmit}
       >
         {({ errors, touched, handleSubmit }) => (
-          <Modal
-            isOpen={this.state.isModalVisible}
-            onRequestClose={this.closeModal}
-            style={customStyles}
-          >
+          <Modal isOpen={isModalVisible} onRequestClose={this.closeModal} style={customStyles}>
             <h2>Sign in</h2>
             <FormGroup className="Form-wrapper">
               <Form onSubmit={handleSubmit}>
@@ -85,9 +77,9 @@ class SignIn extends React.Component {
 
                 <FormGroup className="form-group">
                   <Field
+                    id="username"
                     name="username"
                     type="text"
-                    style={{ width: 365 }}
                     placeholder="Username"
                     className={`form-control${
                       errors.username && touched.username ? ' is-invalid' : ''
@@ -100,7 +92,6 @@ class SignIn extends React.Component {
                   <Field
                     name="password"
                     type="password"
-                    style={{ width: 365 }}
                     placeholder="Password"
                     className={`form-control${
                       errors.password && touched.password ? ' is-invalid' : ''
@@ -131,11 +122,21 @@ Have no account?
   }
 }
 
-function mapStateToProps(state) {
-  const { loggingIn } = state.authentication;
-  return {
-    loggingIn,
-  };
-}
+SignIn.propTypes = {
+  loggingIn: PropTypes.bool.isRequired,
+  login: PropTypes.func.isRequired,
+  history: PropTypes.objectOf.isRequired,
+};
 
-export default connect(mapStateToProps)(SignIn);
+const mapStateToProps = state => ({
+  loggingIn: state.authorizationReducer.loggingIn,
+});
+
+const mapDispatchToProps = () => ({
+  login: userActions.login,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignIn);

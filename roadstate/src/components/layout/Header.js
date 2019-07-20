@@ -1,17 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { PropTypes } from 'prop-types';
 import { userActions } from '../pages/authorization/userActions';
 
 class Header extends React.Component {
   handleLogout = () => {
-    const { dispatch, logOut } = this.props;
-    // dispatch(logOut);
+    const { logOut } = this.props;
+    logOut();
   };
 
   render() {
-    debugger;
-    const { userId } = this.props;
+    // debugger;
+    const { userLoggedIn } = this.props;
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <NavLink className="navbar-brand" to="/" exact>
@@ -48,15 +49,17 @@ class Header extends React.Component {
               </NavLink>
             </li>
 
-            {!userId === false ? (
+            {userLoggedIn ? (
               <>
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/profile">
                     Profile
                   </NavLink>
                 </li>
-                <li className="nav-item" onClick={this.handleLogout}>
-                  <NavLink className="nav-link">Log out</NavLink>
+                <li className="nav-item">
+                  <NavLink className="nav-link" onClick={this.handleLogout}>
+                    Log out
+                  </NavLink>
                 </li>
               </>
             ) : (
@@ -81,8 +84,13 @@ class Header extends React.Component {
   }
 }
 
+Header.propTypes = {
+  userLoggedIn: PropTypes.bool.isRequired,
+  logOut: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = state => ({
-  user: state.authentication.user,
+  userLoggedIn: state.authorizationReducer.loggingIn,
 });
 
 const mapDispatchToProps = () => ({

@@ -2,10 +2,10 @@ import React from 'react';
 import './authorization.css';
 import Modal from 'react-modal';
 import { NavLink } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
 import {
-  FormControl, FormGroup, FormLabel, Row, Col, Image,
+  FormControl, FormGroup, FormLabel, Row, Col, Image, Alert,
 } from 'react-bootstrap';
-
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +13,7 @@ import {
   Formik, Field, Form, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
+import { IMAGE_MAX_SIZE, errorMessages } from './ShowProfile';
 import { userActions } from './userActions';
 import customStyles from './customStyles';
 
@@ -21,68 +22,8 @@ class SignUp extends React.Component {
     isModalVisible: false,
     image: '',
     imagePreviewUrl: '',
-  };
-
-  componentDidMount() {
-    this.openModal();
-  }
-
-  handleFileChanging = (e) => {
-    if (e.target.files[0] === undefined) {
-      return;
-    }
-    if (e.target.files[0].size > this.IMAGE_MAX_SIZE) {
-      e.target.value = null;
-      return;
-    }
-    e.preventDefault();
-
-    const reader = new FileReader();
-    const file = e.target.files[0];
-
-    reader.onloadend = () => {
-      this.setState({
-        image: file,
-        imagePreviewUrl: reader.result,
-      });
-    };
-
-    reader.readAsDataURL(file);
-  };
-
-  IMAGE_MAX_SIZE = () => 16777215;
-
-  openModal = () => {
-    this.setState({ isModalVisible: true });
-  };
-
-  closeModal = () => {
-    const { history } = this.props;
-    this.setState({ isModalVisible: false });
-    history.goBack();
-  };
-
-  handleSubmit = (e) => {
-    const user = {
-      avatar: this.state.image,
-      avatarUrl: this.state.imagePreviewUrl,
-      username: e.username,
-      email: e.email,
-      password: e.password,
-    };
-    const { dispatch } = this.props;
-    if (user.username && user.email && user.password && e.acceptedTerms) {
-      dispatch(userActions.register(user));
-    }
-    this.closeModal();
-  };
-
-  initialState = {
-    username: '',
-    email: '',
-    password: '',
-    confirmPasword: '',
-    acceptedTerms: false,
+    isImageValid: false,
+    imageErrorType: '',
   };
 
   schema = Yup.object().shape({
@@ -105,32 +46,105 @@ class SignUp extends React.Component {
     acceptedTerms: Yup.bool(),
   });
 
-  render() {
-    const { registering } = this.props;
-    const { imagePreviewUrl } = this.state;
-    let $imagePreview = null;
-    if (imagePreviewUrl) {
-      $imagePreview = <Image id="userAvatar" src={imagePreviewUrl} />;
+  componentDidMount() {
+    this.openModal();
+  }
+
+  openModal = () => {
+    this.setState({ isModalVisible: true });
+  };
+
+  closeModal = () => {
+    const { history } = this.props;
+    this.setState({ isModalVisible: false });
+    history.goBack();
+  };
+
+  handleSubmit = (e) => {
+    const { image, imagePreviewUrl } = this.state;
+    const user = {
+      avatar: image,
+      avatarUrl: imagePreviewUrl,
+      username: e.username,
+      email: e.email,
+      password: e.password,
+    };
+    const { register } = this.props;
+    if (user.username && user.email && user.password && e.acceptedTerms) {
+      register(user);
     }
+    this.closeModal();
+  };
+
+  handleFileChanging = (e) => {
+    if (e.target.files[0] === undefined) {
+      return;
+    }
+    if (e.target.files[0].size > IMAGE_MAX_SIZE) {
+      this.setState({
+        imageErrorType: 'maxSize',
+      });
+      this.handleImageAlertShow();
+      e.target.value = null;
+      return;
+    }
+    e.preventDefault();
+
+    const reader = new FileReader();
+    const file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        image: file,
+        imagePreviewUrl: reader.result,
+      });
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  handleImageAlertDismiss = () => this.setState({ isImageValid: false });
+
+  handleImageAlertShow = () => this.setState({ isImageValid: true });
+
+  render() {
+    const { isRegistering } = this.props;
+    const {
+      isModalVisible, isImageValid, imageErrorType, imagePreviewUrl,
+    } = this.state;
+    const imageAlertText = errorMessages[imageErrorType];
+
+    const userImage = imagePreviewUrl && <Image id="userAvatar" src={imagePreviewUrl} />;
     return (
       <Formik
-        initialValues={this.initialState}
+        initialValues={{
+          username: '',
+          email: '',
+          password: '',
+          confirmPasword: '',
+          acceptedTerms: false,
+        }}
         validationSchema={this.schema}
         onSubmit={this.handleSubmit}
       >
         {({ errors, touched, handleSubmit }) => (
-          <Modal
-            isOpen={this.state.isModalVisible}
-            onRequestClose={this.closeModal}
-            style={customStyles}
-          >
+          <Modal isOpen={isModalVisible} onRequestClose={this.closeModal} style={customStyles}>
             <h2>Sign up</h2>
             <FormGroup className="Form-wrapper">
               <center>
-                <div>{$imagePreview}</div>
+                <div>{userImage}</div>
               </center>
               <p className="hint-text">* - Fill in this Form to create your account!</p>
               <Form onSubmit={handleSubmit}>
+                <Alert
+                  show={isImageValid}
+                  variant="danger"
+                  onClose={this.handleImageAlertDismiss}
+                  dismissible
+                >
+                  <Alert.Heading>Image upload error!</Alert.Heading>
+                  {imageAlertText}
+                </Alert>
                 <FormGroup className="input-group">
                   <FormGroup className="input-group-prepend">
                     <span className="input-group-text" id="inputGroupFileAddon01">
@@ -158,7 +172,6 @@ class SignUp extends React.Component {
                   <Field
                     name="username"
                     type="text"
-                    style={{ width: 365 }}
                     placeholder="Username*"
                     className={`form-control${
                       errors.username && touched.username ? ' is-invalid' : ''
@@ -181,7 +194,6 @@ class SignUp extends React.Component {
                   <Field
                     name="password"
                     type="password"
-                    style={{ width: 365 }}
                     placeholder="Password*"
                     className={`form-control${
                       errors.password && touched.password ? ' is-invalid' : ''
@@ -194,7 +206,6 @@ class SignUp extends React.Component {
                   <Field
                     name="confirmPasword"
                     type="password"
-                    style={{ width: 365 }}
                     placeholder="Confirm password*"
                     className={`form-control${
                       errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''
@@ -229,7 +240,7 @@ class SignUp extends React.Component {
                 </Row>
 
                 <FormControl type="submit" className="btn btn-primary btn-block" value="Sign up" />
-                {registering && (
+                {isRegistering && (
                   <center>
                     <FontAwesomeIcon icon={faSpinner} className="fa fa-spinner fa-spin" />
                   </center>
@@ -242,11 +253,20 @@ class SignUp extends React.Component {
     );
   }
 }
-function mapStateToProps(state) {
-  const { registering } = state.registration;
-  return {
-    registering,
-  };
-}
 
-export default connect(mapStateToProps)(SignUp);
+SignUp.propTypes = {
+  isRegistering: PropTypes.bool.isRequired,
+  register: PropTypes.objectOf.isRequired,
+  history: PropTypes.objectOf.isRequired,
+};
+
+const mapStateToProps = state => ({ isRegistering: state.registerReducer });
+
+const mapDispatchToProps = () => ({
+  register: userActions.register,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignUp);

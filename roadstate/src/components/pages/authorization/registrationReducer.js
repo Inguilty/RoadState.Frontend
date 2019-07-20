@@ -1,13 +1,15 @@
 import * as userConstants from './userActions';
 
-export function registrationReducer(state = {}, action) {
+const initialState = { isRegistering: false };
+
+export function registrationReducer(state = initialState, action) {
   switch (action.type) {
     case userConstants.REGISTER_REQUEST:
-      return { registering: true };
+      return { isRegistering: true };
     case userConstants.REGISTER_SUCCESS:
-      return {};
+      return { isRegistering: false };
     case userConstants.REGISTER_FAILURE:
-      return {};
+      return { errorMessage: action.errorMessage };
     default:
       return state;
   }

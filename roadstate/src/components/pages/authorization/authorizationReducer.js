@@ -1,8 +1,13 @@
 import * as userConstants from './userActions';
 
-const initialState = { loggedIn: false, user: null };
+const initialState = {
+  loggedIn: false,
+  loggingIn: false,
+  userId: '',
+  token: '',
+};
 
-export function authorizationReducer(state = initialState, action) {
+export const authorizationReducer = (state = initialState, action) => {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {
@@ -13,15 +18,15 @@ export function authorizationReducer(state = initialState, action) {
       return {
         ...state,
         loggedIn: true,
+        loggingIn: false,
         user: action.user,
       };
     case userConstants.LOGIN_FAILURE:
-      return state;
-    case userConstants.LOGOUT_REQUEST:
-      return state;
-    case userConstants.LOGOUT_SUCCESS:
-      return { ...state, loggedIn: false, user: null };
+      return {
+        ...state,
+        errorMessage: action.errorMessage,
+      };
     default:
       return state;
   }
-}
+};

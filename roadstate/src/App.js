@@ -10,23 +10,20 @@ import ShowProfile from './components/pages/authorization/ShowProfile';
 import PrivateRoute from './components/routes/PrivateRoute';
 import UnauthorizedRoute from './components/routes/UnauthorizedRoute';
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="container-fluid">
-        <Header />
-        <div className="jumbotron">
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/about" component={AboutPage} />
-            <Route path="/signIn" component={SignIn} />
-            <Route path="/signUp" component={SignUp} />
-            <Route path="/profile" component={ShowProfile} />
-            <Route component={PageNotFound} />
-          </Switch>
-        </div>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div className="container-fluid">
+    <Header />
+    <div className="jumbotron">
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/about" component={AboutPage} />
+        <UnauthorizedRoute path="/signIn" component={SignIn} />
+        <UnauthorizedRoute path="/signUp" component={SignUp} />
+        <PrivateRoute path="/profile" component={ShowProfile} />
+        <Route component={PageNotFound} />
+      </Switch>
+    </div>
+  </div>
+);
+
 export default App;

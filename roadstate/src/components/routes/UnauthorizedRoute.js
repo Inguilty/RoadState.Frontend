@@ -1,17 +1,27 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
-const UnauthorizedRoute = ({ component: Component, ...rest }) => (
+const UnauthorizedRoute = ({ component: Component }) => (
   <Route
-    {...rest}
-    render={props =>
-      localStorage.getItem('user') ? (
-        <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-      ) : (
-        <Component {...props} />
-      )
+    render={props => (props.user ? (
+      <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+    ) : (
+      <Component {...props} />
+    ))
     }
   />
 );
 
-export default UnauthorizedRoute;
+UnauthorizedRoute.propTypes = {
+  component: PropTypes.objectOf.isRequired,
+  location: PropTypes.objectOf.isRequired,
+  user: PropTypes.objectOf.isRequired,
+};
+
+const mapStateToProps = state => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(UnauthorizedRoute);

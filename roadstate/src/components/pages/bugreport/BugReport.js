@@ -23,8 +23,8 @@ class BugReport extends React.Component {
   };
 
   async componentDidMount() {
-    const { loadBugReportAsync } = this.props;
-    await loadBugReportAsync(2);
+    const { loadBugReport } = this.props;
+    await loadBugReport(2);
   }
 
   handleShow = () => {
@@ -45,8 +45,12 @@ class BugReport extends React.Component {
 
   render() {
     const { isModalOpened } = this.state;
-    const { bugReport } = this.props;
-
+    const { bugReport, loadingBugReport, loadingBugReportRating } = this.props;
+    while (loadingBugReport === true) {
+      return (
+        <Spinner offsetSize={5} />
+      );
+    }
     return (
       <Container>
         <ModalCaller id={1} handleShow={this.handleShow} />
@@ -56,7 +60,12 @@ class BugReport extends React.Component {
               <NoPhotosAvailable />
             </Modal.Header>
             <Modal.Body>
-              <Poll handlePollButton={this.handlePoll} bugReport={bugReport} user={null} />
+              <Poll
+                handlePollButton={this.handlePoll}
+                bugReport={bugReport}
+                user={null}
+                loadingBugReportRating={loadingBugReportRating}
+              />
               <br />
               <BodyContainer description="Test" state="Very low" rating={!bugReport ? -1 : bugReport.rating} commentsCount={0} />
               <br />
@@ -74,24 +83,38 @@ class BugReport extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    bugReport: state.bugReportReducer.bugReport,
+    bugReport: state.bugReport.bugReport,
+    loadingBugReportRating: state.bugReport.loadingBugReportRating,
+    loadingBugReport: state.bugReport.loadingBugReport,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadBugReportAsync: bugReport => dispatch(bugReportActions.loadBugReportAsync(bugReport)),
+    loadBugReport: bugReport => dispatch(bugReportActions.loadBugReport(bugReport)),
     rateBugReport: (bugReport, rate) => dispatch(bugReportActions.rateBugReport(bugReport, rate)),
   };
 }
 
 BugReport.propTypes = {
+  loadingBugReport: PropTypes.objectOf.isRequired,
+  loadingBugReportRating: PropTypes.objectOf.isRequired,
   bugReport: PropTypes.objectOf.isRequired,
   rateBugReport: PropTypes.func.isRequired,
-  loadBugReportAsync: PropTypes.func.isRequired,
+  loadBugReport: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BugReport);
+
+export const Spinner = offsetSize => (
+  <Row>
+    <Col md={{ offset: offsetSize }}>
+      <div className="spinner-border" role="status">
+        <span className="sr-only">Loading...</span>
+      </div>
+    </Col>
+  </Row>
+);
 
 export const NoPhotosAvailable = () => (
   <Card key="emptyImage">
@@ -217,11 +240,20 @@ ModalCaller.propTypes = {
   handleShow: PropTypes.func.isRequired,
 };
 
-export const Poll = ({ id, handlePollButton, bugReport }) => (
+export const Poll = ({
+  id, handlePollButton,
+  bugReport,
+  loadingBugReportRating,
+}) => (
   <Card>
     <Card.Header as="h6">Poll</Card.Header>
     <div>
-      <BugReportRate handlePollButton={handlePollButton} id={id} bugReport={bugReport} />
+      <BugReportRate
+        handlePollButton={handlePollButton}
+        id={id}
+        bugReport={bugReport}
+        loadingBugReportRating={loadingBugReportRating}
+      />
     </div>
   </Card>
 );
@@ -230,9 +262,20 @@ Poll.propTypes = {
   id: PropTypes.number.isRequired,
   handlePollButton: PropTypes.func.isRequired,
   bugReport: PropTypes.objectOf.isRequired,
+  loadingBugReportRating: PropTypes.objectOf.isRequired,
 };
 
-function BugReportRate({ bugReport, handlePollButton, id }) {
+function BugReportRate({
+  bugReport,
+  handlePollButton,
+  id,
+  loadingBugReportRating,
+}) {
+  while (loadingBugReportRating === true) {
+    return (
+      <Spinner offsetSize={5} />
+    );
+  }
   if (bugReport.userRate !== undefined) {
     return <BugReportRated bugReport={bugReport} />;
   }
@@ -243,6 +286,7 @@ BugReportRate.propTypes = {
   id: PropTypes.number.isRequired,
   handlePollButton: PropTypes.func.isRequired,
   bugReport: PropTypes.objectOf.isRequired,
+  loadingBugReportRating: PropTypes.objectOf.isRequired,
 };
 
 function BugReportRated({ bugReport }) {

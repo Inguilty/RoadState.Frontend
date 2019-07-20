@@ -49,7 +49,11 @@ class BugReport extends React.Component {
     const { bugReport, loadingBugReport, loadingBugReportRating } = this.props;
     while (loadingBugReport === true) {
       return (
-        <Spinner offsetSize={5} />
+        <Row>
+          <Col md={{ offset: 5 }}>
+            <Spinner />
+          </Col>
+        </Row>
       );
     }
     return (
@@ -264,7 +268,11 @@ function BugReportRate({
 }) {
   while (loadingBugReportRating === true) {
     return (
-      <Spinner offsetSize={5} />
+      <Row>
+        <Col md={{ offset: 5 }}>
+          <Spinner />
+        </Col>
+      </Row>
     );
   }
   if (bugReport.userRate !== undefined) {

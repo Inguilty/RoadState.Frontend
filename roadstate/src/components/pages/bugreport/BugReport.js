@@ -72,7 +72,7 @@ class BugReport extends React.Component {
                 loadingBugReportRating={loadingBugReportRating}
               />
               <br />
-              <BodyContainer description="Test" state="Very low" rating={!bugReport ? -1 : bugReport.rating} commentsCount={0} />
+              <BodyContainer description="Test" state="Very low" rating={!bugReport ? 0 : bugReport.rating} commentsCount={0} />
               <br />
               <NoComments />
             </Modal.Body>

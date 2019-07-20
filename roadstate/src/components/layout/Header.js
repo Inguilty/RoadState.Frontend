@@ -11,8 +11,8 @@ class Header extends React.Component {
   };
 
   render() {
-    // debugger;
-    const { userLoggedIn } = this.props;
+    debugger;
+    const { userLoggedIn, userNotLoggedOut } = this.props;
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <NavLink className="navbar-brand" to="/" exact>
@@ -49,7 +49,7 @@ class Header extends React.Component {
               </NavLink>
             </li>
 
-            {userLoggedIn ? (
+            {userLoggedIn && userNotLoggedOut ? (
               <>
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/profile">
@@ -86,15 +86,17 @@ class Header extends React.Component {
 
 Header.propTypes = {
   userLoggedIn: PropTypes.objectOf.isRequired,
+  userNotLoggedOut: PropTypes.objectOf.isRequired,
   logOut: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  userLoggedIn: state.authorizationReducer.user,
+  userLoggedIn: state.authorizationReducer.loggedIn,
+  userNotLoggedOut: state.logOutReducer.loggingOut,
 });
 
 const mapDispatchToProps = {
-  logOut: userActions.logout(),
+  logOut: userActions.logout,
 };
 export default connect(
   mapStateToProps,

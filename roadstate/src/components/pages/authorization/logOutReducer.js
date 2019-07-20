@@ -1,7 +1,7 @@
 import * as userConstants from './userActions';
 
 const initialState = {
-  loggedIn: true,
+  loggingOut: true,
 };
 
 export const logOutReducer = (state = initialState, action) => {
@@ -9,7 +9,12 @@ export const logOutReducer = (state = initialState, action) => {
     case userConstants.LOGOUT_REQUEST:
       return state;
     case userConstants.LOGOUT_SUCCESS:
-      return { ...state, loggedIn: false, user: null };
+      return {
+        ...state,
+        loggingOut: false,
+        userId: '',
+        token: '',
+      };
     default:
       return state;
   }

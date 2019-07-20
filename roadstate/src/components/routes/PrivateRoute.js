@@ -21,7 +21,7 @@ PrivateRoute.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.user,
+  user: state.authorizationReducer.user,
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

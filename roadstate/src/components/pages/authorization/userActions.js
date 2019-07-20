@@ -4,11 +4,11 @@ export const LOGIN_REQUEST = 'USERS_LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'USERS_LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'USERS_LOGIN_FAILURE';
 const login = (username, password) => async (dispatch) => {
-  // debugger;
   dispatch({ type: LOGIN_REQUEST });
   const user = await userService.login(username, password);
+  debugger;
   if (user.status === 200) {
-    dispatch({ type: LOGIN_SUCCESS, user });
+    dispatch({ type: LOGIN_SUCCESS, user: user.response });
   } else {
     dispatch({ type: LOGIN_FAILURE, errorMessage: user.error });
   }
@@ -19,6 +19,7 @@ export const LOGOUT_SUCCESS = 'USERS_LOGOUT_SUCCESS';
 const logout = () => async (dispatch) => {
   dispatch({ type: LOGOUT_REQUEST });
   await userService.logout();
+  debugger;
   dispatch({ type: LOGOUT_SUCCESS });
 };
 
@@ -29,9 +30,9 @@ const update = user => async (dispatch) => {
   dispatch({ type: UPDATE_REQUEST, user });
   const updatedUser = await userService.update(user);
   if (updatedUser.status === 200) {
-    dispatch({ type: UPDATE_SUCCESS, updatedUser });
+    dispatch({ type: UPDATE_SUCCESS, user: updatedUser.response });
   } else {
-    dispatch({ type: UPDATE_FAILURE, errorMessage: user.error });
+    dispatch({ type: UPDATE_FAILURE, errorMessage: updatedUser.error });
   }
 };
 
@@ -42,7 +43,7 @@ const register = user => async (dispatch) => {
   dispatch({ type: REGISTER_REQUEST, user });
   const registeredUser = await userService.register(user);
   if (registeredUser.status === 200) {
-    dispatch({ type: REGISTER_SUCCESS, user });
+    dispatch({ type: REGISTER_SUCCESS, user: registeredUser.response });
   } else {
     dispatch({ type: REGISTER_FAILURE, errorMessage: registeredUser.error });
   }

@@ -168,20 +168,10 @@ class ShowProfile extends React.Component {
                 </FormGroup>
 
                 <FormGroup className="Form-group">
-                  <FormControl
-                    name="username"
-                    type="text"
-                    // placeholder={user.username}
-                    readOnly
-                  />
+                  <FormControl name="username" type="text" placeholder={user.userName} readOnly />
                 </FormGroup>
                 <FormGroup className="Form-group">
-                  <FormControl
-                    name="email"
-                    type="text"
-                    // placeholder={user.email}
-                    readOnly
-                  />
+                  <FormControl name="email" type="text" placeholder={user.email} readOnly />
                 </FormGroup>
                 <FormGroup className="form-group">
                   <span>Do you want to change password?</span>

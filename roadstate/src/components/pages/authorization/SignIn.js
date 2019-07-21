@@ -15,26 +15,13 @@ import { userActions } from './userActions';
 import customStyles from './customStyles';
 
 class SignIn extends React.Component {
-  state = {
-    isModalVisible: false,
-  };
-
   schema = Yup.object().shape({
     username: Yup.string().required('Username is required!'),
     password: Yup.string().required('Password is required'),
   });
 
-  componentDidMount() {
-    this.openModal();
-  }
-
-  openModal = () => {
-    this.setState({ isModalVisible: true });
-  };
-
   closeModal = () => {
     const { history } = this.props;
-    this.setState({ isModalVisible: false });
     history.goBack();
   };
 
@@ -43,12 +30,10 @@ class SignIn extends React.Component {
     if (e.username && e.password) {
       login(e.username, e.password);
     }
-    this.closeModal();
   };
 
   render() {
-    const { loggingIn } = this.props;
-    const { isModalVisible } = this.state;
+    const { loggingIn, loggedIn } = this.props;
     return (
       <Formik
         initialValues={{
@@ -59,7 +44,11 @@ class SignIn extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ errors, touched, handleSubmit }) => (
-          <Modal isOpen={isModalVisible} onRequestClose={this.closeModal} style={customStyles}>
+          <Modal
+            isOpen={loggingIn || !loggedIn}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+          >
             <h2>Sign in</h2>
             <FormGroup className="Form-wrapper">
               <Form onSubmit={handleSubmit}>
@@ -124,19 +113,17 @@ Have no account?
 
 SignIn.propTypes = {
   loggingIn: PropTypes.bool.isRequired,
+  loggedIn: PropTypes.bool.isRequired,
   login: PropTypes.func.isRequired,
   history: PropTypes.objectOf.isRequired,
 };
 
 const mapStateToProps = state => ({
-  loggingIn: state.authorizationReducer.loggingIn,
+  loggingIn: state.authorization.loggingIn,
+  loggedIn: state.authorization.loggedIn,
 });
-
-const mapDispatchToProps = {
-  login: userActions.login,
-};
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  { login: userActions.login },
 )(SignIn);

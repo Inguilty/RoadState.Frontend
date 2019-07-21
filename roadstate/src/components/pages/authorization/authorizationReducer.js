@@ -3,11 +3,12 @@ import * as userConstants from './userActions';
 const initialState = {
   loggedIn: false,
   loggingIn: false,
+  loggingOut: false,
   userId: '',
   token: '',
 };
 
-export const authorizationReducer = (state = initialState, action) => {
+const authorizationReducer = (state = initialState, action) => {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {
@@ -19,14 +20,31 @@ export const authorizationReducer = (state = initialState, action) => {
         ...state,
         loggedIn: true,
         loggingIn: false,
-        user: action.user,
+        userId: action.id,
+        token: action.token,
       };
     case userConstants.LOGIN_FAILURE:
       return {
         ...state,
+        loggingIn: false,
         errorMessage: action.errorMessage,
+      };
+    case userConstants.LOGOUT_REQUEST:
+      return {
+        ...state,
+        loggingOut: true,
+      };
+    case userConstants.LOGOUT_SUCCESS:
+      return {
+        ...state,
+        loggingOut: false,
+        loggedIn: false,
+        userId: '',
+        token: '',
       };
     default:
       return state;
   }
 };
+
+export default authorizationReducer;

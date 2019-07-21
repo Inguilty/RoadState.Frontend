@@ -21,7 +21,7 @@ UnauthorizedRoute.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.authorizationReducer.user,
+  user: state.authorization.userId,
 });
 
 export default connect(mapStateToProps)(UnauthorizedRoute);

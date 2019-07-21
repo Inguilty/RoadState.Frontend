@@ -6,6 +6,8 @@ import './authorization.css';
 import {
   FormControl, FormGroup, FormLabel, Image, Alert,
 } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import {
   Formik, Field, Form, ErrorMessage,
@@ -22,7 +24,6 @@ export const errorMessages = {
 
 class ShowProfile extends React.Component {
   state = {
-    isModalVisible: false,
     imagePreviewUrl: '',
     isImageValid: false,
     imageErrorType: '',
@@ -42,24 +43,22 @@ class ShowProfile extends React.Component {
     confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
   });
 
-  componentDidMount() {
-    this.openModal();
-  }
-
-  openModal = () => {
-    this.setState({ isModalVisible: true });
-  };
-
   closeModal = () => {
     const { history } = this.props;
-    this.setState({ isModalVisible: false });
     history.goBack();
   };
 
+  resetUserRegistered = () => {
+    const { history, updated, completeUpdating } = this.props;
+    if (updated) {
+      completeUpdating();
+      history.push('/');
+    }
+  };
+
   handleSubmit = (e) => {
-    const { update, user } = this.props;
+    const { update } = this.props;
     const updatedUser = {
-      ...user,
       avatar: e.avatar,
       avatarUrl: e.avatarUrl,
       password: e.newPassword,
@@ -67,7 +66,6 @@ class ShowProfile extends React.Component {
     if (e.password && e.newPassword && e.confirmNewPassword) {
       update(updatedUser);
     }
-    this.closeModal();
   };
 
   handleFileChanging = (e) => {
@@ -101,13 +99,9 @@ class ShowProfile extends React.Component {
   handleImageAlertShow = () => this.setState({ isImageValid: true });
 
   render() {
-    debugger;
-    const {
-      isModalVisible, isImageValid, imageErrorType, imagePreviewUrl,
-    } = this.state;
+    const { isImageValid, imageErrorType, imagePreviewUrl } = this.state;
+    const { userId, isUpdating, updated } = this.props;
     const imageAlertText = errorMessages[imageErrorType];
-    const { user } = this.props;
-
     const userImage = imagePreviewUrl && <Image id="userAvatar" src={imagePreviewUrl} />;
     return (
       <Formik
@@ -124,7 +118,8 @@ class ShowProfile extends React.Component {
       >
         {({ errors, touched, handleSubmit }) => (
           <Modal
-            isOpen={isModalVisible}
+            isOpen={isUpdating || !updated}
+            onAfterClose={this.resetUserRegistered}
             onRequestClose={this.closeModal}
             style={customStyles}
             contentLabel="Example Modal"
@@ -168,10 +163,10 @@ class ShowProfile extends React.Component {
                 </FormGroup>
 
                 <FormGroup className="Form-group">
-                  <FormControl name="username" type="text" placeholder={user.userName} readOnly />
+                  <FormControl name="username" type="text" placeholder={userId} readOnly />
                 </FormGroup>
                 <FormGroup className="Form-group">
-                  <FormControl name="email" type="text" placeholder={user.email} readOnly />
+                  <FormControl name="email" type="text" readOnly />
                 </FormGroup>
                 <FormGroup className="form-group">
                   <span>Do you want to change password?</span>
@@ -197,7 +192,7 @@ class ShowProfile extends React.Component {
                       errors.newPassword && touched.newPassword ? ' is-invalid' : ''
                     }`}
                   />
-                  <ErrorMessage name="password" component="div" className="invalid-feedback" />
+                  <ErrorMessage name="newPassword" component="div" className="invalid-feedback" />
                 </FormGroup>
                 <FormGroup className="form-group">
                   <Field
@@ -205,11 +200,11 @@ class ShowProfile extends React.Component {
                     type="password"
                     placeholder="Confirm new password"
                     className={`form-control${
-                      errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''
+                      errors.confirmNewPassword && touched.confirmNewPassword ? ' is-invalid' : ''
                     }`}
                   />
                   <ErrorMessage
-                    name="confirmPasword"
+                    name="confirmNewPasword"
                     component="div"
                     className="invalid-feedback"
                   />
@@ -219,6 +214,11 @@ class ShowProfile extends React.Component {
                   <NavLink href="#">here</NavLink>
                 </FormGroup>
                 <FormControl type="submit" className="btn btn-primary btn-block" value="Update" />
+                {isUpdating && (
+                  <center>
+                    <FontAwesomeIcon icon={faSpinner} className="fa fa-spinner fa-spin" />
+                  </center>
+                )}
               </Form>
             </FormGroup>
           </Modal>
@@ -229,20 +229,21 @@ class ShowProfile extends React.Component {
 }
 
 ShowProfile.propTypes = {
-  user: PropTypes.objectOf.isRequired,
+  userId: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired,
-  history: PropTypes.func.isRequired,
+  history: PropTypes.objectOf.isRequired,
+  isUpdating: PropTypes.bool.isRequired,
+  updated: PropTypes.bool.isRequired,
+  completeUpdating: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  user: state.authorizationReducer.user,
+  userId: state.authorization.userId,
+  isUpdating: state.updateUser.isUpdating,
+  updated: state.updateUser.updated,
 });
-
-const mapDispatchToProps = {
-  update: userActions.update,
-};
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  { update: userActions.update, completeUpdating: userActions.completeUpdating },
 )(ShowProfile);

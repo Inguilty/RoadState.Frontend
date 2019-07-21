@@ -19,7 +19,6 @@ import customStyles from './customStyles';
 
 class SignUp extends React.Component {
   state = {
-    isModalVisible: false,
     image: '',
     imagePreviewUrl: '',
     isImageValid: false,
@@ -46,22 +45,22 @@ class SignUp extends React.Component {
     acceptedTerms: Yup.bool(),
   });
 
-  componentDidMount() {
-    this.openModal();
-  }
-
-  openModal = () => {
-    this.setState({ isModalVisible: true });
-  };
-
   closeModal = () => {
     const { history } = this.props;
-    this.setState({ isModalVisible: false });
     history.goBack();
+  };
+
+  resetUserRegistered = () => {
+    const { completeRegister, history, registered } = this.props;
+    if (registered) {
+      completeRegister();
+      history.push('/');
+    }
   };
 
   handleSubmit = (e) => {
     const { image, imagePreviewUrl } = this.state;
+    const { register } = this.props;
     const user = {
       avatar: image,
       avatarUrl: imagePreviewUrl,
@@ -69,11 +68,9 @@ class SignUp extends React.Component {
       email: e.email,
       password: e.password,
     };
-    const { register } = this.props;
     if (user.username && user.email && user.password && e.acceptedTerms) {
       register(user);
     }
-    this.closeModal();
   };
 
   handleFileChanging = (e) => {
@@ -108,10 +105,8 @@ class SignUp extends React.Component {
   handleImageAlertShow = () => this.setState({ isImageValid: true });
 
   render() {
-    const { isRegistering } = this.props;
-    const {
-      isModalVisible, isImageValid, imageErrorType, imagePreviewUrl,
-    } = this.state;
+    const { isRegistering, registered } = this.props;
+    const { isImageValid, imageErrorType, imagePreviewUrl } = this.state;
     const imageAlertText = errorMessages[imageErrorType];
 
     const userImage = imagePreviewUrl && <Image id="userAvatar" src={imagePreviewUrl} />;
@@ -128,7 +123,12 @@ class SignUp extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ errors, touched, handleSubmit }) => (
-          <Modal isOpen={isModalVisible} onRequestClose={this.closeModal} style={customStyles}>
+          <Modal
+            isOpen={isRegistering || !registered}
+            onAfterClose={this.resetUserRegistered}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+          >
             <h2>Sign up</h2>
             <FormGroup className="Form-wrapper">
               <center>
@@ -256,17 +256,21 @@ class SignUp extends React.Component {
 
 SignUp.propTypes = {
   isRegistering: PropTypes.bool.isRequired,
+  registered: PropTypes.bool.isRequired,
   register: PropTypes.objectOf.isRequired,
   history: PropTypes.objectOf.isRequired,
+  completeRegister: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({ isRegistering: state.registerReducer });
-
-const mapDispatchToProps = {
-  register: userActions.register,
-};
+const mapStateToProps = state => ({
+  isRegistering: state.registration.isRegistering,
+  registered: state.registration.registered,
+});
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  {
+    register: userActions.register,
+    completeRegister: userActions.completeRegistration,
+  },
 )(SignUp);

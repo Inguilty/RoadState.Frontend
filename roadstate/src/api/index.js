@@ -14,4 +14,14 @@ export const loadBugReport = id => new Promise((resolve) => {
   }, 2000);
 });
 
-export const createBugReport = bugReport => axios.post(`${BASE_URL}/createBugReport`, { bugReport });
+export const createBugReport = (createBR) => {
+  const data = new FormData();
+  for (let i = 0; i < createBR.files.length; i += 1) {
+    const file = createBR.files.item(i);
+    data.append(`photos[${i}]`, file, file.name);
+  }
+  const config = {
+    headers: { 'content-type': 'multipart/form-data' },
+  };
+  return axios.post(`${BASE_URL}/createBugReport`, data, config);
+};

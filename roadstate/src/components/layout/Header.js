@@ -2,12 +2,14 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { userActions } from '../pages/authorization/userActions';
+import * as userActions from '../pages/authorization/userActions';
 
 class Header extends React.Component {
   handleLogout = () => {
-    const { logOut } = this.props;
-    logOut();
+    const { logOut, userLoggedIn } = this.props;
+    if (userLoggedIn) {
+      logOut();
+    }
   };
 
   render() {

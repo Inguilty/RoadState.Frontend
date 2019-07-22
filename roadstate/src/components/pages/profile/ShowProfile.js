@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { NavLink } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
-import './authorization.css';
+import '../authorization/authorization.css';
 import {
   FormControl, FormGroup, FormLabel, Image, Alert,
 } from 'react-bootstrap';
@@ -13,8 +13,8 @@ import {
   Formik, Field, Form, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
-import { userActions } from './userActions';
-import customStyles from './customStyles';
+import * as updateUser from './updateUserActions';
+import customStyles from '../authorization/customStyles';
 
 export const IMAGE_MAX_SIZE = 16 * 1024 * 1024;
 export const convertBytesToMB = a => Math.floor(a / (1024 * 1024));
@@ -24,6 +24,7 @@ export const errorMessages = {
 
 class ShowProfile extends React.Component {
   state = {
+    image: '',
     imagePreviewUrl: '',
     isImageValid: false,
     imageErrorType: '',
@@ -48,7 +49,7 @@ class ShowProfile extends React.Component {
     history.goBack();
   };
 
-  resetUserRegistered = () => {
+  resetUserUpdated = () => {
     const { history, updated, completeUpdating } = this.props;
     if (updated) {
       completeUpdating();
@@ -57,13 +58,14 @@ class ShowProfile extends React.Component {
   };
 
   handleSubmit = (e) => {
+    const { image, imagePreviewUrl } = this.state;
     const { update } = this.props;
     const updatedUser = {
-      avatar: e.avatar,
-      avatarUrl: e.avatarUrl,
+      avatar: image,
+      avatarUrl: imagePreviewUrl,
       password: e.newPassword,
     };
-    if (e.password && e.newPassword && e.confirmNewPassword) {
+    if ((updatedUser.password && e.newPassword && e.confirmNewPassword) || image) {
       update(updatedUser);
     }
   };
@@ -87,6 +89,7 @@ class ShowProfile extends React.Component {
 
     reader.onloadend = () => {
       this.setState({
+        image: file,
         imagePreviewUrl: reader.result,
       });
     };
@@ -119,7 +122,7 @@ class ShowProfile extends React.Component {
         {({ errors, touched, handleSubmit }) => (
           <Modal
             isOpen={isUpdating || !updated}
-            onAfterClose={this.resetUserRegistered}
+            onAfterClose={this.resetUserUpdated}
             onRequestClose={this.closeModal}
             style={customStyles}
             contentLabel="Example Modal"
@@ -196,7 +199,7 @@ class ShowProfile extends React.Component {
                 </FormGroup>
                 <FormGroup className="form-group">
                   <Field
-                    name="confirmNewPasword"
+                    name="confirmNewPassword"
                     type="password"
                     placeholder="Confirm new password"
                     className={`form-control${
@@ -204,7 +207,7 @@ class ShowProfile extends React.Component {
                     }`}
                   />
                   <ErrorMessage
-                    name="confirmNewPasword"
+                    name="confirmNewPassword"
                     component="div"
                     className="invalid-feedback"
                   />
@@ -245,5 +248,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { update: userActions.update, completeUpdating: userActions.completeUpdating },
+  { update: updateUser.update, completeUpdating: updateUser.completeUpdating },
 )(ShowProfile);

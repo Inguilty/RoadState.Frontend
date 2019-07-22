@@ -1,13 +1,14 @@
-import * as userConstants from './userActions';
+import * as userConstants from './updateUserActions';
 
 const initialState = {
   isUpdating: false,
   updated: false,
-  user: null,
+  userId: '',
+  token: '',
   errorMessage: '',
 };
 
-function updateUserReducer(state = initialState, action) {
+const updateUserReducer = (state = initialState, action) => {
   switch (action.type) {
     case userConstants.UPDATE_REQUEST:
       return {
@@ -19,10 +20,11 @@ function updateUserReducer(state = initialState, action) {
         ...state,
         isUpdating: false,
         updated: true,
-        user: action.user,
+        userId: action.id,
+        token: action.token,
       };
     case userConstants.UPDATE_COMPLETED:
-      return { updated: false };
+      return { ...state, updated: false };
     case userConstants.UPDATE_FAILURE:
       return {
         ...state,
@@ -31,6 +33,6 @@ function updateUserReducer(state = initialState, action) {
     default:
       return state;
   }
-}
+};
 
 export default updateUserReducer;

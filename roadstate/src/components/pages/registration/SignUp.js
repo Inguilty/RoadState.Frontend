@@ -1,5 +1,5 @@
 import React from 'react';
-import './authorization.css';
+import '../authorization/authorization.css';
 import Modal from 'react-modal';
 import { NavLink } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
@@ -13,9 +13,9 @@ import {
   Formik, Field, Form, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
-import { IMAGE_MAX_SIZE, errorMessages } from './ShowProfile';
-import { userActions } from './userActions';
-import customStyles from './customStyles';
+import { IMAGE_MAX_SIZE, errorMessages } from '../profile/ShowProfile';
+import * as signUp from './registrationActions';
+import customStyles from '../authorization/customStyles';
 
 class SignUp extends React.Component {
   state = {
@@ -269,8 +269,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {
-    register: userActions.register,
-    completeRegister: userActions.completeRegistration,
-  },
+  { register: signUp.register, completeRegister: signUp.completeRegistration },
 )(SignUp);

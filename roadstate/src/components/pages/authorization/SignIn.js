@@ -11,7 +11,7 @@ import {
   Formik, Field, Form, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
-import { userActions } from './userActions';
+import * as userActions from './userActions';
 import customStyles from './customStyles';
 
 class SignIn extends React.Component {

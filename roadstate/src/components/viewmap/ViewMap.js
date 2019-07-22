@@ -69,7 +69,7 @@ export default class ViewMap extends Component {
     this.BGstate(val, position);
   };
 
-  straightEquation(point1, point2, elem) {
+  straightEquation = (point1, point2, elem) => {
     let val;
     const k = (point2.lng - point1.lng) / (point2.lat - point1.lat);
     const b = (point2.lat * point1.lng - point1.lat * point2.lng) / (point2.lat - point1.lat);
@@ -83,7 +83,7 @@ export default class ViewMap extends Component {
     return val;
   }
 
-  contains(elem) {
+  contains = (elem) => {
     let val;
     const { routeCoords } = this.state;
     if (routeCoords !== undefined) {
@@ -100,7 +100,7 @@ export default class ViewMap extends Component {
     return val;
   }
 
-  BGstate(val, position) {
+  BGstate = (val, position) => {
     const prevState = this.state;
     if (val) {
       if (prevState.todoList.clicked) {

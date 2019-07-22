@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import CreateBugReportForm from './CreateBugReportForm';
 
 class CreateBugReport extends React.Component {
@@ -12,9 +13,9 @@ class CreateBugReport extends React.Component {
     const { isModalActive } = this.state;
     return (
       <div>
-        <button type="button" className="btn btn-primary" onClick={this.handleShow}>
+        <Button type="button" className="btn btn-primary" onClick={this.handleShow}>
           Create bug report
-        </button>
+        </Button>
         <CreateBugReportForm
           isActive={isModalActive}
           onClose={this.handleClose}

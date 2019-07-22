@@ -7,7 +7,6 @@
     "bootstrap-react": "^0.3.1",
     "deep-freeze": "0.0.1",
     "eslint-config-airbnb": "^17.1.1",
-    "install": "^0.13.0",
     "keymirror": "^0.1.1",
     "leaflet": "^1.5.1",
     "leaflet-routing-machine": "^3.2.12",

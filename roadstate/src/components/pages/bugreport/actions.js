@@ -1,4 +1,4 @@
-import * as api from '../../../api/index';
+import * as api from '../../../api';
 
 export const ADD_COMMENT_TO_BUG_REPORT = 'bugreports/ADD_COMMENT_TO_BUG_REPORT';
 export const addCommentToBugReport = bugReport => ({
@@ -32,7 +32,9 @@ export const LOAD_BUG_REPORT_FAILURE = 'bugreports/LOAD_BUG_REPORT_FAILURE';
 
 export const loadBugReport = id => async (dispatch) => {
   dispatch({ type: LOAD_BUG_REPORT_REQUEST });
+
   const bugReport = await api.loadBugReport(id);
+  
   if (bugReport.status === 200) {
     dispatch({
       type: LOAD_BUG_REPORT_SUCCESS,

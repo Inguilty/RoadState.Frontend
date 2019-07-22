@@ -7,7 +7,6 @@ import {
   RATE_BUG_REPORT_RECEIVE,
   RATE_BUG_REPORT_FAILURE,
 } from './actions';
-import * as api from '../../../api';
 
 describe('bugReportReducer', () => {
   const initialState = {
@@ -29,8 +28,7 @@ describe('bugReportReducer', () => {
 
   describe('LOAD_BUG_REPORT_SUCCESS', () => {
     it('should return bugReport object inside the state', async () => {
-      const id = 1;
-      const bugReport = (await api.loadBugReport(id)).data;
+      const bugReport = { };
       const action = { type: LOAD_BUG_REPORT_SUCCESS, bugReport };
       const expectedState = { ...initialState, loadingBugReport: false, bugReport };
 

@@ -14,7 +14,7 @@ describe('bugReportReducer', () => {
   };
   describe('LOAD_BUG_REPORT_REQUEST', () => {
     it('should change the loading status', () => {
-      const expectedState = { ...initialState, loading: true };
+      const expectedState = { ...initialState, loadingBugReport: true };
       const action = { type: LOAD_BUG_REPORT_REQUEST };
 
       const currentState = loadBugReportReducer(initialState, action);
@@ -26,9 +26,9 @@ describe('bugReportReducer', () => {
   describe('LOAD_BUG_REPORT_SUCCESS', () => {
     it('should return bugReport object inside the state', async () => {
       const id = 1;
-      const bugReport = (await api.loadBugReport(id)).response;
+      const bugReport = (await api.loadBugReport(id)).data;
       const action = { type: LOAD_BUG_REPORT_SUCCESS, bugReport };
-      const expectedState = { ...initialState, loading: false, bugReport };
+      const expectedState = { ...initialState, loadingBugReport: false, bugReport };
 
       const currentState = loadBugReportReducer(initialState, action);
 
@@ -39,7 +39,7 @@ describe('bugReportReducer', () => {
   describe('LOAD_BUG_REPORT_FAILURE', () => {
     it('should change the callbackError status', () => {
       const action = { type: LOAD_BUG_REPORT_FAILURE };
-      const expectedState = { ...initialState, callbackError: true, loading: false };
+      const expectedState = { ...initialState, callbackError: true, loadingBugReport: false };
 
       const currentState = loadBugReportReducer(initialState, action);
 

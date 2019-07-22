@@ -9,7 +9,16 @@ export const loadBugReport = id => new Promise((resolve) => {
   setTimeout(() => {
     resolve({
       status: 200,
-      response: bugReports.find(x => x.id === id),
+      data: bugReports.find(x => x.id === id),
+    });
+  }, 2000);
+});
+
+export const rateBugReport = () => new Promise((resolve) => {
+  setTimeout(() => {
+    resolve({
+      status: 200,
+      data: null,
     });
   }, 2000);
 });

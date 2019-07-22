@@ -10,6 +10,7 @@ export const bugReports = [
     state: 'Very low',
     rating: 1.0,
     comments: [],
+    userRate: 'agree',
   },
   {
     id: 2,

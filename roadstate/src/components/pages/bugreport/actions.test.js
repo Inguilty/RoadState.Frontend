@@ -11,7 +11,7 @@ describe('bugReportActions', () => {
     // Arrange
     const id = 1;
     const errorOccured = false;
-    const expectedBugReport = (await api.loadBugReport(id)).response;
+    const expectedBugReport = (await api.loadBugReport(id)).data;
     const expectedActions = [
       { type: bugReportActions.LOAD_BUG_REPORT_REQUEST },
       { type: bugReportActions.LOAD_BUG_REPORT_SUCCESS, bugReport: expectedBugReport },

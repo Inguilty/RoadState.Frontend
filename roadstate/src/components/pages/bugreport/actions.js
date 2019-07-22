@@ -34,7 +34,7 @@ export const loadBugReport = id => async (dispatch) => {
   dispatch({ type: LOAD_BUG_REPORT_REQUEST });
 
   const bugReport = await api.loadBugReport(id);
-  
+
   if (bugReport.status === 200) {
     dispatch({
       type: LOAD_BUG_REPORT_SUCCESS,

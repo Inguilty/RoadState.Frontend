@@ -434,7 +434,7 @@ BugReport.defaultProps = {
   bugReport: null,
 };
 
-const mapStateToProps = ({ bugReport }) => ({ ...bugReport });
+const mapStateToProps = ({ bugReportReducer }) => ({ bugReport: bugReportReducer.bugReport });
 
 const mapDispatchToProps = {
   loadBugReport: bugReportActions.loadBugReport,

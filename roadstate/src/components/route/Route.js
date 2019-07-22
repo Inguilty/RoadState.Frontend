@@ -23,12 +23,25 @@ class Route extends MapLayer {
           }),
         }),
         geocoder: L.Control.Geocoder.nominatim(),
-        routeWhileDragging: true,
       }),
-      routeWhileDragging: true,
+      routeWhileDragging: false,
+      routeDragTimeout: 250,
       showAlternatives: true,
+      addWaypoints: false,
+      altLineOptions: {
+        styles: [
+          { color: 'black', opacity: 0.15, weight: 9 },
+          { color: 'white', opacity: 0.8, weight: 6 },
+          { color: 'blue', opacity: 0.5, weight: 2 },
+        ],
+      },
       collapsible: true,
     }).addTo(map.leafletElement);
+
+    leafletElement.on('routeselected', (routes) => {
+      const routeCoordsNew = routes.route.coordinates;
+      this.props.setState({ routeCoords: routeCoordsNew });
+    }, this);
 
     leafletElement.hide();
     return leafletElement.getPlan();

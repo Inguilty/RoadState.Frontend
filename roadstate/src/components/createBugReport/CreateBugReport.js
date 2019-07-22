@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import CreateBugReportForm from './CreateBugReportForm';
 
 class CreateBugReport extends React.Component {
@@ -12,7 +13,9 @@ class CreateBugReport extends React.Component {
     const { isModalActive } = this.state;
     return (
       <div>
-        {/* Put here element that will call handleShow() property */}
+        <Button type="button" className="btn btn-primary" onClick={this.handleShow}>
+          Create bug report
+        </Button>
         <CreateBugReportForm
           isActive={isModalActive}
           onClose={this.handleClose}

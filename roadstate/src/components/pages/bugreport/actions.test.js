@@ -27,3 +27,25 @@ describe('bugReportActions', () => {
     });
   });
 });
+
+describe('bugReportActions', () => {
+  it('should rate bug report', async () => {
+    // Arrange
+    const unratedBugReport = { };
+    const errorOccured = false;
+    const expectedBugReport = { userRate: 'agree' };
+    const expectedActions = [
+      { type: bugReportActions.RATE_BUG_REPORT_REQUEST },
+      { type: bugReportActions.RATE_BUG_REPORT_RECEIVE, receivedBugReport: expectedBugReport },
+    ];
+
+    // Act
+    const store = mockStore({ unratedBugReport });
+
+    // Assert
+    return store.dispatch(bugReportActions.rateBugReport(unratedBugReport, 'agree')).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+      expect(errorOccured).toBeFalsy();
+    });
+  });
+});

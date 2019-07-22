@@ -18,13 +18,6 @@ import { connect } from 'react-redux';
 import { Spinner } from '../../Spinner';
 import * as bugReportActions from './actions';
 
-const mapStateToProps = ({ bugReport }) => ({ ...bugReport });
-
-const mapDispatchToProps = {
-  loadBugReport: bugReportActions.loadBugReport,
-  rateBugReport: bugReportActions.rateBugReport,
-};
-
 export const NoPhotosAvailable = () => (
   <Card key="emptyImage">
     <Card.Img
@@ -439,6 +432,13 @@ class BugReport extends React.Component {
 
 BugReport.defaultProps = {
   bugReport: null,
+};
+
+const mapStateToProps = ({ bugReport }) => ({ ...bugReport });
+
+const mapDispatchToProps = {
+  loadBugReport: bugReportActions.loadBugReport,
+  rateBugReport: bugReportActions.rateBugReport,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BugReport);

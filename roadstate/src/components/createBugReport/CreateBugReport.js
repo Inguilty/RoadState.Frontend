@@ -12,7 +12,9 @@ class CreateBugReport extends React.Component {
     const { isModalActive } = this.state;
     return (
       <div>
-        {/* Put here element that will call handleShow() property */}
+        <button type="button" className="btn btn-primary" onClick={this.handleShow}>
+          Create bug report
+        </button>
         <CreateBugReportForm
           isActive={isModalActive}
           onClose={this.handleClose}

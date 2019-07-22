@@ -1,4 +1,4 @@
-import { getBugReport } from '../../../__mock__/api';
+import * as api from '../../../api/index';
 
 export const ADD_COMMENT_TO_BUG_REPORT = 'bugreports/ADD_COMMENT_TO_BUG_REPORT';
 export const addCommentToBugReport = bugReport => ({
@@ -6,17 +6,41 @@ export const addCommentToBugReport = bugReport => ({
   bugReport,
 });
 
-export const LOAD_BUG_REPORT_RESPONSE = 'bugreports/LOAD_BUG_REPORT_RESPONSE';
+export const RATE_BUG_REPORT_REQUEST = 'bugreports/RATE_BUG_REPORT_REQUEST';
+export const RATE_BUG_REPORT_RECEIVE = 'bugreports/RATE_BUG_REPORT_RECEIVE';
+export const RATE_BUG_REPORT_FAILURE = 'bugreports/RATE_BUG_REPORT_FAILURE';
+
+export const rateBugReport = (bugReport, rate) => async (dispatch) => {
+  dispatch({ type: RATE_BUG_REPORT_REQUEST });
+  const rateBugReportResponse = await api.rateBugReport();
+  if (rateBugReportResponse.status === 200) {
+    const receivedBugReport = { ...bugReport, userRate: rate };
+    dispatch({
+      type: RATE_BUG_REPORT_RECEIVE,
+      receivedBugReport,
+    });
+  } else {
+    dispatch({
+      type: RATE_BUG_REPORT_FAILURE,
+    });
+  }
+};
+
+export const LOAD_BUG_REPORT_REQUEST = 'bugreports/LOAD_BUG_REPORT_REQUEST';
 export const LOAD_BUG_REPORT_SUCCESS = 'bugreports/LOAD_BUG_REPORT_SUCCESS';
-export const loadBugReportAsync = id => async (dispatch) => {
-  try {
-    dispatch({ type: LOAD_BUG_REPORT_RESPONSE });
-    const bugReport = await getBugReport(id);
+export const LOAD_BUG_REPORT_FAILURE = 'bugreports/LOAD_BUG_REPORT_FAILURE';
+
+export const loadBugReport = id => async (dispatch) => {
+  dispatch({ type: LOAD_BUG_REPORT_REQUEST });
+  const bugReport = await api.loadBugReport(id);
+  if (bugReport.status === 200) {
     dispatch({
       type: LOAD_BUG_REPORT_SUCCESS,
-      bugReport,
+      bugReport: bugReport.data,
     });
-  } catch (error) {
-    console.log(error);
+  } else {
+    dispatch({
+      type: LOAD_BUG_REPORT_FAILURE,
+    });
   }
 };

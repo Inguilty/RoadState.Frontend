@@ -18,7 +18,7 @@ describe('bugReportActions', () => {
       { type: bugReportActions.LOAD_BUG_REPORT_REQUEST },
       { type: bugReportActions.LOAD_BUG_REPORT_SUCCESS, bugReport },
     ];
-    api.loadBugReport = apiMock.loadBugReport({ data: bugReport, status: 200 },
+    api.loadBugReport = apiMock.callApiMock({ data: bugReport, status: 200 },
       () => { apiCalled = true; });
 
     // Act
@@ -42,7 +42,7 @@ describe('bugReportActions', () => {
       { type: bugReportActions.RATE_BUG_REPORT_REQUEST },
       { type: bugReportActions.RATE_BUG_REPORT_RECEIVE, receivedBugReport: expectedBugReport },
     ];
-    api.rateBugReport = apiMock.rateBugReport({ data: null, status: 200 },
+    api.rateBugReport = apiMock.callApiMock({ data: null, status: 200 },
       () => { apiCalled = true; });
 
     // Act

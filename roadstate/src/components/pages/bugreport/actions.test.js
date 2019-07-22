@@ -26,9 +26,7 @@ describe('bugReportActions', () => {
       expect(errorOccured).toBeFalsy();
     });
   });
-});
 
-describe('bugReportActions', () => {
   it('should rate bug report', async () => {
     // Arrange
     const unratedBugReport = { };

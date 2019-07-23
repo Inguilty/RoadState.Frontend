@@ -45,19 +45,6 @@ class CreateBugReportForm extends React.Component {
       .required('Description is required'),
   });
 
-  componentDidUpdate(prevProps) {
-    const { isLoading } = this.props;
-    if (prevProps.isLoading !== isLoading) {
-      if (isLoading) {
-        this.btnSub.setAttribute('disabled', 'disabled');
-        this.btnClose.setAttribute('disabled', 'disabled');
-      } else {
-        this.btnSub.removeAttribute('disabled');
-        this.btnClose.removeAttribute('disabled');
-      }
-    }
-  }
-
   handleClose = () => {
     const { onClose } = this.props;
     onClose();
@@ -81,7 +68,7 @@ class CreateBugReportForm extends React.Component {
         this.handleImageAlertShow();
       }
       createBugReport({
-        probLvl: problemLevel, description, photosData, locationLongitude, locationLatitude,
+        problemLevel, description, photosData, locationLongitude, locationLatitude,
       });
     }
   };
@@ -169,7 +156,7 @@ class CreateBugReportForm extends React.Component {
                     max="10"
                     placeholder="Problem level"
                     className={
-                      `form-control ${(errors.probLvl && touched.probLvl ? ' is-invalid' : '')}`
+                      `form-control ${(errors.problemLevel && touched.problemLevel ? ' is-invalid' : '')}`
                     }
                   />
                   <ErrorMessage
@@ -186,7 +173,7 @@ class CreateBugReportForm extends React.Component {
                     as="textarea"
                     placeholder="Description"
                     className={
-                      `form-control ${(errors.desc && touched.desc ? ' is-invalid' : '')}`
+                      `form-control ${(errors.description && touched.description ? ' is-invalid' : '')}`
                     }
                   />
                   <ErrorMessage
@@ -212,7 +199,7 @@ class CreateBugReportForm extends React.Component {
                 <Row>
                   <Col sm={{ offset: 2 }}>
                     <Button
-                      ref={(btnSub) => { this.btnSub = btnSub; }}
+                      disabled={isLoading}
                       type="submit"
                       variant="primary"
                       size="lg"
@@ -222,7 +209,7 @@ class CreateBugReportForm extends React.Component {
                   </Col>
                   <Col sm={{ offset: 2 }}>
                     <Button
-                      ref={(btnClose) => { this.btnClose = btnClose; }}
+                      disabled={isLoading}
                       variant="secondary"
                       size="lg"
                       onClick={this.handleClose}

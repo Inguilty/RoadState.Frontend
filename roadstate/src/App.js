@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { PropTypes } from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import Header from './components/layout/Header';
 import HomePage from './components/pages/home';
@@ -14,35 +12,22 @@ import PrivateRoute from './components/routes/PrivateRoute';
 
 import ViewMap from './components/viewmap/ViewMap';
 
-class App extends React.Component {
-  render() {
-    const { loggedIn } = this.props;
-    return (
-      <div className="container-fluid">
-        <Header />
-        <div className="jumbotron">
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/about" component={AboutPage} />
-            <Route path="/signIn" component={SignIn} />
-            <Route path="/signUp" component={SignUp} />
-            <PrivateRoute path="/profile" authorized={loggedIn} component={ShowProfile} />
-            <Route path="/view" component={BugReport} />
-            <Route component={PageNotFound} />
-          </Switch>
-        </div>
-        <ViewMap />
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div className="container-fluid">
+    <Header />
+    <div className="jumbotron">
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/about" component={AboutPage} />
+        <Route path="/signIn" component={SignIn} />
+        <Route path="/signUp" component={SignUp} />
+        <PrivateRoute path="/profile" component={ShowProfile} />
+        <Route path="/view" component={BugReport} />
+        <Route component={PageNotFound} />
+      </Switch>
+    </div>
+    <ViewMap />
+  </div>
+);
 
-PrivateRoute.propTypes = {
-  loggedIn: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = state => ({
-  loggedIn: state.authorization.loggedIn,
-});
-
-export default connect(mapStateToProps)(App);
+export default App;

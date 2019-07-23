@@ -25,8 +25,8 @@
     "react-scripts": "3.0.1",
     "react-scrollspy": "^3.4.0",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0",
     "redux-mock-store": "^1.5.3",
+    "redux-thunk": "^2.3.0",
     "yup": "^0.27.0"
   },
   "scripts": {

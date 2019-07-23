@@ -1,4 +1,4 @@
-import * as userConstants from './registrationActions';
+import * as userConstants from './actions';
 
 const initialState = { isRegistering: false, registered: false, errorMessage: '' };
 

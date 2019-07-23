@@ -1,4 +1,4 @@
-import * as userConstants from './updateUserActions';
+import * as userConstants from './actions';
 
 const initialState = {
   isUpdating: false,

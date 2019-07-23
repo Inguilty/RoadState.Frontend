@@ -1,4 +1,4 @@
-import * as userConstants from './userActions';
+import * as userConstants from './actions';
 
 const initialState = {
   loggedIn: false,

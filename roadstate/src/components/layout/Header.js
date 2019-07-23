@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import * as userActions from '../pages/authorization/userActions';
+import * as userActions from '../pages/authorization/actions';
 
 class Header extends React.Component {
   handleLogout = () => {

@@ -14,7 +14,7 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import { IMAGE_MAX_SIZE, errorMessages } from '../profile/ShowProfile';
-import * as signUp from './registrationActions';
+import * as signUp from './actions';
 import customStyles from '../authorization/customStyles';
 
 class SignUp extends React.Component {

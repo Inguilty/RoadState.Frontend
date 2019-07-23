@@ -13,7 +13,7 @@ import {
   Formik, Field, Form, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
-import * as updateUser from './updateUserActions';
+import * as updateUser from './actions';
 import customStyles from '../authorization/customStyles';
 
 export const IMAGE_MAX_SIZE = 16 * 1024 * 1024;

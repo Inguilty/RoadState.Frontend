@@ -11,7 +11,6 @@ describe('bugReportActions', () => {
   it('should load a bug report', async () => {
     // Arrange
     const id = 1;
-    const errorOccured = false;
     const bugReport = { id: 1 };
     let apiCalled = false;
     const expectedActions = [
@@ -27,7 +26,6 @@ describe('bugReportActions', () => {
     // Assert
     return store.dispatch(bugReportActions.loadBugReport(id)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
-      expect(errorOccured).toBeFalsy();
       expect(apiCalled).toBeTruthy();
     });
   });
@@ -35,7 +33,6 @@ describe('bugReportActions', () => {
   it('should rate bug report', async () => {
     // Arrange
     const unratedBugReport = {};
-    const errorOccured = false;
     const expectedBugReport = { userRate: 'agree' };
     let apiCalled = false;
     const expectedActions = [
@@ -51,7 +48,6 @@ describe('bugReportActions', () => {
     // Assert
     return store.dispatch(bugReportActions.rateBugReport(unratedBugReport, 'agree')).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
-      expect(errorOccured).toBeFalsy();
       expect(apiCalled).toBeTruthy();
     });
   });

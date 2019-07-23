@@ -12,7 +12,7 @@ class CreateBugReport extends React.Component {
 
   render() {
     const { isModalActive } = this.state;
-    const { locLong, locLat } = this.props;
+    const { locationLongitude, locationLatitude } = this.props;
     return (
       <div>
         <Button type="button" className="btn btn-primary" onClick={this.handleShow}>
@@ -21,8 +21,8 @@ class CreateBugReport extends React.Component {
         <CreateBugReportForm
           isActive={isModalActive}
           onClose={this.handleClose}
-          locLong={locLong}
-          locLat={locLat}
+          locationLongitude={locationLongitude}
+          locationLatitude={locationLatitude}
         />
       </div>
     );
@@ -30,8 +30,8 @@ class CreateBugReport extends React.Component {
 }
 
 CreateBugReport.propTypes = {
-  locLong: PropTypes.objectOf.isRequired,
-  locLat: PropTypes.objectOf.isRequired,
+  locationLongitude: PropTypes.number.isRequired,
+  locationLatitude: PropTypes.number.isRequired,
 };
 
 export default CreateBugReport;

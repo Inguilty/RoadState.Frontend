@@ -389,7 +389,7 @@ class BugReport extends React.Component {
     rateBugReport(bugReportDispatched, rate);
   };
 
-  handleCommentChange = (event) => {}
+  handleCommentChange = () => {};
 
   render() {
     const { isModalOpened } = this.state;
@@ -430,7 +430,10 @@ class BugReport extends React.Component {
               <NoComments />
             </Modal.Body>
             <Modal.Footer>
-              <CommentForm handleChange={this.handleCommentChange} handleSubmit={this.handleCommentChange} />
+              <CommentForm
+                handleChange={this.handleCommentChange}
+                handleSubmit={this.handleCommentChange}
+              />
             </Modal.Footer>
           </Modal.Dialog>
         </Modal>

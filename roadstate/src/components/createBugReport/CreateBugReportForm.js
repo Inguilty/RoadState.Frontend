@@ -71,8 +71,18 @@ class CreateBugReportForm extends React.Component {
     const { createBugReport, locLong, locLat } = this.props;
 
     if (isImageValid === true) {
+      const photosData = new FormData();
+      try {
+        for (let i = 0; i < photos.length; i += 1) {
+          const file = photos.item(i);
+          photosData.append(`photos[${i}]`, file, file.name);
+        }
+      } catch {
+        this.inpPht.value = null;
+        this.setState({ imageErrorType: 'noImage', isImageValid: false });
+      }
       createBugReport({
-        probLvl, desc, photos, locLong, locLat,
+        probLvl, desc, photosData, locLong, locLat,
       });
       // ToDo: Send required objects
     }
@@ -191,6 +201,7 @@ class CreateBugReportForm extends React.Component {
                     multiple
                     type="file"
                     accept="image/*"
+                    ref={(inpPht) => { this.inpPht = inpPht; }}
                     className={
                       `form-control ${(errors.photos && touched.photos ? ' is-invalid' : '')}`
                     }

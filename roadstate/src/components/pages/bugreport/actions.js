@@ -1,4 +1,4 @@
-import * as api from '../../../api/index';
+import * as api from '../../../api';
 
 export const LOAD_BUG_REPORT_REQUEST = 'bugreports/LOAD_BUG_REPORT_RESPONSE';
 export const LOAD_BUG_REPORT_SUCCESS = 'bugreports/LOAD_BUG_REPORT_SUCCESS';

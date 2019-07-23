@@ -28,9 +28,13 @@ describe('bugReportReducer', () => {
 
   describe('LOAD_BUG_REPORT_SUCCESS', () => {
     it('should return bugReport object inside the state', async () => {
-      const bugReport = { };
+      const bugReport = {};
       const action = { type: LOAD_BUG_REPORT_SUCCESS, bugReport };
-      const expectedState = { ...initialState, loadingBugReport: false, bugReport };
+      const expectedState = {
+        ...initialState,
+        loadingBugReport: false,
+        currentBugReport: bugReport,
+      };
 
       const currentState = bugReportReducer(initialState, action);
 
@@ -67,7 +71,7 @@ describe('bugReportReducer', () => {
       const expectedState = {
         ...initialState,
         loadingBugReportRating: false,
-        bugReport: receivedBugReport,
+        currentBugReport: receivedBugReport,
       };
 
       const currentState = bugReportReducer(initialState, action);

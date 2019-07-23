@@ -1,5 +1,4 @@
 import React from 'react';
-import './authorization.css';
 import Modal from 'react-modal';
 import { NavLink } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
@@ -12,7 +11,8 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import * as userActions from './actions';
-import customStyles from './customStyles';
+import customStyles from '../../../customStyles';
+import '../../../authorization.css';
 
 class SignIn extends React.Component {
   schema = Yup.object().shape({

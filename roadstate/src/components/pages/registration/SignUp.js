@@ -1,5 +1,4 @@
 import React from 'react';
-import '../authorization/authorization.css';
 import Modal from 'react-modal';
 import { NavLink } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
@@ -15,7 +14,8 @@ import {
 import * as Yup from 'yup';
 import { IMAGE_MAX_SIZE, errorMessages } from '../profile/ShowProfile';
 import * as signUp from './actions';
-import customStyles from '../authorization/customStyles';
+import customStyles from '../../../customStyles';
+import '../../../authorization.css';
 
 class SignUp extends React.Component {
   state = {

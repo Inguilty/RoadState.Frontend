@@ -2,7 +2,6 @@ import React from 'react';
 import Modal from 'react-modal';
 import { NavLink } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
-import '../authorization/authorization.css';
 import {
   FormControl, FormGroup, FormLabel, Image, Alert,
 } from 'react-bootstrap';
@@ -14,7 +13,8 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import * as updateUser from './actions';
-import customStyles from '../authorization/customStyles';
+import customStyles from '../../../customStyles';
+import '../../../authorization.css';
 
 export const IMAGE_MAX_SIZE = 16 * 1024 * 1024;
 export const convertBytesToMB = a => Math.floor(a / (1024 * 1024));

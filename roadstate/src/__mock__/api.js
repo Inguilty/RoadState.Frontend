@@ -1,5 +1,5 @@
-import { bugReports, users } from './mockData';
 
+<<<<<<< HEAD
 export const getBugReport = (response, apiCallback) => () => {
   apiCallback();
   return Promise.resolve(response);
@@ -14,4 +14,11 @@ export const postComment = async (id, comment, userId) => {
   } catch (error) {
     console.log(error);
   }
+=======
+export const callApiMock = (response, apiCallback) => () => {
+  apiCallback();
+  return new Promise((resolve) => {
+    resolve(response);
+  });
+>>>>>>> 99cfb0f2e77954162247192dc8c183abc4779127
 };

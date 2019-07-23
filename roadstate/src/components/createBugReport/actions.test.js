@@ -1,8 +1,8 @@
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import * as createBugReportActions from './actions';
-import * as api from '../../../api';
-import * as apiMock from '../../../__mock__/api';
+import * as api from '../../api';
+import * as apiMock from '../../__mock__/api';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -15,7 +15,8 @@ describe('createBugReportActions', () => {
       { type: createBugReportActions.CREATE_BUG_REPORT_REQUEST },
       { type: createBugReportActions.CREATE_BUG_REPORT_SUCCESS },
     ];
-    api.loadBugReport = apiMock.callApiMock({ data: bugReport, status: 200 },
+    let apiCalled = false;
+    api.createBugReport = apiMock.callApiMock({ data: bugReport, status: 200 },
       () => { apiCalled = true; });
     const errorOccured = false;
     // Act
@@ -25,6 +26,7 @@ describe('createBugReportActions', () => {
     return store.dispatch(createBugReportActions.createBugReport(bugReport)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
       expect(errorOccured).toBeFalsy();
+      expect(apiCalled).toBeTruthy();
     });
   });
 });

@@ -1,4 +1,4 @@
-import * as api from '../../__mock__/api';
+import * as api from '../../api';
 
 export const CREATE_BUG_REPORT_REQUEST = 'create-bug-report/CREATE_BUG_REPORT_REQUEST';
 export const CREATE_BUG_REPORT_SUCCESS = 'create-bug-report/CREATE_BUG_REPORT_SUCCESS';

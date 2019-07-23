@@ -10,7 +10,6 @@ import SignUp from './components/pages/authorization/SignUp';
 import LogOut from './components/pages/authorization/LogOut';
 import ShowProfile from './components/pages/authorization/ShowProfile';
 import ViewMap from './components/viewmap/ViewMap';
-import CreateBugReport from './components/createBugReport';
 
 const App = () => (
   <div className="container-fluid">
@@ -26,7 +25,6 @@ const App = () => (
         <Route path="/view" component={BugReport} />
         <Route component={PageNotFound} />
       </Switch>
-      <CreateBugReport locLong="1" locLat="2" />
     </div>
     <ViewMap />
   </div>

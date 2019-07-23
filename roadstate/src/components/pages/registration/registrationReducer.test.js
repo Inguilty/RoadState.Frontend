@@ -1,12 +1,11 @@
 import registrationUserReducer from './registrationReducer';
 import * as actions from './registrationActions';
-import * as api from '../../../api';
 
 describe('registrationUserReducer', () => {
   const initialState = {
     isRegistering: false,
     registered: false,
-    error: '',
+    errorMessage: '',
   };
   describe('REGISTER_REQUEST', () => {
     it('should change the loading status', () => {
@@ -32,14 +31,9 @@ describe('registrationUserReducer', () => {
 
   describe('REGISTER_FAILURE', () => {
     it('should return error value', async () => {
-      const user = {
-        userName: 'testUser',
-        password: 'test123Q',
-        email: 'test@user.com',
-      };
-      const registeredUser = (await api.register(user)).data;
-      const expectedState = { ...initialState, errorMessage: registeredUser.errorMessage };
-      const action = { type: actions.REGISTER_FAILURE, errorMessage: registeredUser.error };
+      const errorMessage = '';
+      const expectedState = { ...initialState, errorMessage };
+      const action = { type: actions.REGISTER_FAILURE, errorMessage };
 
       const currentState = registrationUserReducer(initialState, action);
 

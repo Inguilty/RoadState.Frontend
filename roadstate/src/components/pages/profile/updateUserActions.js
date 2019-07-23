@@ -10,7 +10,7 @@ export const update = user => async (dispatch) => {
   if (updatedUser.status === 200) {
     dispatch({ type: UPDATE_SUCCESS, id: updatedUser.data.id, token: updatedUser.data.token });
   } else {
-    dispatch({ type: UPDATE_FAILURE, errorMessage: updatedUser.error });
+    dispatch({ type: UPDATE_FAILURE, errorMessage: updatedUser.date.errorMessage });
   }
 };
 export const completeUpdating = () => async (dispatch) => {

@@ -6,6 +6,7 @@ const initialState = {
   loggingOut: false,
   userId: '',
   token: '',
+  errorMessage: '',
 };
 
 const authorizationReducer = (state = initialState, action) => {

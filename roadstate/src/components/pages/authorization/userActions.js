@@ -9,7 +9,7 @@ export const login = (username, password) => async (dispatch) => {
   if (result.status === 200 && result.data !== undefined) {
     dispatch({ type: LOGIN_SUCCESS, id: result.data.id, token: result.data.token });
   } else {
-    dispatch({ type: LOGIN_FAILURE, errorMessage: result.status });
+    dispatch({ type: LOGIN_FAILURE, errorMessage: result.data.errorMessage });
   }
 };
 

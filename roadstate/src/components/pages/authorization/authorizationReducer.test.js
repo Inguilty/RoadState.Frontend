@@ -1,6 +1,11 @@
 import authorizationReducer from './authorizationReducer';
 import * as userActions from './userActions';
-import * as api from '../../../api';
+
+const user = {
+  id: 'af6b0b609b7900b89ac395d7c5e4b1a513625bac',
+  token: 'fake-jwt-token',
+  errorMessage: '',
+};
 
 describe('authorizationReducer', () => {
   const initialState = {
@@ -9,6 +14,7 @@ describe('authorizationReducer', () => {
     loggingOut: false,
     userId: '',
     token: '',
+    errorMessage: '',
   };
   describe('LOGIN_REQUEST', () => {
     it('should change the loading status', () => {
@@ -23,20 +29,17 @@ describe('authorizationReducer', () => {
 
   describe('LOGIN_SUCCESS', () => {
     it('should return user credentials and set to false loading status', async () => {
-      const userName = 'test';
-      const password = 'test';
-      const userLogin = (await api.login(userName, password)).data;
       const action = {
         type: userActions.LOGIN_SUCCESS,
-        id: userLogin.id,
-        token: userLogin.token,
+        id: user.id,
+        token: user.token,
       };
       const expectedState = {
         ...initialState,
         loggedIn: true,
         loggingIn: false,
-        userId: userLogin.id,
-        token: userLogin.token,
+        userId: user.id,
+        token: user.token,
       };
 
       const currentState = authorizationReducer(initialState, action);

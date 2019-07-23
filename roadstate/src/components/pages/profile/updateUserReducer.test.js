@@ -1,6 +1,11 @@
 import updateUserReducer from './updateUserReducer';
 import * as actions from './updateUserActions';
-import * as api from '../../../api';
+
+const user = {
+  id: 'af6b0b609b7900b89ac395d7c5e4b1a513625bac',
+  token: 'fake-jwt-token',
+  errorMessage: '',
+};
 
 describe('updateUserReducer', () => {
   const initialState = {
@@ -23,23 +28,17 @@ describe('updateUserReducer', () => {
 
   describe('UPDATE_SUCCESS', () => {
     it('should return new user credentials and set to false loading status', async () => {
-      const user = {
-        userName: 'testUser',
-        password: 'test123Q',
-        email: 'test@user.com',
-      };
-      const updatedUser = (await api.update(user)).data;
       const action = {
         type: actions.UPDATE_SUCCESS,
-        id: updatedUser.id,
-        token: updatedUser.token,
+        id: user.id,
+        token: user.token,
       };
       const expectedState = {
         ...initialState,
         isUpdating: false,
         updated: true,
-        userId: updatedUser.id,
-        token: updatedUser.token,
+        userId: user.id,
+        token: user.token,
       };
 
       const currentState = updateUserReducer(initialState, action);
@@ -50,14 +49,8 @@ describe('updateUserReducer', () => {
 
   describe('UPDATE_FAILURE', () => {
     it('should return error value', async () => {
-      const user = {
-        userName: 'testUser',
-        password: 'test123Q',
-        email: 'test@user.com',
-      };
-      const updatedUser = (await api.update(user)).data;
-      const action = { type: actions.UPDATE_FAILURE, errorMessage: updatedUser.error };
-      const expectedState = { ...initialState, errorMessage: updatedUser.errorMessage };
+      const action = { type: actions.UPDATE_FAILURE, errorMessage: user.errorMessage };
+      const expectedState = { ...initialState, errorMessage: user.errorMessage };
 
       const currentState = updateUserReducer(initialState, action);
 

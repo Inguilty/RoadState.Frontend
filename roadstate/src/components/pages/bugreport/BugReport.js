@@ -12,8 +12,9 @@ import {
   Container,
   Form,
 } from 'react-bootstrap';
-import { FaThumbsUp, FaThumbsDown, FaCheck, FaStar, FaComment } from 'react-icons/fa';
-import { connect } from 'react-redux';
+import {
+  FaThumbsUp, FaThumbsDown, FaCheck, FaStar, FaComment,
+} from 'react-icons/fa';
 import { Spinner } from '../../Spinner';
 import * as bugReportActions from './actions';
 
@@ -130,7 +131,9 @@ export const NoComments = () => (
 
 export const ModalCaller = ({ id, handleShow }) => (
   <Button variant="light" onClick={handleShow}>
-    Info about bug report # {id}
+    Info about bug report #
+    {' '}
+    {id}
   </Button>
 );
 
@@ -139,7 +142,9 @@ ModalCaller.propTypes = {
   handleShow: PropTypes.func.isRequired,
 };
 
-const Poll = ({ id, handlePollButton, bugReport, loadingBugReportRating }) => (
+const Poll = ({
+  id, handlePollButton, bugReport, loadingBugReportRating,
+}) => (
   <Card>
     <Card.Header as="h6">Poll</Card.Header>
     <div>
@@ -166,7 +171,9 @@ Poll.defaultProps = {
   loadingBugReportRating: false,
 };
 
-const BugReportRate = ({ bugReport, handlePollButton, id, loadingBugReportRating }) => {
+const BugReportRate = ({
+  bugReport, handlePollButton, id, loadingBugReportRating,
+}) => {
   if (loadingBugReportRating) {
     return (
       <Row>
@@ -297,7 +304,9 @@ Information.propTypes = {
   commentsCount: PropTypes.number.isRequired,
 };
 
-export const BodyContainer = ({ description, state, rating, commentsCount }) => (
+export const BodyContainer = ({
+  description, state, rating, commentsCount,
+}) => (
   <Container>
     <Row>
       <Col md={{ offset: 0, span: 5 }}>
@@ -355,9 +364,9 @@ class BugReport extends React.Component {
     loadBugReport: PropTypes.func.isRequired,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { loadBugReport } = this.props;
-    await loadBugReport(2);
+    loadBugReport(1);
   }
 
   handleShow = () => {
@@ -368,7 +377,7 @@ class BugReport extends React.Component {
     this.setState({ isModalOpened: false });
   };
 
-  handlePoll = event => {
+  handlePoll = (event) => {
     const { bugReport, rateBugReport } = this.props;
     const currentRating = bugReport.rating;
     const bugReportDispatched = {
@@ -382,7 +391,8 @@ class BugReport extends React.Component {
   render() {
     const { isModalOpened } = this.state;
     const { bugReport, loadingBugReport, loadingBugReportRating } = this.props;
-    if (loadingBugReport) {
+    debugger;
+    if (loadingBugReport || !bugReport) {
       return (
         <Row>
           <Col md={{ offset: 5 }}>
@@ -393,7 +403,7 @@ class BugReport extends React.Component {
     }
     return (
       <Container>
-        <ModalCaller id={1} handleShow={this.handleShow} />
+        <ModalCaller id={bugReport.id} handleShow={this.handleShow} />
         <Modal show={isModalOpened} onHide={this.handleClose}>
           <Modal.Dialog scrollable>
             <Modal.Header>
@@ -430,7 +440,7 @@ BugReport.defaultProps = {
   bugReport: null,
 };
 
-const mapStateToProps = ({ bugReport }) => ({ ...bugReport });
+const mapStateToProps = ({ bugReportReducer }) => ({ bugReport: bugReportReducer.bugReport });
 
 const mapDispatchToProps = {
   loadBugReport: bugReportActions.loadBugReport,

@@ -1,5 +1,5 @@
-import registrationUserReducer from './registrationReducer';
-import * as actions from './registrationActions';
+import registrationUserReducer from './reducer';
+import * as actions from './actions';
 
 describe('registrationUserReducer', () => {
   const initialState = {

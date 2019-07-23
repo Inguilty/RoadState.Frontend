@@ -1,5 +1,5 @@
-import authorizationReducer from './authorizationReducer';
-import * as userActions from './userActions';
+import authorizationReducer from './reducer';
+import * as userActions from './actions';
 
 const user = {
   id: 'af6b0b609b7900b89ac395d7c5e4b1a513625bac',

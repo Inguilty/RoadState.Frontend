@@ -1,6 +1,6 @@
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
-import * as actions from './registrationActions';
+import * as actions from './actions';
 import * as api from '../../../api/index';
 import * as apiMock from '../../../__mock__/api';
 

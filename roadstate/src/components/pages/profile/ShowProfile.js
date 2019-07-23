@@ -13,7 +13,6 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import * as updateUser from './actions';
-import customStyles from '../../../customStyles';
 import '../../../authorization.css';
 
 export const IMAGE_MAX_SIZE = 16 * 1024 * 1024;
@@ -121,10 +120,10 @@ class ShowProfile extends React.Component {
       >
         {({ errors, touched, handleSubmit }) => (
           <Modal
+            className="Modal"
             isOpen={isUpdating || !updated}
             onAfterClose={this.resetUserUpdated}
             onRequestClose={this.closeModal}
-            style={customStyles}
             contentLabel="Example Modal"
           >
             <FormGroup className="Form-wrapper">

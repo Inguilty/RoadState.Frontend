@@ -11,7 +11,6 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import * as userActions from './actions';
-import customStyles from '../../../customStyles';
 import '../../../authorization.css';
 
 class SignIn extends React.Component {
@@ -44,11 +43,7 @@ class SignIn extends React.Component {
         onSubmit={this.handleSubmit}
       >
         {({ errors, touched, handleSubmit }) => (
-          <Modal
-            isOpen={loggingIn || !loggedIn}
-            onRequestClose={this.closeModal}
-            style={customStyles}
-          >
+          <Modal className="Modal" isOpen={loggingIn || !loggedIn} onRequestClose={this.closeModal}>
             <h2>Sign in</h2>
             <FormGroup className="Form-wrapper">
               <Form onSubmit={handleSubmit}>

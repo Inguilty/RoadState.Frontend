@@ -14,7 +14,6 @@ import {
 import * as Yup from 'yup';
 import { IMAGE_MAX_SIZE, errorMessages } from '../profile/ShowProfile';
 import * as signUp from './actions';
-import customStyles from '../../../customStyles';
 import '../../../authorization.css';
 
 class SignUp extends React.Component {
@@ -124,10 +123,10 @@ class SignUp extends React.Component {
       >
         {({ errors, touched, handleSubmit }) => (
           <Modal
+            className="Modal"
             isOpen={isRegistering || !registered}
             onAfterClose={this.resetUserRegistered}
             onRequestClose={this.closeModal}
-            style={customStyles}
           >
             <h2>Sign up</h2>
             <FormGroup className="Form-wrapper">

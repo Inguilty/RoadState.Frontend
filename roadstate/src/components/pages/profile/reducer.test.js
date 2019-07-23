@@ -1,5 +1,5 @@
-import updateUserReducer from './updateUserReducer';
-import * as actions from './updateUserActions';
+import updateUserReducer from './reducer';
+import * as actions from './actions';
 
 const user = {
   id: 'af6b0b609b7900b89ac395d7c5e4b1a513625bac',

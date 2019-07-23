@@ -4,11 +4,4 @@ const BASE_URL = '/';
 
 export const loadBugReport = id => axios.get(`${BASE_URL}api/bugreport/${id}`);
 
-export const rateBugReport = () => new Promise((resolve) => {
-  setTimeout(() => {
-    resolve({
-      status: 200,
-      data: null,
-    });
-  }, 2000);
-});
+export const rateBugReport = (id, rate) => axios.put(`${BASE_URL}api/bugreport/rate/${id}`, rate);

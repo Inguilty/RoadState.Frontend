@@ -10,6 +10,7 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import * as createBRactions from './actions';
+import { Spinner } from '../Spinner';
 
 export const MAX_BUG_REPORT_IMAGE_SIZE = 16 * 1024 * 1024;
 export const MAX_BUG_REPORT_IMAGES_NUMBER = 5;
@@ -25,26 +26,23 @@ const errorImageMessages = {
 
 class CreateBugReportForm extends React.Component {
   state = {
-    isImageValid: false, isImageAlert: false, imageErrorType: '', photos: {},
+    isImageValid: false, isImageAlertShown: false, imageErrorType: '', photos: {},
   };
 
   initialState = {
-    probLvl: '',
-    desc: '',
+    problemLevel: '',
+    description: '',
   };
 
   schema = Yup.object().shape({
-    probLvl: Yup.number()
+    problemLevel: Yup.number()
       .min(0, 'Problem level must be in between 0 and 10')
       .integer('Problem level must be an integer in between 0 and 10')
       .max(10, 'Problem level must be in between 0 and 10')
       .required('Description is required'),
-    desc: Yup.string()
+    description: Yup.string()
       .min(5, 'Description is too small!')
       .required('Description is required'),
-    /* .(MAX_BUG_REPORT_IMAGES_NUMBER, 'Maximum 5 photos are allowed!')
-    .maxSize(MAX_BUG_REPORT_IMAGE_SIZE, `The maximum number of photos you can upload
-    is ${MAX_BUG_REPORT_IMAGES_NUMBER}.`) */
   });
 
   componentDidUpdate(prevProps) {
@@ -67,8 +65,8 @@ class CreateBugReportForm extends React.Component {
 
   handleSubmit = (e) => {
     const { isImageValid, photos } = this.state;
-    const { probLvl, desc } = e;
-    const { createBugReport, locLong, locLat } = this.props;
+    const { problemLevel, description } = e;
+    const { createBugReport, locationLongitude, locationLatitude } = this.props;
 
     if (isImageValid === true) {
       const photosData = new FormData();
@@ -78,13 +76,13 @@ class CreateBugReportForm extends React.Component {
           photosData.append(`photos[${i}]`, file, file.name);
         }
       } catch {
-        this.inpPht.value = null;
+        this.inputPhotos.value = null;
         this.setState({ imageErrorType: 'noImage', isImageValid: false });
+        this.handleImageAlertShow();
       }
       createBugReport({
-        probLvl, desc, photosData, locLong, locLat,
+        probLvl: problemLevel, description, photosData, locationLongitude, locationLatitude,
       });
-      // ToDo: Send required objects
     }
   };
 
@@ -95,8 +93,8 @@ class CreateBugReportForm extends React.Component {
       this.handleImageAlertShow();
       return true;
     }
-    let errorImages = Array.from(event.target.files)
-      .filter(image => image.size > MAX_BUG_REPORT_IMAGE_SIZE);
+    let errorImages = event.target.files;
+    errorImages = [...errorImages].filter(image => image.size > MAX_BUG_REPORT_IMAGE_SIZE);
     if (errorImages.length > 0) {
       this.setState({ imageErrorType: 'maxSize' });
       event.target.value = null;
@@ -108,8 +106,8 @@ class CreateBugReportForm extends React.Component {
       this.handleImageAlertShow();
       return true;
     }
-    errorImages = Array.from(event.target.files)
-      .filter(image => !image.name.match(/.(jpg|jpeg|png)$/i));
+    errorImages = event.target.files;
+    errorImages = [...errorImages].filter(image => !image.name.match(/.(jpg|jpeg|png)$/i));
     if (errorImages.length > 0) {
       this.setState({ imageErrorType: 'wrongFileType' });
       event.target.value = null;
@@ -120,17 +118,20 @@ class CreateBugReportForm extends React.Component {
     return true;
   };
 
-  handleImageAlertDismiss = () => this.setState({ isImageAlert: false });
+  handleImageAlertDismiss = () => this.setState({ isImageAlertShown: false });
 
-  handleImageAlertShow = () => this.setState({ isImageValid: false, isImageAlert: true });
+  handleImageAlertShow = () => this.setState({ isImageValid: false, isImageAlertShown: true });
 
   render() {
     const {
-      isImageAlert,
+      isImageAlertShown,
       imageErrorType,
     } = this.state;
 
-    const { isActive } = this.props;
+    const {
+      isActive,
+      isLoading,
+    } = this.props;
     const alertText = errorImageMessages[imageErrorType];
 
     return (
@@ -147,10 +148,9 @@ class CreateBugReportForm extends React.Component {
             <Modal.Body>
               <Form
                 noValidate
-                // onSubmit={e => handleSubmit(e)}
               >
                 <Alert
-                  show={isImageAlert}
+                  show={isImageAlertShown}
                   variant="danger"
                   onClose={this.handleImageAlertDismiss}
                   dismissible
@@ -162,7 +162,7 @@ class CreateBugReportForm extends React.Component {
                 <FormGroup>
                   <Field
                     required
-                    name="probLvl"
+                    name="problemLevel"
                     type="number"
                     step="1"
                     min="0"
@@ -173,7 +173,7 @@ class CreateBugReportForm extends React.Component {
                     }
                   />
                   <ErrorMessage
-                    name="probLvl"
+                    name="problemLevel"
                     component="div"
                     className="invalid-feedback"
                   />
@@ -181,7 +181,7 @@ class CreateBugReportForm extends React.Component {
                 <FormGroup>
                   <Field
                     required
-                    name="desc"
+                    name="description"
                     type="text"
                     as="textarea"
                     placeholder="Description"
@@ -190,7 +190,7 @@ class CreateBugReportForm extends React.Component {
                     }
                   />
                   <ErrorMessage
-                    name="desc"
+                    name="description"
                     component="div"
                     className="invalid-feedback"
                   />
@@ -201,7 +201,7 @@ class CreateBugReportForm extends React.Component {
                     multiple
                     type="file"
                     accept="image/*"
-                    ref={(inpPht) => { this.inpPht = inpPht; }}
+                    ref={(inputPhotos) => { this.inputPhotos = inputPhotos; }}
                     className={
                       `form-control ${(errors.photos && touched.photos ? ' is-invalid' : '')}`
                     }
@@ -217,7 +217,7 @@ class CreateBugReportForm extends React.Component {
                       variant="primary"
                       size="lg"
                     >
-                      Save
+                      {isLoading ? <Spinner /> : 'Save'}
                     </Button>
                   </Col>
                   <Col sm={{ offset: 2 }}>
@@ -241,14 +241,12 @@ class CreateBugReportForm extends React.Component {
 }
 
 CreateBugReportForm.propTypes = {
-  locLong: PropTypes.number.isRequired,
-  locLat: PropTypes.number.isRequired,
+  locationLongitude: PropTypes.number.isRequired,
+  locationLatitude: PropTypes.number.isRequired,
   isActive: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   onClose: PropTypes.objectOf.isRequired,
   createBugReport: PropTypes.func.isRequired,
-  /* locLog: PropTypes.objectOf.isRequired,
-  locLat: PropTypes.objectOf.isRequired, */
 };
 
 const mapStateToProps = state => ({

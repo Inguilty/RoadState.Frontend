@@ -18,14 +18,12 @@ describe('createBugReportActions', () => {
     let apiCalled = false;
     api.createBugReport = apiMock.callApiMock({ data: bugReport, status: 200 },
       () => { apiCalled = true; });
-    const errorOccured = false;
     // Act
     const store = mockStore({ createBugReport: null });
 
     // Assert
     return store.dispatch(createBugReportActions.createBugReport(bugReport)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
-      expect(errorOccured).toBeFalsy();
       expect(apiCalled).toBeTruthy();
     });
   });

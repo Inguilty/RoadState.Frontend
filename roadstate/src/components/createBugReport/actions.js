@@ -6,7 +6,6 @@ export const CREATE_BUG_REPORT_FAILURE = 'create-bug-report/CREATE_BUG_REPORT_FA
 
 export const createBugReport = createBR => async (dispatch) => {
   dispatch({ type: CREATE_BUG_REPORT_REQUEST });
-  // call API
   const bugReportResult = await api.createBugReport(createBR);
   if (bugReportResult.status === 200) {
     dispatch({
@@ -17,5 +16,4 @@ export const createBugReport = createBR => async (dispatch) => {
       type: CREATE_BUG_REPORT_FAILURE,
     });
   }
-  // return bugReportResult;
 };

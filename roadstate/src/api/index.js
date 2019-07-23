@@ -13,12 +13,11 @@ export const rateBugReport = () => new Promise((resolve) => {
   }, 2000);
 });
 
-export const createBugReport = createBR => new Promise((resolve) => {
+export const createBugReport = () => new Promise((resolve) => {
   /* const config = {
     headers: { 'content-type': 'multipart/form-data' },
   };
   return axios.post(`${BASE_URL}/createBugReport`, createBR.photosData, config); */
-  console.log(createBR);
   setTimeout(() => {
     resolve({
       status: 200,

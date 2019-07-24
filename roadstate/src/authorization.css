@@ -362,8 +362,8 @@
 
 .Modal {
   padding: 20px 20px 20px 20px;
-  border-radius: 2%;
-  border: 0.5px black ridge;
+  border-radius: 4%;
+  border: 0.5px #007bff ridge;
   background: white;
   position: absolute;
   top: 50%;

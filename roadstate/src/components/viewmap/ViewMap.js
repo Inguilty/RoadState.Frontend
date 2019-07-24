@@ -38,7 +38,10 @@ export default class ViewMap extends Component {
   }
 
   distanceMapping = (pointCur, pointSrc) => {
-    const dist = Math.sqrt((pointCur.lat - pointSrc.lat) ** 2 + (pointCur.lng - pointSrc.lng) ** 2);
+    const dist = Math.sqrt(
+      ((pointCur.lat - pointSrc.lat) ** 2)
+      + ((pointCur.lng - pointSrc.lng) ** 2),
+    );
     const LatLng = {
       distance: dist,
       point: {
@@ -47,7 +50,7 @@ export default class ViewMap extends Component {
       },
     };
     return LatLng;
-  };
+  }
 
   saveMap = (map) => {
     this.map = map;
@@ -78,7 +81,7 @@ export default class ViewMap extends Component {
       val = true;
     }
     return val;
-  };
+  }
 
   contains = (elem) => {
     let val;
@@ -95,7 +98,7 @@ export default class ViewMap extends Component {
       val = false;
     }
     return val;
-  };
+  }
 
   BGstate = (val, position) => {
     const prevState = this.state;
@@ -127,7 +130,7 @@ export default class ViewMap extends Component {
         },
       });
     }
-  };
+  }
 
   render() {
     const {
@@ -159,9 +162,7 @@ export default class ViewMap extends Component {
             from={from}
             to={to}
             map={this.map}
-            setState={(routeCoords) => {
-              this.setState(routeCoords);
-            }}
+            setState={(routeCoords) => { this.setState(routeCoords); }}
           />
         )}
       </Map>

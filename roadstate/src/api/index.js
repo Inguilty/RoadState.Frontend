@@ -28,7 +28,7 @@ export const logout = () => new Promise((resolve) => {
   }, 2000);
 });
 
-export const login = (userName, password) => new Promise((resolve) => {
+export const login = () => new Promise((resolve) => {
   setTimeout(() => {
     // const result = axios.post(`${config.apiUrl}/users/authenticate`, userName);
     resolve({
@@ -42,7 +42,7 @@ export const login = (userName, password) => new Promise((resolve) => {
   }, 2000);
 });
 
-export const register = user => new Promise((resolve) => {
+export const register = () => new Promise((resolve) => {
   setTimeout(() => {
     // const result = axios.post(`${config.apiUrl}/users/register`, user);
     resolve({
@@ -52,7 +52,7 @@ export const register = user => new Promise((resolve) => {
   }, 2000);
 });
 
-export const update = user => new Promise((resolve) => {
+export const update = () => new Promise((resolve) => {
   setTimeout(() => {
     // const result = axios.put(`${config.apiUrl}/users/${user.id}`, user);
     resolve({

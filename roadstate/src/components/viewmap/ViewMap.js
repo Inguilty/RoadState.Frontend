@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
 import 'leaflet/dist/leaflet.css';
-import { Map, TileLayer, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import {
+  Map, TileLayer, Popup, Marker,
+} from 'react-leaflet';
 import Route from '../route/Route';
 import CreateBugReport from '../createBugReport/CreateBugReport';
+import bug_report from './bug_report.png';
+
+
+const brIcon = L.icon({
+  iconUrl: bug_report,
+  iconSize: [29, 46],
+  iconAnchor: [12, 41],
+  popupAnchor: [0, -45],
+});
 
 export default class ViewMap extends Component {
   state = {
@@ -75,7 +87,7 @@ export default class ViewMap extends Component {
     const b = (point2.lat * point1.lng - point1.lat * point2.lng) / (point2.lat - point1.lat);
     const H = Math.abs(elem.lng - k * elem.lat - b) / Math.sqrt(k * k + 1);
     const lamda = 0.00006;
-    if (H > lamda || Number.isNaN(H)) {
+    if (H >= lamda || Number.isNaN(H)) {
       val = false;
     } else {
       val = true;
@@ -86,7 +98,7 @@ export default class ViewMap extends Component {
   contains = (elem) => {
     let val;
     const { routeCoords } = this.state;
-    if (routeCoords !== undefined) {
+    if (routeCoords.length !== 0) {
       const newRouteCoords = routeCoords.map(x => this.distanceMapping(x, elem));
       newRouteCoords.sort((a, b) => a.distance - b.distance);
       if (this.straightEquation(newRouteCoords[0].point, newRouteCoords[1].point, elem)) {
@@ -148,6 +160,7 @@ export default class ViewMap extends Component {
       <Map
         center={position}
         zoom={zoom}
+        maxZoom={19}
         style={{ height: '100vh', zIndex: '0' }}
         ref={this.saveMap}
         onClick={this.handleClick}
@@ -157,14 +170,17 @@ export default class ViewMap extends Component {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {setBugReport}
-        {isMapInit && (
-          <Route
-            from={from}
-            to={to}
-            map={this.map}
-            setState={(routeCoords) => { this.setState(routeCoords); }}
-          />
-        )}
+        <Marker position={[50.044061, 36.276762]} icon={brIcon} />
+        {
+          isMapInit && (
+            <Route
+              from={from}
+              to={to}
+              map={this.map}
+              setState={(routeCoords) => { this.setState(routeCoords); }}
+            />
+          )
+        }
       </Map>
     );
   }

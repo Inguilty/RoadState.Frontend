@@ -2,11 +2,16 @@
   "name": "roadstate",
   "version": "0.1.0",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/free-solid-svg-icons": "^5.9.0",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "@csstools/normalize.css": "^10.1.0",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "bootstrap-react": "^0.3.1",
     "deep-freeze": "0.0.1",
     "eslint-config-airbnb": "^17.1.1",
+    "formik": "^1.5.8",
     "keymirror": "^0.1.1",
     "leaflet": "^1.5.1",
     "leaflet-routing-machine": "^3.2.12",
@@ -17,14 +22,15 @@
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",
     "react-leaflet": "^2.4.0",
-    "react-modal": "^3.9.1",
+    "react-modal": "^3.8.2",
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "react-scrollspy": "^3.4.0",
     "redux": "^4.0.1",
     "redux-mock-store": "^1.5.3",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -56,5 +62,6 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-react": "^7.14.2"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

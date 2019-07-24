@@ -286,14 +286,10 @@
 }
 
 .icon {
-  background: url("images/Google.png");
+  background: url('images/Google.png');
   height: 32px;
   width: 32px;
   display: block;
-}
-
-.scl-md {
-  margin-left: 80px;
 }
 
 .scl-md:hover {
@@ -301,9 +297,79 @@
 }
 
 #userAvatar {
-  background: url("images/UserNoAvatar.png");
+  /* background: url('images/UserNoAvatar.png'); */
+  border: 1px solid black;
+  border-radius: 50%;
   height: 128px;
   width: 128px;
   margin-bottom: 10px;
   display: block;
+}
+
+#userNoAvatar {
+  background: url('images/UserNoAvatar.png');
+  border: 1px solid black;
+  border-radius: 50%;
+  height: 128px;
+  width: 128px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Spinning in Sign in form */
+.fa-spin-custom,
+.glyphicon-spin {
+  -webkit-animation: spin 1000ms infinite linear;
+  animation: spin 1000ms infinite linear;
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+.imgPreview {
+  text-align: center;
+  margin: 5px 15px;
+  max-height: 100px;
+  min-height: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  border-top: 5px solid gray;
+  border-bottom: 5px solid gray;
+}
+
+.Field {
+  width: 365px;
+}
+
+.Modal {
+  padding: 20px 20px 20px 20px;
+  border-radius: 4%;
+  border: 0.5px #007bff ridge;
+  background: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
 }

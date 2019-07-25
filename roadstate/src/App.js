@@ -15,17 +15,15 @@ import ViewMap from './components/viewmap/ViewMap';
 const App = () => (
   <div className="container-fluid">
     <Header />
-    <div className="jumbotron">
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/about" component={AboutPage} />
-        <Route path="/signIn" component={SignIn} />
-        <Route path="/signUp" component={SignUp} />
-        <PrivateRoute path="/profile" component={ShowProfile} />
-        <Route path="/view" component={WithBugReport} />
-        <Route component={PageNotFound} />
-      </Switch>
-    </div>
+    <Switch>
+      <Route exact path="/" component={HomePage} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="/signIn" component={SignIn} />
+      <Route path="/signUp" component={SignUp} />
+      <PrivateRoute path="/profile" component={ShowProfile} />
+      <Route path="/view" component={WithBugReport} />
+      <Route component={PageNotFound} />
+    </Switch>
     <ViewMap />
   </div>
 );

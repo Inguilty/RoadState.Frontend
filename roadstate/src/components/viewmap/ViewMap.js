@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import 'leaflet/dist/leaflet.css';
-import {
-  Map, TileLayer, Popup,
-} from 'react-leaflet';
+import { Map, TileLayer, Popup } from 'react-leaflet';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
+import { Row, Col } from 'react-bootstrap';
 import Route from '../route/Route';
 import CreateBugReport from '../createBugReport/CreateBugReport';
 import * as rectangleBRactions from './actions';
-import DisplayBg from '../displaybg/DisplayBg'
-
+import DisplayBg from '../displaybg/DisplayBg';
+import { Spinner } from '../Spinner';
 
 class ViewMap extends Component {
   state = {
@@ -45,10 +44,7 @@ class ViewMap extends Component {
   }
 
   distanceMapping = (pointCur, pointSrc) => {
-    const dist = Math.sqrt(
-      ((pointCur.lat - pointSrc.lat) ** 2)
-      + ((pointCur.lng - pointSrc.lng) ** 2),
-    );
+    const dist = Math.sqrt((pointCur.lat - pointSrc.lat) ** 2 + (pointCur.lng - pointSrc.lng) ** 2);
     const LatLng = {
       distance: dist,
       point: {
@@ -57,7 +53,7 @@ class ViewMap extends Component {
       },
     };
     return LatLng;
-  }
+  };
 
   saveMap = (map) => {
     this.map = map;
@@ -89,7 +85,7 @@ class ViewMap extends Component {
       val = true;
     }
     return val;
-  }
+  };
 
   contains = (elem) => {
     let val;
@@ -106,7 +102,7 @@ class ViewMap extends Component {
       val = false;
     }
     return val;
-  }
+  };
 
   bGstate = (val, position) => {
     const prevState = this.state;
@@ -138,31 +134,27 @@ class ViewMap extends Component {
         },
       });
     }
-  }
+  };
 
-  getLats = (arr) => {
-    return arr.map(d => d.lat);
-  }
+  getLats = arr => arr.map(d => d.lat);
 
-  getLngs = (arr) => {
-    return arr.map(d => d.lng);
-  }
+  getLngs = arr => arr.map(d => d.lng);
 
   calculateRectanglePoints = () => {
     const { routeCoords } = this.state;
     const { bugReportRectangle } = this.props;
     if (routeCoords.length !== 0) {
-      let min_lat = Math.min(...this.getLats(routeCoords));
-      let min_lng = Math.min(...this.getLngs(routeCoords));
-      let max_lat = Math.max(...this.getLats(routeCoords));
-      let max_lng = Math.max(...this.getLngs(routeCoords));
+      const min_lat = Math.min(...this.getLats(routeCoords));
+      const min_lng = Math.min(...this.getLngs(routeCoords));
+      const max_lat = Math.max(...this.getLats(routeCoords));
+      const max_lng = Math.max(...this.getLngs(routeCoords));
       bugReportRectangle(min_lng, max_lng, min_lat, max_lat);
     }
-  }
+  };
 
   render() {
     const {
-      from, to, location, zoom, isMapInit, todoList, routeCoords
+      from, to, location, zoom, isMapInit, todoList, routeCoords,
     } = this.state;
 
     const setBugReport = todoList.clicked ? (
@@ -172,7 +164,7 @@ class ViewMap extends Component {
     ) : null;
 
     const position = [location.lat, location.lng];
-    const { rectangleBugReports } = this.props;
+    const { rectangleBugReports, isLoading } = this.props;
     return (
       <Map
         center={position}
@@ -187,17 +179,27 @@ class ViewMap extends Component {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {setBugReport}
-        <DisplayBg bugReports={rectangleBugReports} roadPoints={routeCoords} />
-        {
-          isMapInit && (
-            <Route
-              from={from}
-              to={to}
-              map={this.map}
-              setState={(routeCoords) => { this.setState(routeCoords); }}
-            />
-          )
-        }
+
+        {isLoading || !rectangleBugReports || rectangleBugReports.length === 0 || !routeCoords ? (
+          <Row>
+            <Col>
+              <Spinner />
+            </Col>
+          </Row>
+        ) : (
+          <DisplayBg bugReports={rectangleBugReports} roadPoints={routeCoords} />
+        )}
+
+        {isMapInit && (
+          <Route
+            from={from}
+            to={to}
+            map={this.map}
+            setState={(routeCoords) => {
+              this.setState(routeCoords);
+            }}
+          />
+        )}
       </Map>
     );
   }

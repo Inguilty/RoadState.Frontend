@@ -351,109 +351,46 @@ CommentForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
 };
 
-class BugReport extends React.Component {
-  state = {
-    isModalOpened: false,
-  };
+const BugReport = ({
+  bugReport, isOpened, onClose, onPoll, isLoadingRating, onComment,
+}) => (
+  <Container>
+    <Modal show={isOpened} onHide={onClose} size="lg">
+      <Modal.Dialog scrollable size="lg">
+        <Modal.Header>
+          <NoPhotosAvailable />
+        </Modal.Header>
+        <Modal.Body>
+          <Poll
+            handlePollButton={onPoll}
+            bugReport={bugReport}
+            loadingBugReportRating={isLoadingRating}
+          />
+          <br />
+          <BodyContainer
+            description={bugReport.description}
+            state={bugReport.state}
+            rating={!bugReport ? 0 : bugReport.rating}
+            commentsCount={!bugReport.comments ? 0 : bugReport.comments.length}
+          />
+          <br />
+          <NoComments />
+        </Modal.Body>
+        <Modal.Footer>
+          <CommentForm handleChange={onComment} handleSubmit={onComment} />
+        </Modal.Footer>
+      </Modal.Dialog>
+    </Modal>
+  </Container>
+);
 
-  static propTypes = {
-    loadingBugReport: PropTypes.bool.isRequired,
-    loadingBugReportRating: PropTypes.bool.isRequired,
-    bugReport: PropTypes.objectOf(PropTypes.any),
-    rateBugReport: PropTypes.func.isRequired,
-    loadBugReport: PropTypes.func.isRequired,
-  };
-
-  componentDidMount() {
-    const { loadBugReport } = this.props;
-    loadBugReport(1);
-  }
-
-  handleShow = () => {
-    this.setState({ isModalOpened: true });
-  };
-
-  handleClose = () => {
-    this.setState({ isModalOpened: false });
-  };
-
-  handlePoll = (event) => {
-    const { bugReport, rateBugReport } = this.props;
-    const { currentBugReport } = bugReport;
-    const currentRating = currentBugReport.rating;
-    const bugReportDispatched = {
-      ...currentBugReport,
-      rating: event.target.value === 'true' ? currentRating + 1 : currentRating - 1,
-    };
-    const rate = event.target.value === 'true' ? 'agree' : 'disagree';
-    rateBugReport(bugReportDispatched, rate);
-  };
-
-  handleCommentChange = () => {};
-
-  render() {
-    const { isModalOpened } = this.state;
-    const { bugReport } = this.props;
-    const { currentBugReport, loadingBugReport, loadingBugReportRating } = bugReport;
-    if (loadingBugReport || !currentBugReport) {
-      return (
-        <Row>
-          <Col md={{ offset: 5 }}>
-            <Spinner />
-          </Col>
-        </Row>
-      );
-    }
-    return (
-      <Container>
-        <ModalCaller id={currentBugReport.id} handleShow={this.handleShow} />
-        <Modal show={isModalOpened} onHide={this.handleClose} size="lg">
-          <Modal.Dialog scrollable size="lg">
-            <Modal.Header>
-              <NoPhotosAvailable />
-            </Modal.Header>
-            <Modal.Body>
-              <Poll
-                handlePollButton={this.handlePoll}
-                bugReport={currentBugReport}
-                user={null}
-                loadingBugReportRating={loadingBugReportRating}
-              />
-              <br />
-              <BodyContainer
-                description={currentBugReport.description}
-                state={currentBugReport.state}
-                rating={!currentBugReport ? 0 : currentBugReport.rating}
-                commentsCount={0}
-              />
-              <br />
-              <NoComments />
-            </Modal.Body>
-            <Modal.Footer>
-              <CommentForm
-                handleChange={this.handleCommentChange}
-                handleSubmit={this.handleCommentChange}
-              />
-            </Modal.Footer>
-          </Modal.Dialog>
-        </Modal>
-      </Container>
-    );
-  }
-}
-
-BugReport.defaultProps = {
-  bugReport: null,
+BugReport.propTypes = {
+  bugReport: PropTypes.objectOf.isRequired,
+  isOpened: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onPoll: PropTypes.func.isRequired,
+  isLoadingRating: PropTypes.bool.isRequired,
+  onComment: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ bugReport }) => ({ bugReport });
-
-const mapDispatchToProps = {
-  loadBugReport: bugReportActions.loadBugReport,
-  rateBugReport: bugReportActions.rateBugReport,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(BugReport);
+export default BugReport;

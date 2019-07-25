@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
 import {
-  Map, TileLayer, Popup, Marker,
+  Map, TileLayer, Popup,
 } from 'react-leaflet';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import Route from '../route/Route';
 import CreateBugReport from '../createBugReport/CreateBugReport';
-import bug_report from './bug_report.png';
+import * as rectangleBRactions from './actions';
+import DisplayBg from '../displaybg/DisplayBg'
 
 
-const brIcon = L.icon({
-  iconUrl: bug_report,
-  iconSize: [29, 46],
-  iconAnchor: [12, 41],
-  popupAnchor: [0, -45],
-});
-
-export default class ViewMap extends Component {
+class ViewMap extends Component {
   state = {
     location: {
       lat: 51.505,
@@ -78,7 +73,8 @@ export default class ViewMap extends Component {
       lng: longitude,
     };
     const val = this.contains(position);
-    this.BGstate(val, position);
+    this.bGstate(val, position);
+    this.calculateRectanglePoints();
   };
 
   straightEquation = (point1, point2, elem) => {
@@ -112,7 +108,7 @@ export default class ViewMap extends Component {
     return val;
   }
 
-  BGstate = (val, position) => {
+  bGstate = (val, position) => {
     const prevState = this.state;
     if (val) {
       if (prevState.todoList.clicked) {
@@ -144,9 +140,29 @@ export default class ViewMap extends Component {
     }
   }
 
+  getLats = (arr) => {
+    return arr.map(d => d.lat);
+  }
+
+  getLngs = (arr) => {
+    return arr.map(d => d.lng);
+  }
+
+  calculateRectanglePoints = () => {
+    const { routeCoords } = this.state;
+    const { bugReportRectangle } = this.props;
+    if (routeCoords.length !== 0) {
+      let min_lat = Math.min(...this.getLats(routeCoords));
+      let min_lng = Math.min(...this.getLngs(routeCoords));
+      let max_lat = Math.max(...this.getLats(routeCoords));
+      let max_lng = Math.max(...this.getLngs(routeCoords));
+      bugReportRectangle(min_lng, max_lng, min_lat, max_lat);
+    }
+  }
+
   render() {
     const {
-      from, to, location, zoom, isMapInit, todoList,
+      from, to, location, zoom, isMapInit, todoList, routeCoords
     } = this.state;
 
     const setBugReport = todoList.clicked ? (
@@ -156,6 +172,7 @@ export default class ViewMap extends Component {
     ) : null;
 
     const position = [location.lat, location.lng];
+    const { rectangleBugReports } = this.props;
     return (
       <Map
         center={position}
@@ -170,7 +187,7 @@ export default class ViewMap extends Component {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {setBugReport}
-        <Marker position={[50.044061, 36.276762]} icon={brIcon} />
+        <DisplayBg bugReports={rectangleBugReports} roadPoints={routeCoords} />
         {
           isMapInit && (
             <Route
@@ -185,3 +202,23 @@ export default class ViewMap extends Component {
     );
   }
 }
+
+ViewMap.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  rectangleBugReports: PropTypes.objectOf.isRequired,
+  bugReportRectangle: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+  isLoading: state.bugReportRectangle.isLoading,
+  rectangleBugReports: state.bugReportRectangle.rectangleBugReports,
+});
+
+const mapDispatchToProps = {
+  bugReportRectangle: rectangleBRactions.bugReportRectangle,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ViewMap);

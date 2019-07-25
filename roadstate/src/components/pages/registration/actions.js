@@ -11,7 +11,7 @@ export const register = user => async (dispatch) => {
   if (registeredUser.status === 200) {
     dispatch({ type: REGISTER_SUCCESS });
   } else {
-    dispatch({ type: REGISTER_FAILURE, errorMessage: registeredUser.data.errorMessage });
+    dispatch({ type: REGISTER_FAILURE, errorMessage: registeredUser.response.data.message });
   }
 };
 export const completeRegistration = () => async (dispatch) => {

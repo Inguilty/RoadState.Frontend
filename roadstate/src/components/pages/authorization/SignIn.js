@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { NavLink } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
-import { FormControl, FormGroup } from 'react-bootstrap';
+import { FormControl, FormGroup, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -32,7 +32,7 @@ class SignIn extends React.Component {
   };
 
   render() {
-    const { loggingIn, loggedIn } = this.props;
+    const { loggingIn, loggedIn, errorMessage } = this.props;
     return (
       <Formik
         initialValues={{
@@ -67,7 +67,7 @@ class SignIn extends React.Component {
                     placeholder="Username"
                     className={`form-control${
                       errors.username && touched.username ? ' is-invalid' : ''
-                    }`}
+                      }`}
                   />
                   <ErrorMessage name="username" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -79,7 +79,7 @@ class SignIn extends React.Component {
                     placeholder="Password"
                     className={`form-control${
                       errors.password && touched.password ? ' is-invalid' : ''
-                    }`}
+                      }`}
                   />
                   <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -93,10 +93,18 @@ class SignIn extends React.Component {
                 <FormGroup className="Form-footer">
                   <NavLink href="#">Forgot Your password?</NavLink>
                   {' '}
-Have no account?
+                  Have no account?
                   {' '}
                   <NavLink to="/signUp">Sign up</NavLink>
                 </FormGroup>
+                <Alert
+                  show={errorMessage}
+                  variant="danger"
+                  onClose={!errorMessage}
+                  dismissible
+                >
+                  {errorMessage}
+                </Alert>
               </Form>
             </FormGroup>
           </Modal>
@@ -111,11 +119,13 @@ SignIn.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   login: PropTypes.func.isRequired,
   history: PropTypes.objectOf.isRequired,
+  errorMessage: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   loggingIn: state.authorization.loggingIn,
   loggedIn: state.authorization.loggedIn,
+  errorMessage: state.authorization.errorMessage,
 });
 
 export default connect(

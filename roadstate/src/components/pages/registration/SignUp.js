@@ -104,7 +104,7 @@ class SignUp extends React.Component {
   handleImageAlertShow = () => this.setState({ isImageValid: true });
 
   render() {
-    const { isRegistering, registered } = this.props;
+    const { isRegistering, registered, errorMessage } = this.props;
     const { isImageValid, imageErrorType, imagePreviewUrl } = this.state;
     const imageAlertText = errorMessages[imageErrorType];
 
@@ -173,8 +173,7 @@ class SignUp extends React.Component {
                     type="text"
                     placeholder="Username*"
                     className={`form-control${
-                      errors.username && touched.username ? ' is-invalid' : ''
-                    }`}
+                      errors.username && touched.username ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage name="username" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -195,8 +194,7 @@ class SignUp extends React.Component {
                     type="password"
                     placeholder="Password*"
                     className={`form-control${
-                      errors.password && touched.password ? ' is-invalid' : ''
-                    }`}
+                      errors.password && touched.password ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -207,8 +205,7 @@ class SignUp extends React.Component {
                     type="password"
                     placeholder="Confirm password*"
                     className={`form-control${
-                      errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''
-                    }`}
+                      errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage
                     name="confirmPasword"
@@ -223,8 +220,7 @@ class SignUp extends React.Component {
                       name="acceptedTerms"
                       type="checkbox"
                       className={`form-checkbox${
-                        errors.acceptedTerms && touched.acceptedTerms ? ' is-invalid' : ''
-                      }`}
+                        errors.acceptedTerms && touched.acceptedTerms ? ' is-invalid' : ''}`}
                     />
                   </Col>
                   <Col>
@@ -245,6 +241,14 @@ class SignUp extends React.Component {
                   </center>
                 )}
               </Form>
+              <Alert
+                show={errorMessage}
+                variant="danger"
+                onClose={!errorMessage}
+                dismissible
+              >
+                {errorMessage}
+              </Alert>
             </FormGroup>
           </Modal>
         )}
@@ -259,11 +263,13 @@ SignUp.propTypes = {
   register: PropTypes.objectOf.isRequired,
   history: PropTypes.objectOf.isRequired,
   completeRegister: PropTypes.func.isRequired,
+  errorMessage: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   isRegistering: state.registration.isRegistering,
   registered: state.registration.registered,
+  errorMessage: state.registration.errorMessages,
 });
 
 export default connect(

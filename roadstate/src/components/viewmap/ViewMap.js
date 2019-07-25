@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import 'leaflet/dist/leaflet.css';
-import { Map, TileLayer, Popup } from 'react-leaflet';
+import {
+  Map, TileLayer, Popup,
+} from 'react-leaflet';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import Route from '../route/Route';
 import CreateBugReport from '../createBugReport/CreateBugReport';
+import * as rectangleBRactions from './actions';
+import DisplayBg from '../displaybg/DisplayBg'
 
-export default class ViewMap extends Component {
+
+class ViewMap extends Component {
   state = {
     location: {
       lat: 51.505,
@@ -66,7 +73,8 @@ export default class ViewMap extends Component {
       lng: longitude,
     };
     const val = this.contains(position);
-    this.BGstate(val, position);
+    this.bGstate(val, position);
+    this.calculateRectanglePoints();
   };
 
   straightEquation = (point1, point2, elem) => {
@@ -75,7 +83,7 @@ export default class ViewMap extends Component {
     const b = (point2.lat * point1.lng - point1.lat * point2.lng) / (point2.lat - point1.lat);
     const H = Math.abs(elem.lng - k * elem.lat - b) / Math.sqrt(k * k + 1);
     const lamda = 0.00006;
-    if (H > lamda || Number.isNaN(H)) {
+    if (H >= lamda || Number.isNaN(H)) {
       val = false;
     } else {
       val = true;
@@ -86,7 +94,7 @@ export default class ViewMap extends Component {
   contains = (elem) => {
     let val;
     const { routeCoords } = this.state;
-    if (routeCoords !== undefined) {
+    if (routeCoords.length !== 0) {
       const newRouteCoords = routeCoords.map(x => this.distanceMapping(x, elem));
       newRouteCoords.sort((a, b) => a.distance - b.distance);
       if (this.straightEquation(newRouteCoords[0].point, newRouteCoords[1].point, elem)) {
@@ -100,7 +108,7 @@ export default class ViewMap extends Component {
     return val;
   }
 
-  BGstate = (val, position) => {
+  bGstate = (val, position) => {
     const prevState = this.state;
     if (val) {
       if (prevState.todoList.clicked) {
@@ -132,9 +140,29 @@ export default class ViewMap extends Component {
     }
   }
 
+  getLats = (arr) => {
+    return arr.map(d => d.lat);
+  }
+
+  getLngs = (arr) => {
+    return arr.map(d => d.lng);
+  }
+
+  calculateRectanglePoints = () => {
+    const { routeCoords } = this.state;
+    const { bugReportRectangle } = this.props;
+    if (routeCoords.length !== 0) {
+      let min_lat = Math.min(...this.getLats(routeCoords));
+      let min_lng = Math.min(...this.getLngs(routeCoords));
+      let max_lat = Math.max(...this.getLats(routeCoords));
+      let max_lng = Math.max(...this.getLngs(routeCoords));
+      bugReportRectangle(min_lng, max_lng, min_lat, max_lat);
+    }
+  }
+
   render() {
     const {
-      from, to, location, zoom, isMapInit, todoList,
+      from, to, location, zoom, isMapInit, todoList, routeCoords
     } = this.state;
 
     const setBugReport = todoList.clicked ? (
@@ -144,10 +172,12 @@ export default class ViewMap extends Component {
     ) : null;
 
     const position = [location.lat, location.lng];
+    const { rectangleBugReports } = this.props;
     return (
       <Map
         center={position}
         zoom={zoom}
+        maxZoom={19}
         style={{ height: '100vh', zIndex: '0' }}
         ref={this.saveMap}
         onClick={this.handleClick}
@@ -157,15 +187,38 @@ export default class ViewMap extends Component {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {setBugReport}
-        {isMapInit && (
-          <Route
-            from={from}
-            to={to}
-            map={this.map}
-            setState={(routeCoords) => { this.setState(routeCoords); }}
-          />
-        )}
+        <DisplayBg bugReports={rectangleBugReports} roadPoints={routeCoords} />
+        {
+          isMapInit && (
+            <Route
+              from={from}
+              to={to}
+              map={this.map}
+              setState={(routeCoords) => { this.setState(routeCoords); }}
+            />
+          )
+        }
       </Map>
     );
   }
 }
+
+ViewMap.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  rectangleBugReports: PropTypes.objectOf.isRequired,
+  bugReportRectangle: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+  isLoading: state.bugReportRectangle.isLoading,
+  rectangleBugReports: state.bugReportRectangle.rectangleBugReports,
+});
+
+const mapDispatchToProps = {
+  bugReportRectangle: rectangleBRactions.bugReportRectangle,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ViewMap);

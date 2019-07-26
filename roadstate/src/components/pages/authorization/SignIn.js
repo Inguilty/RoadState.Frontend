@@ -19,6 +19,12 @@ class SignIn extends React.Component {
     password: Yup.string().required('Password is required'),
   });
 
+  handleAlertDismiss = () => {
+    const { removeError } = this.props;
+    removeError();
+  };
+
+
   closeModal = () => {
     const { history } = this.props;
     history.goBack();
@@ -32,6 +38,7 @@ class SignIn extends React.Component {
   };
 
   render() {
+    debugger;
     const { loggingIn, loggedIn, errorMessage } = this.props;
     return (
       <Formik
@@ -66,8 +73,7 @@ class SignIn extends React.Component {
                     type="text"
                     placeholder="Username"
                     className={`form-control${
-                      errors.username && touched.username ? ' is-invalid' : ''
-                      }`}
+                      errors.username && touched.username ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage name="username" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -78,8 +84,7 @@ class SignIn extends React.Component {
                     type="password"
                     placeholder="Password"
                     className={`form-control${
-                      errors.password && touched.password ? ' is-invalid' : ''
-                      }`}
+                      errors.password && touched.password ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -100,7 +105,7 @@ class SignIn extends React.Component {
                 <Alert
                   show={errorMessage}
                   variant="danger"
-                  onClose={!errorMessage}
+                  onClose={this.handleAlertDismiss}
                   dismissible
                 >
                   {errorMessage}
@@ -120,6 +125,7 @@ SignIn.propTypes = {
   login: PropTypes.func.isRequired,
   history: PropTypes.objectOf.isRequired,
   errorMessage: PropTypes.string.isRequired,
+  removeError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -130,5 +136,8 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { login: userActions.login },
+  {
+    login: userActions.login,
+    removeError: userActions.removeError,
+  },
 )(SignIn);

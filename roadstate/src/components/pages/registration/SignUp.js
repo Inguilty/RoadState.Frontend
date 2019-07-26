@@ -44,6 +44,11 @@ class SignUp extends React.Component {
     acceptedTerms: Yup.bool(),
   });
 
+  handleAlertDismiss = () => {
+    const { removeError } = this.props;
+    removeError();
+  };
+
   closeModal = () => {
     const { history } = this.props;
     history.goBack();
@@ -61,7 +66,7 @@ class SignUp extends React.Component {
     const { image, imagePreviewUrl } = this.state;
     const { register } = this.props;
     const user = {
-      avatar: image,
+      // avatar: image,
       avatarUrl: imagePreviewUrl,
       username: e.username,
       email: e.email,
@@ -107,7 +112,6 @@ class SignUp extends React.Component {
     const { isRegistering, registered, errorMessage } = this.props;
     const { isImageValid, imageErrorType, imagePreviewUrl } = this.state;
     const imageAlertText = errorMessages[imageErrorType];
-
     const userImage = imagePreviewUrl && <Image id="userAvatar" src={imagePreviewUrl} />;
     return (
       <Formik
@@ -135,6 +139,14 @@ class SignUp extends React.Component {
               </center>
               <p className="hint-text">* - Fill in this Form to create your account!</p>
               <Form onSubmit={handleSubmit}>
+                <Alert
+                  show={errorMessage}
+                  variant="danger"
+                  onClose={this.handleAlertDismiss}
+                  dismissible
+                >
+                  {errorMessage}
+                </Alert>
                 <Alert
                   show={isImageValid}
                   variant="danger"
@@ -240,15 +252,8 @@ class SignUp extends React.Component {
                     <FontAwesomeIcon icon={faSpinner} className="fa fa-spinner fa-spin" />
                   </center>
                 )}
+
               </Form>
-              <Alert
-                show={errorMessage}
-                variant="danger"
-                onClose={!errorMessage}
-                dismissible
-              >
-                {errorMessage}
-              </Alert>
             </FormGroup>
           </Modal>
         )}
@@ -264,15 +269,20 @@ SignUp.propTypes = {
   history: PropTypes.objectOf.isRequired,
   completeRegister: PropTypes.func.isRequired,
   errorMessage: PropTypes.string.isRequired,
+  removeError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   isRegistering: state.registration.isRegistering,
   registered: state.registration.registered,
-  errorMessage: state.registration.errorMessages,
+  errorMessage: state.registration.errorMessage,
 });
 
 export default connect(
   mapStateToProps,
-  { register: signUp.register, completeRegister: signUp.completeRegistration },
+  {
+    register: signUp.register,
+    completeRegister: signUp.completeRegistration,
+    removeError: signUp.removeError,
+  },
 )(SignUp);

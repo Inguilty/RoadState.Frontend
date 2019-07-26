@@ -20,7 +20,7 @@ export const bugReportRectangle = (
   if (getBugReports.status === 200) {
     dispatch({
       type: BUG_REPORT_RECTANGLE_SUCCESS,
-      rectangleBugReports: getBugReports.data,
+      bugReports: getBugReports.data,
     });
   } else {
     dispatch({

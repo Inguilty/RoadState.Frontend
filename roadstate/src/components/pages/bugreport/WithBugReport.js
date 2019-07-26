@@ -34,7 +34,7 @@ class WithBugReport extends Component {
     this.handleOpen();
   };
 
-  handleCommentChange = () => {};
+  handleCommentChange = () => { };
 
   handlePoll = (event) => {
     const { bugReport, rateBugReport } = this.props;
@@ -60,19 +60,19 @@ class WithBugReport extends Component {
         {loadingBugReport || !currentBugReport ? (
           <Row>
             <Col>
-              <Spinner />
+              <center><Spinner /></center>
             </Col>
           </Row>
         ) : (
-          <BugReport
-            bugReport={currentBugReport}
-            isOpened={isModalOpened}
-            onClose={this.handleClose}
-            onPoll={this.handlePoll}
-            isLoadingRating={loadingBugReportRating}
-            onComment={this.handleCommentChange}
-          />
-        )}
+            <BugReport
+              bugReport={currentBugReport}
+              isOpened={isModalOpened}
+              onClose={this.handleClose}
+              onPoll={this.handlePoll}
+              isLoadingRating={loadingBugReportRating}
+              onComment={this.handleCommentChange}
+            />
+          )}
       </div>
     );
   }

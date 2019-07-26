@@ -6,7 +6,7 @@ import {
 
 const initialState = {
     isLoading: false,
-    rectangleBugReports: []
+    bugReports: [],
 };
 
 const loadBugReportRectangle = (state = initialState, action) => {
@@ -14,7 +14,7 @@ const loadBugReportRectangle = (state = initialState, action) => {
         case BUG_REPORT_RECTANGLE_REQUEST:
             return { ...state, isLoading: true };
         case BUG_REPORT_RECTANGLE_SUCCESS:
-            return { ...state, rectangleBugReports: action.rectangleBugReports, isLoading: false };
+            return { ...state, bugReports: action.bugReports, isLoading: false };
         case BUG_REPORT_RECTANGLE_FAILURE:
             return { ...state, isLoading: false };
         default:

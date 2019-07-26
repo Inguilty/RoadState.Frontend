@@ -18,16 +18,6 @@ export const createBugReport = () => new Promise((resolve) => {
   }, 2000);
 });
 
-export const logout = () => new Promise((resolve) => {
-  setTimeout(() => {
-    // const result = axios.post(`${config.apiUrl}/users/logout`);
-    resolve({
-      status: 200,
-      data: null,
-    });
-  }, 2000);
-});
-
 export const login = (userName, password) => axios.post(`${BASE_URL}api/users/authenticate`, { userName, password }).catch(error => error);
 
 export const register = user => axios.post(`${BASE_URL}api/users/register`, user).catch(error => error);

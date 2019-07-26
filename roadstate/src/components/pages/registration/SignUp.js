@@ -252,7 +252,6 @@ class SignUp extends React.Component {
                     <FontAwesomeIcon icon={faSpinner} className="fa fa-spinner fa-spin" />
                   </center>
                 )}
-
               </Form>
             </FormGroup>
           </Modal>

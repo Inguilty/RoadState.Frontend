@@ -57,7 +57,7 @@ class WithBugReport extends Component {
         <Button id={id} onClick={this.handleClick} variant="success">
           View bug report
         </Button>
-        {loadingBugReport || !currentBugReport ? (
+        {!currentBugReport || loadingBugReport ? (
           <Row>
             <Col>
               <Spinner />

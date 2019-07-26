@@ -9,6 +9,7 @@ import CreateBugReport from '../createBugReport/CreateBugReport';
 import * as rectangleBRactions from './actions';
 import DisplayBg from '../displaybg/DisplayBg';
 import { Spinner } from '../Spinner';
+import Sidebar from '../pages/sidebar/Sidebar';
 
 class ViewMap extends Component {
   state = {
@@ -28,6 +29,7 @@ class ViewMap extends Component {
       clicked: false,
     },
     routeCoords: [],
+    roadBugReports: [],
   };
 
   componentDidMount() {
@@ -144,12 +146,25 @@ class ViewMap extends Component {
     const { routeCoords } = this.state;
     const { bugReportRectangle } = this.props;
     if (routeCoords.length !== 0) {
-      const min_lat = Math.min(...this.getLats(routeCoords));
-      const min_lng = Math.min(...this.getLngs(routeCoords));
-      const max_lat = Math.max(...this.getLats(routeCoords));
-      const max_lng = Math.max(...this.getLngs(routeCoords));
-      bugReportRectangle(min_lng, max_lng, min_lat, max_lat);
+      const minLat = Math.min(...this.getLats(routeCoords));
+      const minLng = Math.min(...this.getLngs(routeCoords));
+      const maxLat = Math.max(...this.getLats(routeCoords));
+      const maxLng = Math.max(...this.getLngs(routeCoords));
+      bugReportRectangle(minLng, maxLng, minLat, maxLat);
     }
+  };
+
+  handleZoomChange = (selected) => {
+    const { rectangleBugReports } = this.props;
+    const selectedLocation = {
+      lng: rectangleBugReports.find(x => x.id === selected).location.longitude,
+      lat: rectangleBugReports.find(x => x.id === selected).location.latitude,
+    };
+    this.setState({ location: selectedLocation, zoom: 20 });
+  };
+
+  handleBugReportsChange = (bugReports) => {
+    this.setState({ roadBugReports: bugReports });
   };
 
   render() {
@@ -164,43 +179,56 @@ class ViewMap extends Component {
     ) : null;
 
     const position = [location.lat, location.lng];
+    const { roadBugReports } = this.state;
     const { rectangleBugReports, isLoading } = this.props;
     return (
-      <Map
-        center={position}
-        zoom={zoom}
-        maxZoom={19}
-        style={{ height: '100vh', zIndex: '0' }}
-        ref={this.saveMap}
-        onClick={this.handleClick}
-      >
-        <TileLayer
-          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {setBugReport}
-
-        {isLoading || !rectangleBugReports || rectangleBugReports.length === 0 || !routeCoords ? (
-          <Row>
-            <Col>
-              <Spinner />
-            </Col>
-          </Row>
-        ) : (
-          <DisplayBg bugReports={rectangleBugReports} roadPoints={routeCoords} />
-        )}
-
-        {isMapInit && (
-          <Route
-            from={from}
-            to={to}
-            map={this.map}
-            setState={(routeCoords) => {
-              this.setState(routeCoords);
-            }}
+      <>
+        <Map
+          center={position}
+          zoom={zoom}
+          maxZoom={19}
+          style={{ height: '100vh', zIndex: '0' }}
+          ref={this.saveMap}
+          onClick={this.handleClick}
+        >
+          <TileLayer
+            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-        )}
-      </Map>
+          {setBugReport}
+
+          {isLoading || !rectangleBugReports || rectangleBugReports.length === 0 || !routeCoords ? (
+            <Row>
+              <Col>
+                <Spinner />
+              </Col>
+            </Row>
+          ) : (
+            <DisplayBg
+              bugReports={rectangleBugReports}
+              roadPoints={routeCoords}
+              handler={this.handleBugReportsChange}
+            />
+          )}
+
+          {isMapInit && (
+            <Route
+              from={from}
+              to={to}
+              map={this.map}
+              setState={(routeCoordinates) => {
+                this.setState(routeCoordinates);
+              }}
+            />
+          )}
+        </Map>
+
+        <Sidebar
+          onChoose={this.handleZoomChange}
+          bugReports={roadBugReports}
+          isLoading={isLoading}
+        />
+      </>
     );
   }
 }

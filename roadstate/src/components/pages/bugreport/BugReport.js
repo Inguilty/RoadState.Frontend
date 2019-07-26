@@ -1,6 +1,5 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { connect } from 'react-redux';
 import {
   Card,
   Carousel,
@@ -16,7 +15,6 @@ import {
   FaThumbsUp, FaThumbsDown, FaCheck, FaStar, FaComment,
 } from 'react-icons/fa';
 import { Spinner } from '../../Spinner';
-import * as bugReportActions from './actions';
 
 export const NoPhotosAvailable = () => (
   <Card key="emptyImage" style={{ width: '25rem' }}>
@@ -59,7 +57,7 @@ export const Comment = ({
   disabledDislikeButton,
 }) => (
   <Card key={comment.id}>
-    <Card.Header as="h5">{comment.userName}</Card.Header>
+    <Card.Header as="h5">{comment.authorName}</Card.Header>
     <Card.Body>
       <Card.Text>{comment.text}</Card.Text>
     </Card.Body>
@@ -356,11 +354,15 @@ const BugReport = ({
 }) => (
   <Container>
     <Modal show={isOpened} onHide={onClose} size="lg">
-      <Modal.Dialog scrollable size="lg">
-        <Modal.Header>
+      <Modal.Dialog scrollable size="lg" style={{ width: '100%' }}>
+        <Modal.Header style={{ alignContent: 'center' }}>
           <NoPhotosAvailable />
         </Modal.Header>
         <Modal.Body>
+          <h5>
+            Created by
+            {bugReport.authorName}
+          </h5>
           <Poll
             handlePollButton={onPoll}
             bugReport={bugReport}
@@ -374,7 +376,11 @@ const BugReport = ({
             commentsCount={!bugReport.comments ? 0 : bugReport.comments.length}
           />
           <br />
-          <NoComments />
+          {!bugReport.comments || bugReport.comments.length === 0 ? (
+            <NoComments />
+          ) : (
+            <Comments handleLikeButton={onComment} comments={bugReport.comments} />
+          )}
         </Modal.Body>
         <Modal.Footer>
           <CommentForm handleChange={onComment} handleSubmit={onComment} />

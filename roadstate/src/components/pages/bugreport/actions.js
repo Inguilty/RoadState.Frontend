@@ -12,7 +12,7 @@ export const RATE_BUG_REPORT_FAILURE = 'bugreports/RATE_BUG_REPORT_FAILURE';
 
 export const rateBugReport = (bugReport, rate) => async (dispatch) => {
   dispatch({ type: RATE_BUG_REPORT_REQUEST });
-  const rateBugReportResponse = await api.rateBugReport();
+  const rateBugReportResponse = await api.rateBugReport(bugReport.id, rate);
   if (rateBugReportResponse.status === 200) {
     const receivedBugReport = { ...bugReport, userRate: rate };
     dispatch({

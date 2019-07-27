@@ -2,7 +2,9 @@ import axios from 'axios';
 
 const BASE_URL = '/';
 
-export const getBugReportRectangle = (longitudemin, longitudemax, latitudemin, latitudemax) => axios.get(`${BASE_URL}api/bugreport/?longitudemin=${longitudemin}&longitudemax=${longitudemax}&latitudemin=${latitudemin}&latitudemax=${latitudemax}`);
+export const getBugReportRectangle = (longMin, longMax, latMin, latMax) => axios.get(
+  `${BASE_URL}api/bugreport/?longitudemin=${longMin}&longitudemax=${longMax}&latitudemin=${latMin}&latitudemax=${latMax}`,
+);
 
 export const loadBugReport = id => axios.get(`${BASE_URL}api/bugreport/${id}`);
 

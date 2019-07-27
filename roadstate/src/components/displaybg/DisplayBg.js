@@ -38,5 +38,4 @@ export default DisplayBg;
 
 DisplayBg.propTypes = {
   bugReports: PropTypes.objectOf.isRequired,
-  roadPoints: PropTypes.objectOf.isRequired,
 };

@@ -56,43 +56,43 @@ export const Comment = ({
   disabledLikeButton,
   disabledDislikeButton,
 }) => (
-    <Card key={comment.id}>
-      <Card.Header as="h5">{comment.userName}</Card.Header>
-      <Card.Body>
-        <Card.Text>{comment.text}</Card.Text>
-      </Card.Body>
-      <Card.Footer>
-        <Row>
-          <Col>
-            <Button
-              key={comment.id}
-              variant="outline-success"
-              onClick={handleLikeButton}
-              value="true"
-              id={comment.id}
-              disabled={disabledLikeButton}
-            >
-              <FaThumbsUp />
-            </Button>
-            <span>{comment.likes}</span>
-          </Col>
-          <Col>
-            <Button
-              key={comment.id}
-              variant="outline-danger"
-              onClick={handleLikeButton}
-              value="likeEnum.DISLIKE"
-              id={comment.id}
-              disabled={disabledDislikeButton}
-            >
-              <FaThumbsDown />
-            </Button>
-            <span>{comment.dislikes}</span>
-          </Col>
-        </Row>
-      </Card.Footer>
-    </Card>
-  );
+  <Card key={comment.id}>
+    <Card.Header as="h5">{comment.userName}</Card.Header>
+    <Card.Body>
+      <Card.Text>{comment.text}</Card.Text>
+    </Card.Body>
+    <Card.Footer>
+      <Row>
+        <Col>
+          <Button
+            key={comment.id}
+            variant="outline-success"
+            onClick={handleLikeButton}
+            value="true"
+            id={comment.id}
+            disabled={disabledLikeButton}
+          >
+            <FaThumbsUp />
+          </Button>
+          <span>{comment.likes}</span>
+        </Col>
+        <Col>
+          <Button
+            key={comment.id}
+            variant="outline-danger"
+            onClick={handleLikeButton}
+            value="likeEnum.DISLIKE"
+            id={comment.id}
+            disabled={disabledDislikeButton}
+          >
+            <FaThumbsDown />
+          </Button>
+          <span>{comment.dislikes}</span>
+        </Col>
+      </Row>
+    </Card.Footer>
+  </Card>
+);
 
 Comment.propTypes = {
   comment: PropTypes.objectOf.isRequired,
@@ -143,18 +143,18 @@ ModalCaller.propTypes = {
 const Poll = ({
   id, handlePollButton, bugReport, loadingBugReportRating,
 }) => (
-    <Card>
-      <Card.Header as="h6">Poll</Card.Header>
-      <div>
-        <BugReportRate
-          handlePollButton={handlePollButton}
-          id={id}
-          bugReport={bugReport}
-          loadingBugReportRating={loadingBugReportRating}
-        />
-      </div>
-    </Card>
-  );
+  <Card>
+    <Card.Header as="h6">Poll</Card.Header>
+    <div>
+      <BugReportRate
+        handlePollButton={handlePollButton}
+        id={id}
+        bugReport={bugReport}
+        loadingBugReportRating={loadingBugReportRating}
+      />
+    </div>
+  </Card>
+);
 
 Poll.propTypes = {
   id: PropTypes.number,
@@ -205,8 +205,8 @@ const BugReportRated = ({ bugReport }) => (
       {bugReport.userRate === 'agree' ? (
         <p>You agreed with this bug report!</p>
       ) : (
-          <p>You disagreed with this bug report!</p>
-        )}
+        <p>You disagreed with this bug report!</p>
+      )}
     </Col>
   </Row>
 );
@@ -305,17 +305,17 @@ Information.propTypes = {
 export const BodyContainer = ({
   description, state, rating, commentsCount,
 }) => (
-    <Container>
-      <Row>
-        <Col md={{ offset: 0, span: 5 }}>
-          <Description description={description} />
-        </Col>
-        <Col md={{ offset: -1, span: 6 }}>
-          <Information state={state} rating={rating} commentsCount={commentsCount} />
-        </Col>
-      </Row>
-    </Container>
-  );
+  <Container>
+    <Row>
+      <Col md={{ offset: 0, span: 5 }}>
+        <Description description={description} />
+      </Col>
+      <Col md={{ offset: -1, span: 6 }}>
+        <Information state={state} rating={rating} commentsCount={commentsCount} />
+      </Col>
+    </Row>
+  </Container>
+);
 
 BodyContainer.propTypes = {
   description: PropTypes.string.isRequired,
@@ -352,35 +352,35 @@ CommentForm.propTypes = {
 const BugReport = ({
   bugReport, isOpened, onClose, onPoll, isLoadingRating, onComment,
 }) => (
-    <Container>
-      <Modal show={isOpened} onHide={onClose} size="lg">
-        <Modal.Dialog scrollable size="lg">
-          <Modal.Header>
-            <NoPhotosAvailable />
-          </Modal.Header>
-          <Modal.Body>
-            <Poll
-              handlePollButton={onPoll}
-              bugReport={bugReport}
-              loadingBugReportRating={isLoadingRating}
-            />
-            <br />
-            <BodyContainer
-              description={bugReport.description}
-              state={bugReport.state}
-              rating={!bugReport ? 0 : bugReport.rating}
-              commentsCount={!bugReport.comments ? 0 : bugReport.comments.length}
-            />
-            <br />
-            <NoComments />
-          </Modal.Body>
-          <Modal.Footer>
-            <CommentForm handleChange={onComment} handleSubmit={onComment} />
-          </Modal.Footer>
-        </Modal.Dialog>
-      </Modal>
-    </Container>
-  );
+  <Container>
+    <Modal show={isOpened} onHide={onClose} size="lg">
+      <Modal.Dialog scrollable size="lg">
+        <Modal.Header>
+          <NoPhotosAvailable />
+        </Modal.Header>
+        <Modal.Body>
+          <Poll
+            handlePollButton={onPoll}
+            bugReport={bugReport}
+            loadingBugReportRating={isLoadingRating}
+          />
+          <br />
+          <BodyContainer
+            description={bugReport.description}
+            state={bugReport.state}
+            rating={!bugReport ? 0 : bugReport.rating}
+            commentsCount={!bugReport.comments ? 0 : bugReport.comments.length}
+          />
+          <br />
+          <NoComments />
+        </Modal.Body>
+        <Modal.Footer>
+          <CommentForm handleChange={onComment} handleSubmit={onComment} />
+        </Modal.Footer>
+      </Modal.Dialog>
+    </Modal>
+  </Container>
+);
 
 BugReport.propTypes = {
   bugReport: PropTypes.objectOf.isRequired,

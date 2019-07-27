@@ -47,9 +47,9 @@ class Route extends MapLayer {
       const linearCoeffs = this.calculateLineCoeffs(roadLocations[i], roadLocations[i + 1]);
       if (
         pointLocation.longitude * linearCoeffs.slope + linearCoeffs.intercept
-        >= pointLocation.latitude - errorSize
+          >= pointLocation.latitude - errorSize
         && pointLocation.longitude * linearCoeffs.slope + linearCoeffs.intercept
-        <= pointLocation.latitude + errorSize
+          <= pointLocation.latitude + errorSize
       ) {
         return true;
       }
@@ -97,13 +97,19 @@ class Route extends MapLayer {
         ],
       },
       collapsible: true,
-    })
+    });
 
-    leafletElement.on('routeselected', (routes) => {
-      const routeCoordsNew = routes.route.coordinates;
-      this.calculateRectanglePoints(routeCoordsNew);
-      this.routeHandler(routeCoordsNew)
-    }, this).addTo(map.leafletElement);
+    leafletElement
+      .on(
+        'routeselected',
+        (routes) => {
+          const routeCoordsNew = routes.route.coordinates;
+          this.calculateRectanglePoints(routeCoordsNew);
+          this.routeHandler(routeCoordsNew);
+        },
+        this,
+      )
+      .addTo(map.leafletElement);
 
     leafletElement.hide();
     return leafletElement.getPlan();
@@ -118,7 +124,7 @@ class Route extends MapLayer {
         rectangleBrs: newArray,
       });
     }
-  }
+  };
 }
 
 Route.propTypes = {

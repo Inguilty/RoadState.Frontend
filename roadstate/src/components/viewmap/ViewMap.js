@@ -137,7 +137,7 @@ class ViewMap extends Component {
 
   render() {
     const {
-      from, to, location, zoom, isMapInit, todoList, routeCoords, rectangleBrs,
+      from, to, location, zoom, isMapInit, todoList, rectangleBrs,
     } = this.state;
 
     const setBugReport = todoList.clicked ? (
@@ -172,14 +172,15 @@ class ViewMap extends Component {
             }}
           />
         )}
-        {!routeCoords ? (
+        {rectangleBrs.length === 0 ? (
           <Row>
             <Col>
               <Spinner />
             </Col>
           </Row>
         ) : (
-            <DisplayBg bugReports={rectangleBrs} />)}
+          <DisplayBg bugReports={rectangleBrs} />
+        )}
       </Map>
     );
   }

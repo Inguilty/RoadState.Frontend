@@ -38,7 +38,6 @@ class SignIn extends React.Component {
   };
 
   render() {
-    debugger;
     const { loggingIn, loggedIn, errorMessage } = this.props;
     return (
       <Formik

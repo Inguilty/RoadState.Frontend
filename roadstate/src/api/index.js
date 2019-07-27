@@ -2,6 +2,10 @@ import axios from 'axios';
 
 const BASE_URL = '/';
 
+export const getBugReportRectangle = (longMin, longMax, latMin, latMax) => axios.get(
+  `${BASE_URL}api/bugreport/?longitudemin=${longMin}&longitudemax=${longMax}&latitudemin=${latMin}&latitudemax=${latMax}`,
+);
+
 export const loadBugReport = id => axios.get(`${BASE_URL}api/bugreport/${id}`);
 
 export const rateBugReport = (id, rate) => axios.post(`${BASE_URL}api/bugreport/${id}/rate`, rate);

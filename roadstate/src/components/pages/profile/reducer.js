@@ -31,10 +31,10 @@ const updateUserReducer = (state = initialState, action) => {
         errorMessage: action.errorMessage,
         isUpdating: false,
       };
-    case userConstants.UPDATE_REMOVE_ERROR:
+    case userConstants.UPDATE_CLOSE_ERROR_ALERT:
       return {
         ...state,
-        errorMessage: '',
+        errorMessage: action.errorMessage,
       };
     default:
       return state;

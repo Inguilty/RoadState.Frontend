@@ -13,9 +13,9 @@ export const login = (username, password) => async (dispatch) => {
   }
 };
 
-export const LOGIN_REMOVE_ERROR = 'LOGIN_REMOVE_ERROR';
-export const removeError = () => (dispatch) => {
-  dispatch({ type: LOGIN_REMOVE_ERROR, errorMessage: '' });
+export const LOGIN_CLOSE_ERROR_ALERT = 'LOGIN_CLOSE_ERROR_ALERT';
+export const closeErrorAlert = () => (dispatch) => {
+  dispatch({ type: LOGIN_CLOSE_ERROR_ALERT, errorMessage: '' });
 };
 
 export const LOGOUT_REQUEST = 'USERS_LOGOUT_REQUEST';

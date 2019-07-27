@@ -64,7 +64,14 @@ class SignIn extends React.Component {
                 <FormGroup className="or-seperator">
                   <b>or</b>
                 </FormGroup>
-
+                <Alert
+                  show={errorMessage}
+                  variant="danger"
+                  onClose={this.handleAlertDismiss}
+                  dismissible
+                >
+                  {errorMessage}
+                </Alert>
                 <FormGroup className="form-group">
                   <Field
                     id="username"
@@ -101,14 +108,6 @@ class SignIn extends React.Component {
                   {' '}
                   <NavLink to="/signUp">Sign up</NavLink>
                 </FormGroup>
-                <Alert
-                  show={errorMessage}
-                  variant="danger"
-                  onClose={this.handleAlertDismiss}
-                  dismissible
-                >
-                  {errorMessage}
-                </Alert>
               </Form>
             </FormGroup>
           </Modal>
@@ -137,6 +136,6 @@ export default connect(
   mapStateToProps,
   {
     login: userActions.login,
-    removeError: userActions.removeError,
+    removeError: userActions.closeErrorAlert,
   },
 )(SignIn);

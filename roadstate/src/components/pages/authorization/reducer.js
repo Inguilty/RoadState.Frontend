@@ -30,7 +30,7 @@ const authorizationReducer = (state = initialState, action) => {
         loggingIn: false,
         errorMessage: action.errorMessage,
       };
-    case userConstants.LOGIN_REMOVE_ERROR:
+    case userConstants.LOGIN_CLOSE_ERROR_ALERT:
       return {
         ...state,
         errorMessage: action.errorMessage,

@@ -14,9 +14,9 @@ export const register = user => async (dispatch) => {
   }
 };
 
-export const REGISTER_REMOVE_ERROR = 'REGISTER_REMOVE_ERROR';
+export const REGISTER_CLOSE_ERROR_ALERT = 'REGISTER_CLOSE_ERROR_ALERT';
 export const removeError = () => (dispatch) => {
-  dispatch({ type: REGISTER_REMOVE_ERROR });
+  dispatch({ type: REGISTER_CLOSE_ERROR_ALERT, errorMessage: '' });
 };
 
 export const REGISTER_COMPLETED = 'USERS_REGISTER_COMPLETED';

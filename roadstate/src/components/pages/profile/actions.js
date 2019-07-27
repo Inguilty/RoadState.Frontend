@@ -14,9 +14,9 @@ export const update = (id, avatarUrl, oldPassword, newPassword, token) => async 
   }
 };
 
-export const UPDATE_REMOVE_ERROR = 'UPDATE_REMOVE_ERROR';
+export const UPDATE_CLOSE_ERROR_ALERT = 'UPDATE_CLOSE_ERROR_ALERT';
 export const removeError = () => (dispatch) => {
-  dispatch({ type: UPDATE_REMOVE_ERROR });
+  dispatch({ type: UPDATE_CLOSE_ERROR_ALERT, errorMessage: '' });
 };
 
 

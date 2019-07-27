@@ -18,7 +18,6 @@ import '../../../authorization.css';
 
 class SignUp extends React.Component {
   state = {
-    // image: '',
     imagePreviewUrl: '',
     isImageValid: false,
     imageErrorType: '',
@@ -66,7 +65,6 @@ class SignUp extends React.Component {
     const { imagePreviewUrl } = this.state;
     const { register } = this.props;
     const user = {
-      // avatar: image,
       avatarUrl: imagePreviewUrl,
       username: e.username,
       email: e.email,
@@ -96,7 +94,6 @@ class SignUp extends React.Component {
 
     reader.onloadend = () => {
       this.setState({
-        // image: file,
         imagePreviewUrl: reader.result,
       });
     };

@@ -135,23 +135,6 @@ class ShowProfile extends React.Component {
           >
             <FormGroup className="Form-wrapper">
               <Form onSubmit={handleSubmit}>
-                <Alert
-                  show={errorMessage}
-                  variant="danger"
-                  onClose={this.handleAlertDismiss}
-                  dismissible
-                >
-                  {errorMessage}
-                </Alert>
-                <Alert
-                  show={isImageValid}
-                  variant="danger"
-                  onClose={this.handleImageAlertDismiss}
-                  dismissible
-                >
-                  <Alert.Heading>Image upload error!</Alert.Heading>
-                  {imageAlertText}
-                </Alert>
                 <center>
                   <div>{userImage}</div>
                 </center>
@@ -178,13 +161,29 @@ class ShowProfile extends React.Component {
                     </FormLabel>
                   </FormGroup>
                 </FormGroup>
-
+                <Alert
+                  show={isImageValid}
+                  variant="danger"
+                  onClose={this.handleImageAlertDismiss}
+                  dismissible
+                >
+                  <Alert.Heading>Image upload error!</Alert.Heading>
+                  {imageAlertText}
+                </Alert>
                 <FormGroup className="Form-group">
                   <FormControl name="username" type="text" placeholder={userId} readOnly />
                 </FormGroup>
                 <FormGroup className="Form-group">
                   <FormControl name="email" type="text" readOnly />
                 </FormGroup>
+                <Alert
+                  show={errorMessage}
+                  variant="danger"
+                  onClose={this.handleAlertDismiss}
+                  dismissible
+                >
+                  {errorMessage}
+                </Alert>
                 <FormGroup className="form-group">
                   <span>Do you want to change password?</span>
                 </FormGroup>

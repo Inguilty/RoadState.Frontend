@@ -161,14 +161,6 @@ class ViewMap extends Component {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {setBugReport}
-        {!rectangleBrs || rectangleBrs.length === 0 || !routeCoords ? (
-          <Row>
-            <Col>
-              <Spinner />
-            </Col>
-          </Row>
-        ) : (
-            <DisplayBg bugReports={rectangleBrs} roadPoints={routeCoords} />)}
 
         {isMapInit && (
           <Route
@@ -180,6 +172,14 @@ class ViewMap extends Component {
             }}
           />
         )}
+        {!routeCoords ? (
+          <Row>
+            <Col>
+              <Spinner />
+            </Col>
+          </Row>
+        ) : (
+            <DisplayBg bugReports={rectangleBrs} />)}
       </Map>
     );
   }

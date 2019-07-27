@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import { PropTypes } from 'prop-types';
 import L from 'leaflet';
 import { Marker, Popup } from 'react-leaflet';
-import bugReport from './bug_report.png';
+import bugReport from './bugReport.png';
 import WithBugReport from '../pages/bugreport/WithBugReport';
 
 class DisplayBg extends Component {
@@ -14,54 +14,9 @@ class DisplayBg extends Component {
     popupAnchor: [2, -34],
   });
 
-  isOnRoadFull = (arrayBr, arrayPoints) => {
-    const newArray = [];
-    for (let i = 0; i < arrayPoints.length - 1; i += 1) {
-      for (let j = 0; j < arrayBr.length; j += 1) {
-        if (this.isOnRoadSection(arrayBr[j].location, [arrayPoints[i], arrayPoints[i + 1]])) {
-          if (newArray.length !== 0) {
-            if (!newArray.includes(arrayBr[j])) {
-              newArray.push(arrayBr[j]);
-            }
-          } else {
-            newArray.push(arrayBr[j]);
-          }
-        }
-      }
-    }
-    return newArray;
-  };
-
-  isOnRoadSection = (pointLocation, roadLocations) => {
-    const errorSize = 0.00006;
-    for (let i = 0; i < roadLocations.length - 1; i += 1) {
-      const linearCoeffs = this.calculateLineCoeffs(roadLocations[i], roadLocations[i + 1]);
-      if (
-        pointLocation.longitude * linearCoeffs.slope + linearCoeffs.intercept
-        >= pointLocation.latitude - errorSize
-        && pointLocation.longitude * linearCoeffs.slope + linearCoeffs.intercept
-        <= pointLocation.latitude + errorSize
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  calculateLineCoeffs = (start, end) => {
-    const k = (end.lat - start.lat) / (end.lng - start.lng);
-    const b = start.lat - k * start.lng;
-    const obj = {
-      slope: k,
-      intercept: b,
-    };
-    return obj;
-  };
-
   renderMarkers = () => {
-    const { bugReports, roadPoints } = this.props;
-    const newArray = this.isOnRoadFull(bugReports, roadPoints);
-    return newArray.map(marker => (
+    const { bugReports } = this.props;
+    return bugReports.map(marker => (
       <Marker
         key={`${marker.id}`}
         position={[marker.location.latitude, marker.location.longitude]}

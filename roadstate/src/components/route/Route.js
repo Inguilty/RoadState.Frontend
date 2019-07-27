@@ -13,14 +13,58 @@ class Route extends MapLayer {
   getLngs = arr => arr.map(d => d.lng);
 
   calculateRectanglePoints = (array) => {
-    const { bugReportRectangle } = this.props;
+    const { getBugReportRectangle } = this.props;
     if (array.length !== 0) {
       const minLat = Math.min(...this.getLats(array));
       const minLng = Math.min(...this.getLngs(array));
       const maxLat = Math.max(...this.getLats(array));
       const maxLng = Math.max(...this.getLngs(array));
-      bugReportRectangle(minLat, minLng, maxLat, maxLng);
+      getBugReportRectangle(minLng, maxLng, minLat, maxLat);
     }
+  };
+
+  isOnRoadFull = (arrayBr, arrayPoints) => {
+    const newArray = [];
+    for (let i = 0; i < arrayPoints.length - 1; i += 1) {
+      for (let j = 0; j < arrayBr.length; j += 1) {
+        if (this.isOnRoadSection(arrayBr[j].location, [arrayPoints[i], arrayPoints[i + 1]])) {
+          if (newArray.length !== 0) {
+            if (!newArray.includes(arrayBr[j])) {
+              newArray.push(arrayBr[j]);
+            }
+          } else {
+            newArray.push(arrayBr[j]);
+          }
+        }
+      }
+    }
+    return newArray;
+  };
+
+  isOnRoadSection = (pointLocation, roadLocations) => {
+    const errorSize = 0.00006;
+    for (let i = 0; i < roadLocations.length - 1; i += 1) {
+      const linearCoeffs = this.calculateLineCoeffs(roadLocations[i], roadLocations[i + 1]);
+      if (
+        pointLocation.longitude * linearCoeffs.slope + linearCoeffs.intercept
+        >= pointLocation.latitude - errorSize
+        && pointLocation.longitude * linearCoeffs.slope + linearCoeffs.intercept
+        <= pointLocation.latitude + errorSize
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  calculateLineCoeffs = (start, end) => {
+    const k = (end.lat - start.lat) / (end.lng - start.lng);
+    const b = start.lat - k * start.lng;
+    const obj = {
+      slope: k,
+      intercept: b,
+    };
+    return obj;
   };
 
   createLeafletElement() {
@@ -53,37 +97,43 @@ class Route extends MapLayer {
         ],
       },
       collapsible: true,
-    }).addTo(map.leafletElement);
+    })
 
     leafletElement.on('routeselected', (routes) => {
       const routeCoordsNew = routes.route.coordinates;
       this.calculateRectanglePoints(routeCoordsNew);
-      setTimeout(1000);
-      const { rectangleBugReports } = this.props;
-      this.props.setState({
-        routeCoords: routeCoordsNew,
-        rectangleBrs: rectangleBugReports,
-      });
-    }, this);
+      this.routeHandler(routeCoordsNew)
+    }, this).addTo(map.leafletElement);
 
     leafletElement.hide();
     return leafletElement.getPlan();
+  }
+
+  routeHandler = (routeCoordsNew) => {
+    const { bugReports } = this.props;
+    if (bugReports.length !== 0) {
+      const newArray = this.isOnRoadFull(bugReports, routeCoordsNew);
+      this.props.setState({
+        routeCoords: routeCoordsNew,
+        rectangleBrs: newArray,
+      });
+    }
   }
 }
 
 Route.propTypes = {
   isLoading: PropTypes.bool.isRequired,
-  rectangleBugReports: PropTypes.objectOf.isRequired,
-  bugReportRectangle: PropTypes.func.isRequired,
+  bugReports: PropTypes.objectOf.isRequired,
+  getBugReportRectangle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   isLoading: state.bugReportRectangle.isLoading,
-  rectangleBugReports: state.bugReportRectangle.rectangleBugReports,
+  bugReports: state.bugReportRectangle.bugReports,
 });
 
 const mapDispatchToProps = {
-  bugReportRectangle: rectangleBRactions.bugReportRectangle,
+  getBugReportRectangle: rectangleBRactions.getBugReportRectangle,
 };
 
 export default connect(

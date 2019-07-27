@@ -17,16 +17,14 @@ describe('rectangleBRactions', () => {
             { type: rectangleBRactions.BUG_REPORT_RECTANGLE_SUCCESS, bugReports },
         ];
         let apiCalled = false;
-        api.bugReportRectangle = apiMock.callApiMock({ data: bugReports, status: 200 },
+        api.getBugReportRectangle = apiMock.callApiMock({ data: bugReports, status: 200 },
             () => { apiCalled = true; });
 
         // Act
-        const store = mockStore({ coordinates: null });
+        const store = mockStore({ bugReports: null });
 
         // Assert
-        return store.dispatch(
-            rectangleBRactions.bugReportRectangle(longitudemin, longitudemax, latitudemin, latitudemax),
-        ).then(() => {
+        return store.dispatch(rectangleBRactions.getBugReportRectangle(longitudemin, longitudemax, latitudemin, latitudemax)).then(() => {
             expect(store.getActions()).toEqual(expectedActions);
             expect(apiCalled).toBeTruthy();
         });

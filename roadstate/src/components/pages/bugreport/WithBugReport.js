@@ -34,8 +34,6 @@ class WithBugReport extends Component {
     this.handleOpen();
   };
 
-  handleCommentChange = () => {};
-
   handlePoll = (event) => {
     const { bugReport, rateBugReport } = this.props;
     const { currentBugReport } = bugReport;
@@ -72,7 +70,6 @@ class WithBugReport extends Component {
             onClose={this.handleClose}
             onPoll={this.handlePoll}
             isLoadingRating={loadingBugReportRating}
-            onComment={this.handleCommentChange}
           />
         )}
       </div>

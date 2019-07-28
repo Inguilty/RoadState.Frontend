@@ -37,6 +37,8 @@ class SignIn extends React.Component {
 
   handleSubmit = (e) => {
     const { login } = this.props;
+    const { history } = this.props;
+    history.push('/');
     if (e.username && e.password) {
       login(e.username, e.password);
     }

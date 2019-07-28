@@ -52,12 +52,19 @@ class WithBugReport extends Component {
     const { isModalOpened } = this.state;
     const { id, bugReport } = this.props;
     const { loadingBugReport, currentBugReport, loadingBugReportRating } = bugReport;
+    if (!loadingBugReport && !currentBugReport) {
+      return (
+        <Button id={id} onClick={this.handleClick} variant="success">
+          View bug report
+        </Button>
+      );
+    }
     return (
       <div>
         <Button id={id} onClick={this.handleClick} variant="success">
           View bug report
         </Button>
-        {loadingBugReport || !currentBugReport ? (
+        {!currentBugReport || loadingBugReport ? (
           <Row>
             <Col>
               <center>

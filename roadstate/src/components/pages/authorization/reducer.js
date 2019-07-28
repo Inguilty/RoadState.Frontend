@@ -4,7 +4,7 @@ const initialState = {
   loggedIn: false,
   loggingIn: false,
   loggingOut: false,
-  userId: '',
+  userId: '8723258e-d2c9-4823-bb8d-9b532b24c5cc',
   token: '',
   errorMessage: '',
 };

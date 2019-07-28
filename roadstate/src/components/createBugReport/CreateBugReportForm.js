@@ -132,7 +132,9 @@ class CreateBugReportForm extends React.Component {
         validationSchema={this.schema}
         onSubmit={this.handleSubmit}
       >
-        {({ values, handleChange, errors, touched }) => (
+        {({
+          values, handleChange, errors, touched,
+        }) => (
           <Modal backdrop="static" keyboard="false" show={isActive} onHide={this.handleClose}>
             <Modal.Header>
               <Modal.Title>Create Bug Report</Modal.Title>
@@ -190,7 +192,9 @@ class CreateBugReportForm extends React.Component {
                   />
                 </FormGroup>
                 <FormGroup>
-                  <BugReportImageCarousel photos={isImageValid && !isLoading && !isFailed ? photos : []} />
+                  <BugReportImageCarousel
+                    photos={isImageValid && !isLoading && !isFailed ? photos : []}
+                  />
                 </FormGroup>
                 <br />
                 <Row>

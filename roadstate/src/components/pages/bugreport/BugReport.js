@@ -350,7 +350,7 @@ CommentForm.propTypes = {
 };
 
 const BugReport = ({
-  bugReport, isOpened, onClose, onPoll, isLoadingRating, onComment,
+  bugReport, isOpened, onClose, onPoll, isLoadingRating, onComment, loggedIn,
 }) => (
   <Container>
     <Modal show={isOpened} onHide={onClose} size="lg">
@@ -363,11 +363,13 @@ const BugReport = ({
             Created by
             {bugReport.authorName}
           </h5>
-          <Poll
-            handlePollButton={onPoll}
-            bugReport={bugReport}
-            loadingBugReportRating={isLoadingRating}
-          />
+          {loggedIn ? (
+            <Poll
+              handlePollButton={onPoll}
+              bugReport={bugReport}
+              loadingBugReportRating={isLoadingRating}
+            />
+          ) : <div />}
           <br />
           <BodyContainer
             description={bugReport.description}
@@ -397,6 +399,7 @@ BugReport.propTypes = {
   onPoll: PropTypes.func.isRequired,
   isLoadingRating: PropTypes.bool.isRequired,
   onComment: PropTypes.func.isRequired,
+  loggedIn: PropTypes.bool.isRequired,
 };
 
 export default BugReport;

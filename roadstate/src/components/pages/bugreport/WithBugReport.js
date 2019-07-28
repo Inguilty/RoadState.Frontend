@@ -16,6 +16,8 @@ class WithBugReport extends Component {
     loadBugReport: PropTypes.func.isRequired,
     bugReport: PropTypes.objectOf.isRequired,
     id: PropTypes.number.isRequired,
+    token: PropTypes.objectOf.isRequired,
+    loggedIn: PropTypes.bool.isRequired,
     rateBugReport: PropTypes.func.isRequired,
   };
 
@@ -37,7 +39,7 @@ class WithBugReport extends Component {
   handleCommentChange = () => {};
 
   handlePoll = (event) => {
-    const { bugReport, rateBugReport } = this.props;
+    const { bugReport, rateBugReport, token } = this.props;
     const { currentBugReport } = bugReport;
     const currentRating = currentBugReport.rating;
     const bugReportDispatched = {
@@ -45,12 +47,12 @@ class WithBugReport extends Component {
       rating: event.target.value === 'true' ? currentRating + 1 : currentRating - 1,
     };
     const rate = event.target.value === 'true' ? 'agree' : 'disagree';
-    rateBugReport(bugReportDispatched, rate);
+    rateBugReport(bugReportDispatched, rate, token);
   };
 
   render() {
     const { isModalOpened } = this.state;
-    const { id, bugReport } = this.props;
+    const { id, bugReport, loggedIn } = this.props;
     const { loadingBugReport, currentBugReport, loadingBugReportRating } = bugReport;
     if (!loadingBugReport && !currentBugReport) {
       return (
@@ -74,6 +76,7 @@ class WithBugReport extends Component {
           </Row>
         ) : (
           <BugReport
+            loggedIn={loggedIn}
             bugReport={currentBugReport}
             isOpened={isModalOpened}
             onClose={this.handleClose}
@@ -87,7 +90,11 @@ class WithBugReport extends Component {
   }
 }
 
-const mapStateToProps = ({ bugReport }) => ({ bugReport });
+const mapStateToProps = ({ bugReport, authorization }) => ({
+  bugReport,
+  loggedIn: authorization.loggedIn,
+  token: authorization.token,
+});
 
 export default connect(
   mapStateToProps,

@@ -357,6 +357,7 @@ const BugReport = ({
       <Modal.Dialog scrollable size="lg" style={{ width: '100%' }}>
         <Modal.Header style={{ display: 'flex', justifyContent: 'center' }}>
           <NoPhotosAvailable />
+          <Photos />
         </Modal.Header>
         <Modal.Body>
           <h5>

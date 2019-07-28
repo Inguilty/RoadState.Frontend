@@ -35,7 +35,7 @@ export const createBugReport = (createBR) => {
   const config = {
     headers: { 'Content-Type': 'multipart/form-data' },
   };
-  return axios.post(`${BASE_URL}api/createbugreport`, fd, config);
+  return axios.post(`${BASE_URL}api/bugreport`, fd, config);
 };
 
 export const checkToken = (token) => {

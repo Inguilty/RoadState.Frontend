@@ -44,12 +44,11 @@ class CreateBugReportForm extends React.Component {
 
   componentWillReceiveProps = (nextProps) => {
     const { isLoading, isFailed } = this.props;
-    if (nextProps.isLoading !== isLoading && nextProps.isFailed !== isFailed) {
+    if (nextProps.isLoading !== isLoading || nextProps.isFailed !== isFailed) {
       if (nextProps.isLoading === false && nextProps.isFailed === false) {
-        this.inputForm.refs.reset();
+        this.setState(this.initialState);
+        this.handleClose();
       }
-      this.setState(this.initialState);
-      this.handleClose();
     }
   }
 
@@ -200,7 +199,7 @@ class CreateBugReportForm extends React.Component {
                 </FormGroup>
                 <FormGroup>
                   <BugReportImageCarousel
-                    photos={isImageValid && !isLoading && !isFailed ? photos : []}
+                    photos={isImageValid ? photos : []}
                   />
                 </FormGroup>
                 <br />

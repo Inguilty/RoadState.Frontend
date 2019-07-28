@@ -46,7 +46,9 @@ class ViewMap extends Component {
   }
 
   distanceMapping = (pointCur, pointSrc) => {
-    const dist = Math.sqrt((pointCur.lat - pointSrc.lat) ** 2 + (pointCur.lng - pointSrc.lng) ** 2);
+    const A = (pointCur.lat - pointSrc.lat) ** 2;
+    const B = (pointCur.lng - pointSrc.lng) ** 2;
+    const dist = Math.sqrt(A + B);
     const LatLng = {
       distance: dist,
       point: {
@@ -72,7 +74,6 @@ class ViewMap extends Component {
     };
     const val = this.contains(position);
     this.bGstate(val, position);
-    this.calculateRectanglePoints();
   };
 
   straightEquation = (point1, point2, elem) => {
@@ -144,27 +145,33 @@ class ViewMap extends Component {
 
   calculateRectanglePoints = () => {
     const { routeCoords } = this.state;
-    const { bugReportRectangle } = this.props;
+    const { getBugReportRectangle } = this.props;
     if (routeCoords.length !== 0) {
       const minLat = Math.min(...this.getLats(routeCoords));
       const minLng = Math.min(...this.getLngs(routeCoords));
       const maxLat = Math.max(...this.getLats(routeCoords));
       const maxLng = Math.max(...this.getLngs(routeCoords));
-      bugReportRectangle(minLng, maxLng, minLat, maxLat);
+      getBugReportRectangle(minLng, maxLng, minLat, maxLat);
     }
   };
 
   handleZoomChange = (selected) => {
-    const { rectangleBugReports } = this.props;
+    const { bugReports } = this.props;
     const selectedLocation = {
-      lng: rectangleBugReports.find(x => x.id === selected).location.longitude,
-      lat: rectangleBugReports.find(x => x.id === selected).location.latitude,
+      lng: bugReports.find(x => x.id === selected).location.longitude,
+      lat: bugReports.find(x => x.id === selected).location.latitude,
     };
     this.setState({ location: selectedLocation, zoom: 20 });
   };
 
   handleBugReportsChange = (bugReports) => {
     this.setState({ roadBugReports: bugReports });
+    const { loadRoadNames } = this.props;
+    loadRoadNames(bugReports);
+  };
+
+  handleCalculate = () => {
+    this.calculateRectanglePoints();
   };
 
   render() {
@@ -180,13 +187,23 @@ class ViewMap extends Component {
 
     const position = [location.lat, location.lng];
     const { roadBugReports } = this.state;
-    const { rectangleBugReports, isLoading } = this.props;
+    const {
+      bugReports, isLoading, roads, loadingRoads,
+    } = this.props;
     return (
       <>
         <Map
           center={position}
           zoom={zoom}
           maxZoom={19}
+          attributionControl
+          zoomControl
+          doubleClickZoom
+          scrollWheelZoom
+          dragging
+          animate
+          duration={1}
+          easeLinearity={0.1}
           style={{ height: '100vh', zIndex: '0' }}
           ref={this.saveMap}
           onClick={this.handleClick}
@@ -197,7 +214,7 @@ class ViewMap extends Component {
           />
           {setBugReport}
 
-          {isLoading || !rectangleBugReports || rectangleBugReports.length === 0 || !routeCoords ? (
+          {isLoading || !bugReports || bugReports.length === 0 || !routeCoords ? (
             <Row>
               <Col>
                 <Spinner />
@@ -205,9 +222,10 @@ class ViewMap extends Component {
             </Row>
           ) : (
             <DisplayBg
-              bugReports={rectangleBugReports}
+              bugReports={bugReports}
               roadPoints={routeCoords}
               handler={this.handleBugReportsChange}
+              calculate={this.handleCalculate}
             />
           )}
 
@@ -223,10 +241,14 @@ class ViewMap extends Component {
           )}
         </Map>
 
+        {}
         <Sidebar
           onChoose={this.handleZoomChange}
           bugReports={roadBugReports}
           isLoading={isLoading}
+          loadingRoads={loadingRoads}
+          roads={roads}
+          calculate={this.handleCalculate}
         />
       </>
     );
@@ -235,17 +257,23 @@ class ViewMap extends Component {
 
 ViewMap.propTypes = {
   isLoading: PropTypes.bool.isRequired,
-  rectangleBugReports: PropTypes.objectOf.isRequired,
-  bugReportRectangle: PropTypes.func.isRequired,
+  bugReports: PropTypes.objectOf.isRequired,
+  getBugReportRectangle: PropTypes.func.isRequired,
+  loadRoadNames: PropTypes.func.isRequired,
+  loadingRoads: PropTypes.bool.isRequired,
+  roads: PropTypes.arrayOf.isRequired,
 };
 
 const mapStateToProps = state => ({
   isLoading: state.bugReportRectangle.isLoading,
-  rectangleBugReports: state.bugReportRectangle.rectangleBugReports,
+  bugReports: state.bugReportRectangle.bugReports,
+  loadingRoads: state.bugReportRectangle.loadingRoadName,
+  roads: state.bugReportRectangle.bugReportsRoadNames,
 });
 
 const mapDispatchToProps = {
-  bugReportRectangle: rectangleBRactions.bugReportRectangle,
+  getBugReportRectangle: rectangleBRactions.getBugReportRectangle,
+  loadRoadNames: rectangleBRactions.loadRoadName,
 };
 
 export default connect(

@@ -1,8 +1,14 @@
 import axios from 'axios';
 
 const BASE_URL = '/';
+const GOOGLE_MAPS_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
+const publicKey = 'AIzaSyBeFEC_8v3061wgyMUEO6mJ8EmAXzWedTk';
 
-export const bugReportRectangle = (longitudemin, longitudemax, latitudemin, latitudemax) => axios.get(`${BASE_URL}api/bugreport/?longitudemin=${longitudemin}&longitudemax=${longitudemax}&latitudemin=${latitudemin}&latitudemax=${latitudemax}`);
+export const loadCurrentRoad = (latitude, longitude) => axios.get(`${GOOGLE_MAPS_URL}latlng=${latitude},${longitude}&key=${publicKey}`);
+
+export const getBugReportRectangle = (longMin, longMax, latMin, latMax) => axios.get(
+  `${BASE_URL}api/bugreport/?longitudemin=${longMin}&longitudemax=${longMax}&latitudemin=${latMin}&latitudemax=${latMax}`,
+);
 
 export const loadBugReport = id => axios.get(`${BASE_URL}api/bugreport/${id}`);
 

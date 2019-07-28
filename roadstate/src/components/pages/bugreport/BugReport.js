@@ -17,7 +17,7 @@ import {
 import { Spinner } from '../../Spinner';
 
 export const NoPhotosAvailable = () => (
-  <Card key="emptyImage" style={{ width: '25rem' }}>
+  <Card key="emptyImage" style={{ width: '10rem' }}>
     <Card.Img
       variant="top"
       src="https://scontent.fiev1-1.fna.fbcdn.net/v/t1.0-9/51760210_10155878999561389_7628714773646934016_o.jpg?_nc_cat=104&_nc_oc=AQnjSEe5kf53VvjoC-puvwwP7XsR6mDvPai2W5VoHhtyf12JtMgTaSeqNdEGf7iRXn8&_nc_ht=scontent.fiev1-1.fna&oh=5c3e1a8c2ef5521b95ce4e16e0fd9a79&oe=5DB35696"
@@ -355,7 +355,7 @@ const BugReport = ({
   <Container>
     <Modal show={isOpened} onHide={onClose} size="lg">
       <Modal.Dialog scrollable size="lg" style={{ width: '100%' }}>
-        <Modal.Header style={{ alignContent: 'center' }}>
+        <Modal.Header style={{ display: 'flex', justifyContent: 'center' }}>
           <NoPhotosAvailable />
         </Modal.Header>
         <Modal.Body>

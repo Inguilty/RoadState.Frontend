@@ -23,6 +23,7 @@ class DisplayBg extends Component {
     bugReports: PropTypes.arrayOf.isRequired,
     roadPoints: PropTypes.arrayOf.isRequired,
     handler: PropTypes.func.isRequired,
+    calculate: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
@@ -30,8 +31,14 @@ class DisplayBg extends Component {
     this.isOnRoadFull(bugReports, roadPoints);
   }
 
+  componentDidUpdate(prevProps) {
+    const { roadPoints, calculate } = this.props;
+    if (prevProps.roadPoints !== roadPoints && prevProps.roadPoints.length !== roadPoints.length) {
+      calculate();
+    }
+  }
+
   isOnRoadFull = (arrayBr, arrayPoints) => {
-    debugger;
     const { handler } = this.props;
     const newArray = [];
     for (let i = 0; i < arrayPoints.length - 1; i += 1) {
@@ -98,7 +105,15 @@ class DisplayBg extends Component {
   };
 
   render() {
-    return <div>{this.renderMarkers()}</div>;
+    const { roadPoints } = this.props;
+    return (
+      <div>
+        {this.renderMarkers()}
+        {roadPoints.map(x => (
+          <div style={{ display: 'none' }}>{`${x.lng} ${x.lat}`}</div>
+        ))}
+      </div>
+    );
   }
 }
 

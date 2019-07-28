@@ -1,6 +1,5 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { connect } from 'react-redux';
 import {
   Card,
   Carousel,
@@ -16,10 +15,9 @@ import {
   FaThumbsUp, FaThumbsDown, FaCheck, FaStar, FaComment,
 } from 'react-icons/fa';
 import { Spinner } from '../../Spinner';
-import * as bugReportActions from './actions';
 
 export const NoPhotosAvailable = () => (
-  <Card key="emptyImage" style={{ width: '25rem' }}>
+  <Card key="emptyImage" style={{ width: '10rem' }}>
     <Card.Img
       variant="top"
       src="https://scontent.fiev1-1.fna.fbcdn.net/v/t1.0-9/51760210_10155878999561389_7628714773646934016_o.jpg?_nc_cat=104&_nc_oc=AQnjSEe5kf53VvjoC-puvwwP7XsR6mDvPai2W5VoHhtyf12JtMgTaSeqNdEGf7iRXn8&_nc_ht=scontent.fiev1-1.fna&oh=5c3e1a8c2ef5521b95ce4e16e0fd9a79&oe=5DB35696"
@@ -59,7 +57,7 @@ export const Comment = ({
   disabledDislikeButton,
 }) => (
   <Card key={comment.id}>
-    <Card.Header as="h5">{comment.userName}</Card.Header>
+    <Card.Header as="h5">{comment.authorName}</Card.Header>
     <Card.Body>
       <Card.Text>{comment.text}</Card.Text>
     </Card.Body>
@@ -351,109 +349,54 @@ CommentForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
 };
 
-class BugReport extends React.Component {
-  state = {
-    isModalOpened: false,
-  };
+const BugReport = ({
+  bugReport, isOpened, onClose, onPoll, isLoadingRating, onComment,
+}) => (
+  <Container>
+    <Modal show={isOpened} onHide={onClose} size="lg">
+      <Modal.Dialog scrollable size="lg" style={{ width: '100%' }}>
+        <Modal.Header style={{ display: 'flex', justifyContent: 'center' }}>
+          <NoPhotosAvailable />
+        </Modal.Header>
+        <Modal.Body>
+          <h5>
+            Created by
+            {bugReport.authorName}
+          </h5>
+          <Poll
+            handlePollButton={onPoll}
+            bugReport={bugReport}
+            loadingBugReportRating={isLoadingRating}
+          />
+          <br />
+          <BodyContainer
+            description={bugReport.description}
+            state={bugReport.state}
+            rating={!bugReport ? 0 : bugReport.rating}
+            commentsCount={!bugReport.comments ? 0 : bugReport.comments.length}
+          />
+          <br />
+          {!bugReport.comments || bugReport.comments.length === 0 ? (
+            <NoComments />
+          ) : (
+            <Comments handleLikeButton={onComment} comments={bugReport.comments} />
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <CommentForm handleChange={onComment} handleSubmit={onComment} />
+        </Modal.Footer>
+      </Modal.Dialog>
+    </Modal>
+  </Container>
+);
 
-  static propTypes = {
-    loadingBugReport: PropTypes.bool.isRequired,
-    loadingBugReportRating: PropTypes.bool.isRequired,
-    bugReport: PropTypes.objectOf(PropTypes.any),
-    rateBugReport: PropTypes.func.isRequired,
-    loadBugReport: PropTypes.func.isRequired,
-  };
-
-  componentDidMount() {
-    const { loadBugReport } = this.props;
-    loadBugReport(1);
-  }
-
-  handleShow = () => {
-    this.setState({ isModalOpened: true });
-  };
-
-  handleClose = () => {
-    this.setState({ isModalOpened: false });
-  };
-
-  handlePoll = (event) => {
-    const { bugReport, rateBugReport } = this.props;
-    const { currentBugReport } = bugReport;
-    const currentRating = currentBugReport.rating;
-    const bugReportDispatched = {
-      ...currentBugReport,
-      rating: event.target.value === 'true' ? currentRating + 1 : currentRating - 1,
-    };
-    const rate = event.target.value === 'true' ? 'agree' : 'disagree';
-    rateBugReport(bugReportDispatched, rate);
-  };
-
-  handleCommentChange = () => {};
-
-  render() {
-    const { isModalOpened } = this.state;
-    const { bugReport } = this.props;
-    const { currentBugReport, loadingBugReport, loadingBugReportRating } = bugReport;
-    if (loadingBugReport || !currentBugReport) {
-      return (
-        <Row>
-          <Col md={{ offset: 5 }}>
-            <Spinner />
-          </Col>
-        </Row>
-      );
-    }
-    return (
-      <Container>
-        <ModalCaller id={currentBugReport.id} handleShow={this.handleShow} />
-        <Modal show={isModalOpened} onHide={this.handleClose} size="lg">
-          <Modal.Dialog scrollable size="lg">
-            <Modal.Header>
-              <NoPhotosAvailable />
-            </Modal.Header>
-            <Modal.Body>
-              <Poll
-                handlePollButton={this.handlePoll}
-                bugReport={currentBugReport}
-                user={null}
-                loadingBugReportRating={loadingBugReportRating}
-              />
-              <br />
-              <BodyContainer
-                description={currentBugReport.description}
-                state={currentBugReport.state}
-                rating={!currentBugReport ? 0 : currentBugReport.rating}
-                commentsCount={0}
-              />
-              <br />
-              <NoComments />
-            </Modal.Body>
-            <Modal.Footer>
-              <CommentForm
-                handleChange={this.handleCommentChange}
-                handleSubmit={this.handleCommentChange}
-              />
-            </Modal.Footer>
-          </Modal.Dialog>
-        </Modal>
-      </Container>
-    );
-  }
-}
-
-BugReport.defaultProps = {
-  bugReport: null,
+BugReport.propTypes = {
+  bugReport: PropTypes.objectOf.isRequired,
+  isOpened: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onPoll: PropTypes.func.isRequired,
+  isLoadingRating: PropTypes.bool.isRequired,
+  onComment: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ bugReport }) => ({ bugReport });
-
-const mapDispatchToProps = {
-  loadBugReport: bugReportActions.loadBugReport,
-  rateBugReport: bugReportActions.rateBugReport,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(BugReport);
+export default BugReport;

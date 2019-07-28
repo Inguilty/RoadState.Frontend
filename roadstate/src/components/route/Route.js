@@ -38,10 +38,14 @@ class Route extends MapLayer {
       collapsible: true,
     }).addTo(map.leafletElement);
 
-    leafletElement.on('routeselected', (routes) => {
-      const routeCoordsNew = routes.route.coordinates;
-      this.props.setState({ routeCoords: routeCoordsNew });
-    }, this);
+    leafletElement.on(
+      'routeselected',
+      (routes) => {
+        const routeCoordsNew = routes.route.coordinates;
+        this.props.setState({ routeCoords: routeCoordsNew });
+      },
+      this,
+    );
 
     leafletElement.hide();
     return leafletElement.getPlan();

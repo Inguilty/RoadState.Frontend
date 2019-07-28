@@ -18,7 +18,6 @@ import '../../../authorization.css';
 
 class SignUp extends React.Component {
   state = {
-    image: '',
     imagePreviewUrl: '',
     isImageValid: false,
     imageErrorType: '',
@@ -44,6 +43,11 @@ class SignUp extends React.Component {
     acceptedTerms: Yup.bool(),
   });
 
+  handleAlertDismiss = () => {
+    const { removeError } = this.props;
+    removeError();
+  };
+
   closeModal = () => {
     const { history } = this.props;
     history.goBack();
@@ -58,10 +62,9 @@ class SignUp extends React.Component {
   };
 
   handleSubmit = (e) => {
-    const { image, imagePreviewUrl } = this.state;
+    const { imagePreviewUrl } = this.state;
     const { register } = this.props;
     const user = {
-      avatar: image,
       avatarUrl: imagePreviewUrl,
       username: e.username,
       email: e.email,
@@ -91,7 +94,6 @@ class SignUp extends React.Component {
 
     reader.onloadend = () => {
       this.setState({
-        image: file,
         imagePreviewUrl: reader.result,
       });
     };
@@ -104,10 +106,9 @@ class SignUp extends React.Component {
   handleImageAlertShow = () => this.setState({ isImageValid: true });
 
   render() {
-    const { isRegistering, registered } = this.props;
+    const { isRegistering, registered, errorMessage } = this.props;
     const { isImageValid, imageErrorType, imagePreviewUrl } = this.state;
     const imageAlertText = errorMessages[imageErrorType];
-
     const userImage = imagePreviewUrl && <Image id="userAvatar" src={imagePreviewUrl} />;
     return (
       <Formik
@@ -135,6 +136,14 @@ class SignUp extends React.Component {
               </center>
               <p className="hint-text">* - Fill in this Form to create your account!</p>
               <Form onSubmit={handleSubmit}>
+                <Alert
+                  show={errorMessage}
+                  variant="danger"
+                  onClose={this.handleAlertDismiss}
+                  dismissible
+                >
+                  {errorMessage}
+                </Alert>
                 <Alert
                   show={isImageValid}
                   variant="danger"
@@ -173,8 +182,7 @@ class SignUp extends React.Component {
                     type="text"
                     placeholder="Username*"
                     className={`form-control${
-                      errors.username && touched.username ? ' is-invalid' : ''
-                    }`}
+                      errors.username && touched.username ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage name="username" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -195,8 +203,7 @@ class SignUp extends React.Component {
                     type="password"
                     placeholder="Password*"
                     className={`form-control${
-                      errors.password && touched.password ? ' is-invalid' : ''
-                    }`}
+                      errors.password && touched.password ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -207,8 +214,7 @@ class SignUp extends React.Component {
                     type="password"
                     placeholder="Confirm password*"
                     className={`form-control${
-                      errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''
-                    }`}
+                      errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage
                     name="confirmPasword"
@@ -223,8 +229,7 @@ class SignUp extends React.Component {
                       name="acceptedTerms"
                       type="checkbox"
                       className={`form-checkbox${
-                        errors.acceptedTerms && touched.acceptedTerms ? ' is-invalid' : ''
-                      }`}
+                        errors.acceptedTerms && touched.acceptedTerms ? ' is-invalid' : ''}`}
                     />
                   </Col>
                   <Col>
@@ -259,14 +264,21 @@ SignUp.propTypes = {
   register: PropTypes.objectOf.isRequired,
   history: PropTypes.objectOf.isRequired,
   completeRegister: PropTypes.func.isRequired,
+  errorMessage: PropTypes.string.isRequired,
+  removeError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   isRegistering: state.registration.isRegistering,
   registered: state.registration.registered,
+  errorMessage: state.registration.errorMessage,
 });
 
 export default connect(
   mapStateToProps,
-  { register: signUp.register, completeRegister: signUp.completeRegistration },
+  {
+    register: signUp.register,
+    completeRegister: signUp.completeRegistration,
+    removeError: signUp.removeError,
+  },
 )(SignUp);

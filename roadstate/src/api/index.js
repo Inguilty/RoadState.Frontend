@@ -19,6 +19,19 @@ export const addComment = (bugReportId, comment) => {
   );
 };
 
+export const loadCurrentUser = userId => axios.get(`${BASE_URL}api/users/${userId}`);
+
+export const addComment = (bugReportId, comment) => {
+  const config = {
+    headers: { 'content-type': 'application/json' },
+  };
+  return axios.post(
+    `${BASE_URL}api/bugreport/${bugReportId}/comment`,
+    JSON.stringify(comment),
+    config,
+  );
+};
+
 export const getBugReportRectangle = (longMin, longMax, latMin, latMax) => axios.get(
   `${BASE_URL}api/bugreport/?longitudemin=${longMin}&longitudemax=${longMax}&latitudemin=${latMin}&latitudemax=${latMax}`,
 );

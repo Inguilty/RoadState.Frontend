@@ -67,15 +67,14 @@ class WithBugReport extends Component {
   handleCommentSubmit = (event) => {
     event.preventDefault();
     const { comment } = this.state;
-    this.setState({ comment: { ...comment } });
     const { addCommentDispatched, bugReport } = this.props;
     const { currentBugReport } = bugReport;
-    const { commentDispatched } = this.state;
-    addCommentDispatched({ ...currentBugReport }, commentDispatched);
+    addCommentDispatched({ ...currentBugReport }, comment);
   };
 
   handlePoll = (event) => {
-    const { bugReport, rateBugReport, token } = this.props;
+    const { bugReport, rateBugReport, authorization } = this.props;
+    const { token } = authorization;
     const { currentBugReport } = bugReport;
     const currentRating = currentBugReport.rating;
     const bugReportDispatched = {
@@ -88,8 +87,9 @@ class WithBugReport extends Component {
 
   render() {
     const { isModalOpened } = this.state;
-    const { id, bugReport, loggedIn } = this.props;
+    const { bugReport, authorization, id } = this.props;
     const { loadingBugReport, currentBugReport, loadingBugReportRating } = bugReport;
+    const { loggedIn } = authorization;
     if (!loadingBugReport && !currentBugReport) {
       return (
         <Button id={id} onClick={this.handleClick} variant="success">

@@ -29,6 +29,12 @@ const updateUserReducer = (state = initialState, action) => {
       return {
         ...state,
         errorMessage: action.errorMessage,
+        isUpdating: false,
+      };
+    case userConstants.UPDATE_CLOSE_ERROR_ALERT:
+      return {
+        ...state,
+        errorMessage: action.errorMessage,
       };
     default:
       return state;

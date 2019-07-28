@@ -48,6 +48,21 @@ const authorizationReducer = (state = initialState, action) => {
         userId: '',
         token: '',
       };
+
+    case userConstants.CHECK_TOKEN_SUCCESS:
+      return {
+        ...state,
+        loggedIn: true,
+        userId: action.id,
+        token: action.token,
+      };
+    case userConstants.CHECK_TOKEN_FAILURE:
+      return {
+        ...state,
+        loggedIn: false,
+        userId: '',
+        token: '',
+      };
     default:
       return state;
   }

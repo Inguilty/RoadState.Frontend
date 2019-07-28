@@ -5,10 +5,6 @@ const GOOGLE_MAPS_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
 const publicKey = 'AIzaSyBeFEC_8v3061wgyMUEO6mJ8EmAXzWedTk';
 
 export const loadCurrentRoad = (latitude, longitude) => {
-  const rand = () => Math.random()
-    .toString(36)
-    .substr(2); // remove `0.`
-  const token = () => rand() + rand(); // to make it longer
   const headers = {
     Accept: 'application/json',
     'Access-Control-Allow-Origin': '*',

@@ -6,13 +6,36 @@ const publicKey = 'AIzaSyBeFEC_8v3061wgyMUEO6mJ8EmAXzWedTk';
 
 export const loadCurrentRoad = (latitude, longitude) => axios.get(`${GOOGLE_MAPS_URL}latlng=${latitude},${longitude}&key=${publicKey}`);
 
+export const loadCurrentUser = userId => axios.get(`${BASE_URL}api/users/${userId}`);
+
+export const addComment = (bugReportId, comment) => {
+  const config = {
+    headers: { 'content-type': 'application/json' },
+  };
+  return axios.post(
+    `${BASE_URL}api/bugreport/${bugReportId}/comment`,
+    JSON.stringify(comment),
+    config,
+  );
+};
+
 export const getBugReportRectangle = (longMin, longMax, latMin, latMax) => axios.get(
   `${BASE_URL}api/bugreport/?longitudemin=${longMin}&longitudemax=${longMax}&latitudemin=${latMin}&latitudemax=${latMax}`,
 );
 
-export const loadBugReport = id => axios.get(`${BASE_URL}api/bugreport/${id}`);
+export const loadBugReport = (id, userId) => axios.get(`${BASE_URL}api/bugreport/${id}?userId=${userId}`);
 
-export const rateBugReport = (id, rate) => axios.post(`${BASE_URL}api/bugreport/${id}/rate`, rate);
+export const rateBugReport = (id, rate, token) => {
+  const config = {
+    headers: { 'content-type': 'application/json' },
+  };
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  return axios.post(
+    `${BASE_URL}api/bugreport/${id}/rate?`,
+    JSON.stringify({ rate, id, token }),
+    config,
+  );
+};
 
 export const createBugReport = (createBR) => {
   const data = {

@@ -9,6 +9,13 @@ import BugReport from './BugReport';
 class WithBugReport extends Component {
   state = {
     isModalOpened: false,
+    comment: {
+      authorName: '',
+      likes: 0,
+      dislikes: 0,
+      text: '',
+      publishDate: new Date().toISOString(),
+    },
   };
 
   static propTypes = {
@@ -16,7 +23,20 @@ class WithBugReport extends Component {
     loadBugReport: PropTypes.func.isRequired,
     bugReport: PropTypes.objectOf.isRequired,
     id: PropTypes.number.isRequired,
+    token: PropTypes.objectOf.isRequired,
+    loggedIn: PropTypes.bool.isRequired,
     rateBugReport: PropTypes.func.isRequired,
+    authorization: PropTypes.objectOf.isRequired,
+    loadUserName: PropTypes.func.isRequired,
+    addCommentDispatched: PropTypes.func.isRequired,
+  };
+
+  componentDidMount = () => {
+    const { authorization, loadUserName } = this.props;
+    const { userId } = authorization;
+    if (userId && userId !== '') {
+      loadUserName(userId);
+    }
   };
 
   handleOpen = () => {
@@ -29,15 +49,32 @@ class WithBugReport extends Component {
 
   handleClick = (event) => {
     const id = +event.currentTarget.id;
-    const { loadBugReport } = this.props;
-    loadBugReport(id);
+    const { loadBugReport, authorization } = this.props;
+    const { userId } = authorization;
+    loadBugReport(id, userId);
     this.handleOpen();
   };
 
-  handleCommentChange = () => {};
+  handleCommentChange = (event) => {
+    const { bugReport } = this.props;
+    const { userName } = bugReport;
+    const { comment } = this.state;
+    this.setState({
+      comment: { ...comment, text: event.currentTarget.value, authorName: userName },
+    });
+  };
+
+  handleCommentSubmit = (event) => {
+    event.preventDefault();
+    const { comment } = this.state;
+    const { addCommentDispatched, bugReport } = this.props;
+    const { currentBugReport } = bugReport;
+    addCommentDispatched({ ...currentBugReport }, comment);
+  };
 
   handlePoll = (event) => {
-    const { bugReport, rateBugReport } = this.props;
+    const { bugReport, rateBugReport, authorization } = this.props;
+    const { token } = authorization;
     const { currentBugReport } = bugReport;
     const currentRating = currentBugReport.rating;
     const bugReportDispatched = {
@@ -45,13 +82,14 @@ class WithBugReport extends Component {
       rating: event.target.value === 'true' ? currentRating + 1 : currentRating - 1,
     };
     const rate = event.target.value === 'true' ? 'agree' : 'disagree';
-    rateBugReport(bugReportDispatched, rate);
+    rateBugReport(bugReportDispatched, rate, token);
   };
 
   render() {
     const { isModalOpened } = this.state;
-    const { id, bugReport } = this.props;
+    const { bugReport, authorization, id } = this.props;
     const { loadingBugReport, currentBugReport, loadingBugReportRating } = bugReport;
+    const { loggedIn } = authorization;
     if (!loadingBugReport && !currentBugReport) {
       return (
         <Button id={id} onClick={this.handleClick} variant="success">
@@ -74,12 +112,14 @@ class WithBugReport extends Component {
           </Row>
         ) : (
           <BugReport
+            loggedIn={loggedIn}
             bugReport={currentBugReport}
             isOpened={isModalOpened}
             onClose={this.handleClose}
             onPoll={this.handlePoll}
             isLoadingRating={loadingBugReportRating}
             onComment={this.handleCommentChange}
+            onCommentSubmit={this.handleCommentSubmit}
           />
         )}
       </div>
@@ -87,9 +127,14 @@ class WithBugReport extends Component {
   }
 }
 
-const mapStateToProps = ({ bugReport }) => ({ bugReport });
+const mapStateToProps = ({ bugReport, authorization }) => ({ bugReport, authorization });
 
 export default connect(
   mapStateToProps,
-  { loadBugReport: bugReportActions.loadBugReport, rateBugReport: bugReportActions.rateBugReport },
+  {
+    loadBugReport: bugReportActions.loadBugReport,
+    rateBugReport: bugReportActions.rateBugReport,
+    loadUserName: bugReportActions.loadUserName,
+    addCommentDispatched: bugReportActions.addCommentToBugReport,
+  },
 )(WithBugReport);

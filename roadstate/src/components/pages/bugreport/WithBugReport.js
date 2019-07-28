@@ -19,6 +19,7 @@ class WithBugReport extends Component {
     token: PropTypes.objectOf.isRequired,
     loggedIn: PropTypes.bool.isRequired,
     rateBugReport: PropTypes.func.isRequired,
+    userId: PropTypes.objectOf.isRequired,
   };
 
   handleOpen = () => {
@@ -31,8 +32,8 @@ class WithBugReport extends Component {
 
   handleClick = (event) => {
     const id = +event.currentTarget.id;
-    const { loadBugReport } = this.props;
-    loadBugReport(id);
+    const { loadBugReport, userId } = this.props;
+    loadBugReport(id, userId);
     this.handleOpen();
   };
 
@@ -94,6 +95,7 @@ const mapStateToProps = ({ bugReport, authorization }) => ({
   bugReport,
   loggedIn: authorization.loggedIn,
   token: authorization.token,
+  userId: authorization.userId,
 });
 
 export default connect(

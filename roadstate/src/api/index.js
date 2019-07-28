@@ -20,7 +20,7 @@ export const getBugReportRectangle = (longMin, longMax, latMin, latMax) => axios
   `${BASE_URL}api/bugreport/?longitudemin=${longMin}&longitudemax=${longMax}&latitudemin=${latMin}&latitudemax=${latMax}`,
 );
 
-export const loadBugReport = id => axios.get(`${BASE_URL}api/bugreport/${id}`);
+export const loadBugReport = (id, userId) => axios.get(`${BASE_URL}api/bugreport/${id}?userId=${userId}`);
 
 export const rateBugReport = (id, rate, token) => {
   const config = {

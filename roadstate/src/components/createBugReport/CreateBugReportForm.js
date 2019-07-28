@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import {
-  Modal, Button, Col, Alert, FormGroup, Row, FormControl, Carousel, CarouselItem, Card,
+  Modal, Button, Col, Alert, FormGroup, Row, FormControl,
 
 } from 'react-bootstrap';
 import {
@@ -11,6 +11,7 @@ import {
 import * as Yup from 'yup';
 import * as createBRactions from './actions';
 import { Spinner } from '../Spinner';
+import BugReportImageCarousel from './BugReportImageCarousel';
 
 export const MAX_BUG_REPORT_IMAGE_SIZE = 16 * 1024 * 1024;
 export const MAX_BUG_REPORT_IMAGES_NUMBER = 5;
@@ -26,7 +27,7 @@ const errorImageMessages = {
 
 class CreateBugReportForm extends React.Component {
   state = {
-    isImageValid: false, isImageAlertShown: false, imageErrorType: '', photos: {},
+    isImageValid: false, isImageAlertShown: false, imageErrorType: '', photos: [],
   };
 
   initialState = {
@@ -55,19 +56,8 @@ class CreateBugReportForm extends React.Component {
     const { problemLevel, description } = e;
     const { createBugReport, locationLongitude, locationLatitude } = this.props;
     if (isImageValid === true) {
-      const photosData = new FormData();
-      try {
-        for (let i = 0; i < photos.length; i += 1) {
-          const file = photos.item(i);
-          photosData.append(`photos[${i}]`, file);
-        }
-      } catch {
-        this.inputPhotos.value = null;
-        this.setState({ imageErrorType: 'noImage', isImageValid: false });
-        this.handleImageAlertShow();
-      }
       createBugReport({
-        problemLevel, description, photos, longitude: 1, latitude: 2,
+        problemLevel, description, photos, longitude: locationLongitude, latitude: locationLatitude,
       });
     }
   };
@@ -100,7 +90,7 @@ class CreateBugReportForm extends React.Component {
       this.handleImageAlertShow();
       return true;
     }
-    this.setState({ isImageValid: true, photos: event.target.files });
+    this.setState({ isImageValid: true, photos: [...event.target.files] });
     return true;
   };
 
@@ -189,14 +179,11 @@ class CreateBugReportForm extends React.Component {
                     multiple
                     type="file"
                     accept="image/*"
-                    enctype="multipart/form-data"
-                    method="post"
-                    ref={(inputPhotos) => { this.inputPhotos = inputPhotos; }}
-                    className={
-                      `form-control ${(errors.photos && touched.photos ? ' is-invalid' : '')}`
-                    }
                     onChange={this.handleFileChanging}
                   />
+                </FormGroup>
+                <FormGroup>
+                  <BugReportImageCarousel photos={isImageValid ? photos : []} />
                 </FormGroup>
                 <br />
                 <Row>

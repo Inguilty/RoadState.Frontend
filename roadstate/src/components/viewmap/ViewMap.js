@@ -139,7 +139,10 @@ export default class ViewMap extends Component {
 
     const setBugReport = todoList.clicked ? (
       <Popup position={[todoList.BRLocation.lat, todoList.BRLocation.lng]}>
-        <CreateBugReport />
+        <CreateBugReport
+          locationLongitude={todoList.BRLocation.lng}
+          locationLatitude={todoList.BRLocation.lat}
+        />
       </Popup>
     ) : null;
 

@@ -129,7 +129,6 @@ class CreateBugReportForm extends React.Component {
     const {
       isActive,
       isLoading,
-      isFailed,
     } = this.props;
     const alertText = errorImageMessages[imageErrorType];
     return (

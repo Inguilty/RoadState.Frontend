@@ -356,7 +356,7 @@ const BugReport = ({
   onPoll,
   isLoadingRating,
   onComment,
-  onCommentSubmit, 
+  onCommentSubmit,
   loggedIn,
 }) => (
   <Container>

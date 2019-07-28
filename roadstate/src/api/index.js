@@ -14,7 +14,8 @@ export const loadCurrentRoad = (latitude, longitude) => {
     'Access-Control-Allow-Origin': '*',
     'X-Requested-With': 'XMLHttpRequest',
     'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-    'Access-Control-Allow-Headers': `Content-Type, Access-Control-Allow-Headers, ${token()}, X-Requested-With`,
+    'Access-Control-Allow-Headers':
+      'Content-Type, Access-Control-Allow-Headers, authorization , X-Requested-With',
   };
   return axios.get(`${GOOGLE_MAPS_URL}latlng=${latitude},${longitude}&key=${publicKey}`, headers);
 };

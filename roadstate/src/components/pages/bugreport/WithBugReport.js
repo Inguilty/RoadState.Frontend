@@ -67,7 +67,9 @@ class WithBugReport extends Component {
         {!currentBugReport || loadingBugReport ? (
           <Row>
             <Col>
-              <Spinner />
+              <center>
+                <Spinner />
+              </center>
             </Col>
           </Row>
         ) : (

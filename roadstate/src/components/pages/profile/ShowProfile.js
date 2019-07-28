@@ -56,16 +56,21 @@ class ShowProfile extends React.Component {
     }
   };
 
+  handleAlertDismiss = () => {
+    const { removeError } = this.props;
+    removeError();
+  };
+
   handleSubmit = (e) => {
     const { image, imagePreviewUrl } = this.state;
-    const { update } = this.props;
+    const { update, userId, token } = this.props;
     const updatedUser = {
       avatar: image,
       avatarUrl: imagePreviewUrl,
       password: e.newPassword,
     };
     if ((updatedUser.password && e.newPassword && e.confirmNewPassword) || image) {
-      update(updatedUser);
+      update(userId, updatedUser.avatarUrl, e.password, e.confirmNewPassword, token);
     }
   };
 
@@ -102,7 +107,9 @@ class ShowProfile extends React.Component {
 
   render() {
     const { isImageValid, imageErrorType, imagePreviewUrl } = this.state;
-    const { userId, isUpdating, updated } = this.props;
+    const {
+      userId, isUpdating, updated, errorMessage,
+    } = this.props;
     const imageAlertText = errorMessages[imageErrorType];
     const userImage = imagePreviewUrl && <Image id="userAvatar" src={imagePreviewUrl} />;
     return (
@@ -128,15 +135,6 @@ class ShowProfile extends React.Component {
           >
             <FormGroup className="Form-wrapper">
               <Form onSubmit={handleSubmit}>
-                <Alert
-                  show={isImageValid}
-                  variant="danger"
-                  onClose={this.handleImageAlertDismiss}
-                  dismissible
-                >
-                  <Alert.Heading>Image upload error!</Alert.Heading>
-                  {imageAlertText}
-                </Alert>
                 <center>
                   <div>{userImage}</div>
                 </center>
@@ -163,13 +161,29 @@ class ShowProfile extends React.Component {
                     </FormLabel>
                   </FormGroup>
                 </FormGroup>
-
+                <Alert
+                  show={isImageValid}
+                  variant="danger"
+                  onClose={this.handleImageAlertDismiss}
+                  dismissible
+                >
+                  <Alert.Heading>Image upload error!</Alert.Heading>
+                  {imageAlertText}
+                </Alert>
                 <FormGroup className="Form-group">
                   <FormControl name="username" type="text" placeholder={userId} readOnly />
                 </FormGroup>
                 <FormGroup className="Form-group">
                   <FormControl name="email" type="text" readOnly />
                 </FormGroup>
+                <Alert
+                  show={errorMessage}
+                  variant="danger"
+                  onClose={this.handleAlertDismiss}
+                  dismissible
+                >
+                  {errorMessage}
+                </Alert>
                 <FormGroup className="form-group">
                   <span>Do you want to change password?</span>
                 </FormGroup>
@@ -179,8 +193,7 @@ class ShowProfile extends React.Component {
                     type="password"
                     placeholder="Old password"
                     className={`form-control${
-                      errors.password && touched.password ? ' is-invalid' : ''
-                    }`}
+                      errors.password && touched.password ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -191,8 +204,7 @@ class ShowProfile extends React.Component {
                     type="password"
                     placeholder="New password"
                     className={`form-control${
-                      errors.newPassword && touched.newPassword ? ' is-invalid' : ''
-                    }`}
+                      errors.newPassword && touched.newPassword ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage name="newPassword" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -202,8 +214,7 @@ class ShowProfile extends React.Component {
                     type="password"
                     placeholder="Confirm new password"
                     className={`form-control${
-                      errors.confirmNewPassword && touched.confirmNewPassword ? ' is-invalid' : ''
-                    }`}
+                      errors.confirmNewPassword && touched.confirmNewPassword ? ' is-invalid' : ''}`}
                   />
                   <ErrorMessage
                     name="confirmNewPassword"
@@ -237,15 +248,24 @@ ShowProfile.propTypes = {
   isUpdating: PropTypes.bool.isRequired,
   updated: PropTypes.bool.isRequired,
   completeUpdating: PropTypes.func.isRequired,
+  token: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string.isRequired,
+  removeError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   userId: state.authorization.userId,
   isUpdating: state.updateUser.isUpdating,
   updated: state.updateUser.updated,
+  token: state.authorization.token,
+  errorMessage: state.updateUser.errorMessage,
 });
 
 export default connect(
   mapStateToProps,
-  { update: updateUser.update, completeUpdating: updateUser.completeUpdating },
+  {
+    update: updateUser.update,
+    completeUpdating: updateUser.completeUpdating,
+    removeError: updateUser.removeError,
+  },
 )(ShowProfile);

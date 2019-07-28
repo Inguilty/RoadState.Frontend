@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Marker, Popup } from 'react-leaflet';
 import PropTypes from 'prop-types';
-import bugReport from './bug_report.png';
+import bugReport from './bugReport.png';
 import WithBugReport from '../pages/bugreport/WithBugReport';
 import { Spinner } from '../Spinner';
 

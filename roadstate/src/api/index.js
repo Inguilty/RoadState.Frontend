@@ -38,6 +38,11 @@ export const createBugReport = (createBR) => {
   return axios.post(`${BASE_URL}api/createbugreport`, fd, config);
 };
 
+export const checkToken = (token) => {
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  return axios.get(`${BASE_URL}api/users/checkToken`).catch(error => error);
+};
+
 export const login = (userName, password) => axios.post(`${BASE_URL}api/users/authenticate`, { userName, password }).catch(error => error);
 
 export const register = user => axios.post(`${BASE_URL}api/users/register`, user).catch(error => error);

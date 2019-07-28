@@ -46,20 +46,20 @@ class Header extends React.Component {
                 </li>
               </>
             ) : (
-                <>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/signIn">
-                      Sign in
+              <>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/signIn">
+                    Sign in
                   </NavLink>
-                  </li>
+                </li>
 
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/signUp">
-                      Sign up
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/signUp">
+                    Sign up
                   </NavLink>
-                  </li>
-                </>
-              )}
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </nav>

@@ -43,9 +43,15 @@ class ShowProfile extends React.Component {
     confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
   });
 
+  componentDidMount() {
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 27) this.closeModal();
+    });
+  }
+
   closeModal = () => {
     const { history } = this.props;
-    history.goBack();
+    history.push('/');
   };
 
   resetUserUpdated = () => {

@@ -19,6 +19,12 @@ class SignIn extends React.Component {
     password: Yup.string().required('Password is required'),
   });
 
+  componentDidMount() {
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 27) this.closeModal();
+    });
+  }
+
   handleAlertDismiss = () => {
     const { removeError } = this.props;
     removeError();

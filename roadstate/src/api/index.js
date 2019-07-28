@@ -8,12 +8,11 @@ export const rateBugReport = (id, rate) => axios.post(`${BASE_URL}api/bugreport/
 
 export const createBugReport = (createBR) => {
   const data = {
-    ProblemLevel: createBR.problemLevel,
+    ProblemLevel: createBR.problemState,
     Description: createBR.description,
     Longitude: createBR.longitude,
     Latitude: createBR.latitude,
   };
-  debugger;
   const json = JSON.stringify(data);
   const blob = new Blob([json], {
     type: 'application/json',
@@ -21,19 +20,13 @@ export const createBugReport = (createBR) => {
   const fd = new FormData();
   fd.append('Data', blob);
   for (let i = 0; i < createBR.photos.length; i += 1) {
-    const file = createBR.photos.item(i);
+    const file = createBR.photos[i];
     fd.append(`Photos[${i}]`, file, file.name);
   }
   const config = {
     headers: { 'Content-Type': 'multipart/form-data' },
-    onUploadProgress: (progressEvent) => {
-      let percentCompleted = Math.floor(progressEvent.loaded * 100 / progressEvent.total);
-      console.log(percentCompleted);
-    }
   };
-  return axios.post(`${BASE_URL}api/createbugreport`, fd, config)
-    .then(responce => console.log(responce))
-    .catch(responce => console.log(responce));
+  return axios.post(`${BASE_URL}api/createbugreport`, fd, config);
 };
 
 export const logout = () => new Promise((resolve) => {

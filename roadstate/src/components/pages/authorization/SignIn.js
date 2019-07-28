@@ -30,7 +30,6 @@ class SignIn extends React.Component {
     removeError();
   };
 
-
   closeModal = () => {
     const { history } = this.props;
     history.push('/');
@@ -38,8 +37,6 @@ class SignIn extends React.Component {
 
   handleSubmit = (e) => {
     const { login } = this.props;
-    const { history } = this.props;
-    history.push('/');
     if (e.username && e.password) {
       login(e.username, e.password);
     }
@@ -87,7 +84,8 @@ class SignIn extends React.Component {
                     type="text"
                     placeholder="Username"
                     className={`form-control${
-                      errors.username && touched.username ? ' is-invalid' : ''}`}
+                      errors.username && touched.username ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage name="username" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -98,7 +96,8 @@ class SignIn extends React.Component {
                     type="password"
                     placeholder="Password"
                     className={`form-control${
-                      errors.password && touched.password ? ' is-invalid' : ''}`}
+                      errors.password && touched.password ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -112,7 +111,7 @@ class SignIn extends React.Component {
                 <FormGroup className="Form-footer">
                   <NavLink href="#">Forgot Your password?</NavLink>
                   {' '}
-                  Have no account?
+Have no account?
                   {' '}
                   <NavLink to="/signUp">Sign up</NavLink>
                 </FormGroup>

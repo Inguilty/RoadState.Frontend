@@ -9,6 +9,13 @@ import BugReport from './BugReport';
 class WithBugReport extends Component {
   state = {
     isModalOpened: false,
+    comment: {
+      authorName: '',
+      likes: 0,
+      dislikes: 0,
+      text: '',
+      publishDate: new Date().toISOString(),
+    },
   };
 
   static propTypes = {
@@ -19,7 +26,17 @@ class WithBugReport extends Component {
     token: PropTypes.objectOf.isRequired,
     loggedIn: PropTypes.bool.isRequired,
     rateBugReport: PropTypes.func.isRequired,
-    userId: PropTypes.objectOf.isRequired,
+    authorization: PropTypes.objectOf.isRequired,
+    loadUserName: PropTypes.func.isRequired,
+    addCommentDispatched: PropTypes.func.isRequired,
+  };
+
+  componentDidMount = () => {
+    const { authorization, loadUserName } = this.props;
+    const { userId } = authorization;
+    if (userId && userId !== '') {
+      loadUserName(userId);
+    }
   };
 
   handleOpen = () => {
@@ -32,12 +49,30 @@ class WithBugReport extends Component {
 
   handleClick = (event) => {
     const id = +event.currentTarget.id;
-    const { loadBugReport, userId } = this.props;
+    const { loadBugReport, authorization } = this.props;
+    const { userId } = authorization;
     loadBugReport(id, userId);
     this.handleOpen();
   };
 
-  handleCommentChange = () => {};
+  handleCommentChange = (event) => {
+    const { bugReport } = this.props;
+    const { userName } = bugReport;
+    const { comment } = this.state;
+    this.setState({
+      comment: { ...comment, text: event.currentTarget.value, authorName: userName },
+    });
+  };
+
+  handleCommentSubmit = (event) => {
+    event.preventDefault();
+    const { comment } = this.state;
+    this.setState({ comment: { ...comment } });
+    const { addCommentDispatched, bugReport } = this.props;
+    const { currentBugReport } = bugReport;
+    const { commentDispatched } = this.state;
+    addCommentDispatched({ ...currentBugReport }, commentDispatched);
+  };
 
   handlePoll = (event) => {
     const { bugReport, rateBugReport, token } = this.props;
@@ -84,6 +119,7 @@ class WithBugReport extends Component {
             onPoll={this.handlePoll}
             isLoadingRating={loadingBugReportRating}
             onComment={this.handleCommentChange}
+            onCommentSubmit={this.handleCommentSubmit}
           />
         )}
       </div>
@@ -91,14 +127,14 @@ class WithBugReport extends Component {
   }
 }
 
-const mapStateToProps = ({ bugReport, authorization }) => ({
-  bugReport,
-  loggedIn: authorization.loggedIn,
-  token: authorization.token,
-  userId: authorization.userId,
-});
+const mapStateToProps = ({ bugReport, authorization }) => ({ bugReport, authorization });
 
 export default connect(
   mapStateToProps,
-  { loadBugReport: bugReportActions.loadBugReport, rateBugReport: bugReportActions.rateBugReport },
+  {
+    loadBugReport: bugReportActions.loadBugReport,
+    rateBugReport: bugReportActions.rateBugReport,
+    loadUserName: bugReportActions.loadUserName,
+    addCommentDispatched: bugReportActions.addCommentToBugReport,
+  },
 )(WithBugReport);

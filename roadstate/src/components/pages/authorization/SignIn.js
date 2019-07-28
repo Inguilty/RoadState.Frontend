@@ -19,6 +19,12 @@ class SignIn extends React.Component {
     password: Yup.string().required('Password is required'),
   });
 
+  componentDidMount() {
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 27) this.closeModal();
+    });
+  }
+
   handleAlertDismiss = () => {
     const { removeError } = this.props;
     removeError();
@@ -27,11 +33,13 @@ class SignIn extends React.Component {
 
   closeModal = () => {
     const { history } = this.props;
-    history.goBack();
+    history.push('/');
   };
 
   handleSubmit = (e) => {
     const { login } = this.props;
+    const { history } = this.props;
+    history.push('/');
     if (e.username && e.password) {
       login(e.username, e.password);
     }

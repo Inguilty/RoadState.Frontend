@@ -12,7 +12,13 @@ export const getBugReportRectangle = (longMin, longMax, latMin, latMax) => axios
 
 export const loadBugReport = id => axios.get(`${BASE_URL}api/bugreport/${id}`);
 
-export const rateBugReport = (id, rate) => axios.post(`${BASE_URL}api/bugreport/${id}/rate`, rate);
+export const rateBugReport = (id, rate, token) => {
+  const config = {
+    headers: { 'content-type': 'application/json' },
+  };
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  return axios.post(`${BASE_URL}api/bugreport/${id}/rate?`, JSON.stringify({ rate, id, token }), config);
+};
 
 export const createBugReport = () => new Promise((resolve) => {
   /* const config = {

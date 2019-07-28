@@ -10,9 +10,9 @@ export const RATE_BUG_REPORT_REQUEST = 'bugreports/RATE_BUG_REPORT_REQUEST';
 export const RATE_BUG_REPORT_RECEIVE = 'bugreports/RATE_BUG_REPORT_RECEIVE';
 export const RATE_BUG_REPORT_FAILURE = 'bugreports/RATE_BUG_REPORT_FAILURE';
 
-export const rateBugReport = (bugReport, rate) => async (dispatch) => {
+export const rateBugReport = (bugReport, rate, token) => async (dispatch) => {
   dispatch({ type: RATE_BUG_REPORT_REQUEST });
-  const rateBugReportResponse = await api.rateBugReport(bugReport.id, rate);
+  const rateBugReportResponse = await api.rateBugReport(bugReport.id, rate, token);
   if (rateBugReportResponse.status === 200) {
     const receivedBugReport = { ...bugReport, userRate: rate };
     dispatch({

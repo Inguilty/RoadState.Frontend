@@ -20,6 +20,7 @@ export const createBugReport = (createBR) => {
     Description: createBR.description,
     Longitude: createBR.longitude,
     Latitude: createBR.latitude,
+    userId: createBR.userId,
   };
   const json = JSON.stringify(data);
   const blob = new Blob([json], {

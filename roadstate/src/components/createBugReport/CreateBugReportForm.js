@@ -61,10 +61,17 @@ class CreateBugReportForm extends React.Component {
   handleSubmit = (e) => {
     const { isImageValid, photos, problemState } = this.state;
     const { description } = e;
-    const { createBugReport, locationLongitude, locationLatitude } = this.props;
-    if (isImageValid === true) {
+    const {
+      createBugReport, locationLongitude, locationLatitude, userId,
+    } = this.props;
+    if (isImageValid === true && userId !== undefined && userId !== '') {
       createBugReport({
-        problemState, description, photos, longitude: locationLongitude, latitude: locationLatitude,
+        problemState,
+        description,
+        photos,
+        longitude: locationLongitude,
+        latitude: locationLatitude,
+        userId,
       });
     } else {
       this.setState({ imageErrorType: 'noImage', isImageValid: false });
@@ -236,11 +243,13 @@ CreateBugReportForm.propTypes = {
   isFailed: PropTypes.bool.isRequired,
   onClose: PropTypes.objectOf.isRequired,
   createBugReport: PropTypes.func.isRequired,
+  userId: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   isLoading: state.createBugReport.isLoading,
   isFailed: state.createBugReport.isFailed,
+  userId: state.authorization.userId,
 });
 
 const mapDispatchToProps = {

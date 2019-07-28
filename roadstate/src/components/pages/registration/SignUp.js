@@ -43,6 +43,12 @@ class SignUp extends React.Component {
     acceptedTerms: Yup.bool(),
   });
 
+  componentDidMount() {
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 27) this.closeModal();
+    });
+  }
+
   handleAlertDismiss = () => {
     const { removeError } = this.props;
     removeError();
@@ -50,7 +56,7 @@ class SignUp extends React.Component {
 
   closeModal = () => {
     const { history } = this.props;
-    history.goBack();
+    history.push('/');
   };
 
   resetUserRegistered = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import {
-  Modal, Button, Col, Alert, FormGroup, Row, FormControl,
+  Modal, Button, Col, Alert, FormGroup, Row, FormControl, Carousel, CarouselItem, Card,
 
 } from 'react-bootstrap';
 import {
@@ -112,6 +112,8 @@ class CreateBugReportForm extends React.Component {
     const {
       isImageAlertShown,
       imageErrorType,
+      isImageValid,
+      photos,
     } = this.state;
 
     const {

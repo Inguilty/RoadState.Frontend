@@ -61,6 +61,9 @@ class Route extends MapLayer {
       'routeselected',
       (routes) => {
         const routeCoordsNew = routes.route.coordinates;
+        this.props.setState({
+          routeCoords: routeCoordsNew,
+        });
         this.calculateRectanglePoints(routeCoordsNew);
       },
       this,

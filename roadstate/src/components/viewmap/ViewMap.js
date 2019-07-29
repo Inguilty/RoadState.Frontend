@@ -304,10 +304,6 @@ class ViewMap extends Component {
     ) : null;
 
     const position = [location.lat, location.lng];
-<<<<<<< HEAD
-    const { roadBugReports } = this.state;
-=======
->>>>>>> 037f45dc4aefaf4c3ed9663c737eab6d265c5c3d
     return (
       <>
         <Map

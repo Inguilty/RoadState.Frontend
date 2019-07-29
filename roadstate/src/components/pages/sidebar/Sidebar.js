@@ -2,7 +2,6 @@ import React from 'react';
 import SideNav, { NavItem } from '@trendmicro/react-sidenav';
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
 import { Spinner } from '../../Spinner';
 import './Sidebar.css';
 
@@ -35,7 +34,7 @@ const defineBadge = (state) => {
 const stateEnum = { Low: 1, Middle: 2, High: 3 };
 
 const Sidebar = ({
-  onChoose, bugReports, isLoading, loadingRoads, roads, calculate,
+  onChoose, bugReports, isLoading, loadingRoads, roads,
 }) => (
   <SideNav
     style={{
@@ -52,9 +51,6 @@ const Sidebar = ({
   >
     <SideNav.Toggle style={{ left: '40%' }} />
     <SideNav.Nav style={{ width: '100%', overflow: 'hidden' }} id="nav">
-      <Button variant="info" onClick={calculate}>
-        Show bug reports
-      </Button>
       {isLoading || !bugReports || loadingRoads || !roads ? (
         <Spinner style={{ marginLeft: '30px', marginTop: '10px' }} />
       ) : (
@@ -82,7 +78,6 @@ Sidebar.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   loadingRoads: PropTypes.bool.isRequired,
   roads: PropTypes.arrayOf.isRequired,
-  calculate: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

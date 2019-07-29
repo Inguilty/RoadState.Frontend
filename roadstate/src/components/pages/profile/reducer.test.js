@@ -2,8 +2,8 @@ import updateUserReducer from './reducer';
 import * as actions from './actions';
 
 const user = {
-  id: 'af6b0b609b7900b89ac395d7c5e4b1a513625bac',
-  token: 'fake-jwt-token',
+  userName: 'testUser',
+  email: 'test@user.com',
   errorMessage: '',
 };
 
@@ -11,8 +11,6 @@ describe('updateUserReducer', () => {
   const initialState = {
     isUpdating: false,
     updated: false,
-    userId: '',
-    token: '',
     errorMessage: '',
   };
   describe('UPDATE_REQUEST', () => {
@@ -30,15 +28,11 @@ describe('updateUserReducer', () => {
     it('should return new user credentials and set to false loading status', async () => {
       const action = {
         type: actions.UPDATE_SUCCESS,
-        id: user.id,
-        token: user.token,
       };
       const expectedState = {
         ...initialState,
         isUpdating: false,
         updated: true,
-        userId: user.id,
-        token: user.token,
       };
 
       const currentState = updateUserReducer(initialState, action);

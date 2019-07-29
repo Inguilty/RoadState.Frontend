@@ -49,21 +49,31 @@ const Sidebar = ({
       onChoose(selected);
     }}
   >
-    <SideNav.Toggle style={{ left: '40%' }} />
+    <SideNav.Toggle style={{ left: '35px' }} />
     <SideNav.Nav style={{ width: '100%', overflow: 'hidden' }} id="nav">
       {isLoading || !bugReports || loadingRoads || !roads ? (
-        <Spinner style={{ marginLeft: '30px', marginTop: '10px' }} />
+        <div style={{ marginLeft: '30px', marginTop: '10px' }}>
+          <Spinner />
+        </div>
       ) : (
         bugReports
           .sort((a, b) => stateEnum[b.state] - stateEnum[a.state])
           .map(bugReport => (
             <NavItem eventKey={bugReport.id}>
-              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <i className="fas fa-map-marked-alt" style={{ fontSize: '36px' }} />
+              <div style={{
+                overflow: 'hidden',
+                lineHeight: '10px',
+                height: '70px',
+                marginTop: '5px',
+                marginLeft: '20px',
+              }}
+              >
+                <i className="fas fa-map-marked-alt" style={{ fontSize: '36px', marginLeft: '4px' }} />
+                <span style={{ marginLeft: '40px' }}>{roads.find(x => x.id === bugReport.id).address}</span>
+                <p> </p>
                 <span className={`badge badge-pill ${defineColor(bugReport.state)}`}>
                   {defineBadge(bugReport.state)}
                 </span>
-                <span>{roads.find(x => x.id === bugReport.id).address}</span>
               </div>
             </NavItem>
           ))

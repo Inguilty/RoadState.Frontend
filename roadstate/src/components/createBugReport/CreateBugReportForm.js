@@ -147,7 +147,6 @@ class CreateBugReportForm extends React.Component {
             <Modal.Body>
               <Form
                 noValidate
-                ref={(form) => { this.inputForm = form; }}
               >
                 <Alert
                   show={isImageAlertShown}

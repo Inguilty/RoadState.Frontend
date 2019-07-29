@@ -17,7 +17,7 @@ export const getBugReportRectangle = (
     latitudemin,
     latitudemax,
   );
-  if (getBugReports === undefined) {
+  if (!getBugReports) {
     dispatch({
       type: BUG_REPORT_RECTANGLE_FAILURE,
     });
@@ -45,15 +45,9 @@ export const loadRoadName = bugReports => async (dispatch) => {
     const { latitude, longitude } = bugReport.location;
     const response = await api.loadCurrentRoad(latitude, longitude);
     let address;
-    if (response === undefined) {
-      dispatch({
-        type: BUG_REPORT_RECTANGLE_FAILURE,
-      });
-      return;
-    }
-    if (response !== undefined) {
+    if (response) {
       if (response.status === 200) {
-        address = response.data.formattedAddress;
+        address = response.data;
       } else {
         address = 'Unknown location';
       }

@@ -26,9 +26,6 @@ class WithBugReport extends Component {
     token: PropTypes.objectOf.isRequired,
     loggedIn: PropTypes.bool.isRequired,
     rateBugReport: PropTypes.func.isRequired,
-<<<<<<< HEAD
-    userId: PropTypes.objectOf.isRequired,
-=======
     authorization: PropTypes.objectOf.isRequired,
     loadUserName: PropTypes.func.isRequired,
     addCommentDispatched: PropTypes.func.isRequired,
@@ -40,7 +37,6 @@ class WithBugReport extends Component {
     if (userId && userId !== '') {
       loadUserName(userId);
     }
->>>>>>> a185c69acf1c82573c581dc947454f8b657be4d1
   };
 
   handleOpen = () => {
@@ -53,12 +49,8 @@ class WithBugReport extends Component {
 
   handleClick = (event) => {
     const id = +event.currentTarget.id;
-<<<<<<< HEAD
-    const { loadBugReport, userId } = this.props;
-=======
     const { loadBugReport, authorization } = this.props;
     const { userId } = authorization;
->>>>>>> a185c69acf1c82573c581dc947454f8b657be4d1
     loadBugReport(id, userId);
     this.handleOpen();
   };
@@ -135,16 +127,7 @@ class WithBugReport extends Component {
   }
 }
 
-<<<<<<< HEAD
-const mapStateToProps = ({ bugReport, authorization }) => ({
-  bugReport,
-  loggedIn: authorization.loggedIn,
-  token: authorization.token,
-  userId: authorization.userId,
-});
-=======
 const mapStateToProps = ({ bugReport, authorization }) => ({ bugReport, authorization });
->>>>>>> a185c69acf1c82573c581dc947454f8b657be4d1
 
 export default connect(
   mapStateToProps,

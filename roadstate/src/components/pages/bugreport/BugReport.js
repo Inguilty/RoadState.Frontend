@@ -26,9 +26,9 @@ export const NoPhotosAvailable = () => (
   </Card>
 );
 
-export const Photo = ({ photo }) => (
-  <Card key={photo}>
-    <Card.Img variant="top" src={photo} alt="Not downloaded yet:(" />
+/* export const Photo = ({ id }) => (
+  <Card key={id}>
+    <Card.Img variant="top" src={getPhotoURL(id)} alt="Not downloaded yet:(" />
   </Card>
 );
 
@@ -40,7 +40,7 @@ export const Photos = ({ photos }) => (
   <Carousel>
     {photos.map(photo => (
       <CarouselItem>
-        <Photo photo={photo} />
+        <Photo id={photo} />
       </CarouselItem>
     ))}
   </Carousel>
@@ -48,7 +48,7 @@ export const Photos = ({ photos }) => (
 
 Photos.propTypes = {
   photos: PropTypes.arrayOf.isRequired,
-};
+}; */
 
 export const Comment = ({
   comment,

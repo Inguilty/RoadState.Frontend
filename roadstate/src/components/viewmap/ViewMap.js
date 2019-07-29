@@ -164,10 +164,10 @@ class ViewMap extends Component {
     } = this.state;
 
     const {
-      bugReports, isLoading, roads, loadingRoads, loggedIn,
+      bugReports, isLoading, roads, loadingRoads,
     } = this.props;
 
-    const setBugReport = todoList.clicked && loggedIn ? (
+    const setBugReport = todoList.clicked ? (
       <Popup position={[todoList.BRLocation.lat, todoList.BRLocation.lng]}>
         <CreateBugReport
           locationLongitude={todoList.BRLocation.lng}
@@ -249,7 +249,6 @@ ViewMap.propTypes = {
   loadRoadNames: PropTypes.func.isRequired,
   loadingRoads: PropTypes.bool.isRequired,
   roads: PropTypes.arrayOf.isRequired,
-  loggedIn: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -257,7 +256,6 @@ const mapStateToProps = state => ({
   bugReports: state.bugReportRectangle.bugReports,
   loadingRoads: state.bugReportRectangle.loadingRoadName,
   roads: state.bugReportRectangle.bugReportsRoadNames,
-  loggedIn: state.authorization.loggedIn,
 });
 
 const mapDispatchToProps = {

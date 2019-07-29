@@ -15,8 +15,8 @@ class Header extends React.Component {
   render() {
     const { userLoggedIn } = this.props;
     return (
-      <nav className="navbar navbar-expand-xl navbar-dark bg-dark" style={{ height: '9vh' }}>
-        <NavLink className="navbar-brand" to="/" exact>
+      <nav className="navbar navbar-expand-xl navbar-dark bg-dark" style={{ height: '50px' }}>
+        <NavLink className="navbar-brand" style={{ marginRight: '-30px' }} to="/" exact>
           RoadState
         </NavLink>
         <button
@@ -31,7 +31,7 @@ class Header extends React.Component {
           <span className="navbar-toggler-icon" />
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
+          <ul className="navbar-nav mr-auto" style={{ marginLeft: '91%' }}>
             {userLoggedIn ? (
               <>
                 <li className="nav-item">

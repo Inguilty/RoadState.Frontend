@@ -12,6 +12,7 @@ const initialState = {
   bugReports: [],
   loadingRoadName: false,
   bugReportsRoadNames: [],
+  routeCoords: [],
 };
 
 const loadBugReportRectangle = (state = initialState, action) => {
@@ -19,7 +20,12 @@ const loadBugReportRectangle = (state = initialState, action) => {
     case BUG_REPORT_RECTANGLE_REQUEST:
       return { ...state, isLoading: true };
     case BUG_REPORT_RECTANGLE_SUCCESS:
-      return { ...state, bugReports: action.bugReports, isLoading: false };
+      return {
+        ...state,
+        bugReports: action.bugReports,
+        isLoading: false,
+        routeCoords: action.routeCoords,
+      };
     case BUG_REPORT_RECTANGLE_FAILURE:
       return { ...state, isLoading: false };
     case LOAD_ROAD_NAME_REQUEST:

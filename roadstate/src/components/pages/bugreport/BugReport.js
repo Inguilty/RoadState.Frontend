@@ -11,9 +11,7 @@ import {
   Container,
   Form,
 } from 'react-bootstrap';
-import {
-  FaThumbsUp, FaThumbsDown, FaCheck, FaStar, FaComment,
-} from 'react-icons/fa';
+import { FaCheck, FaStar, FaComment } from 'react-icons/fa';
 import { Spinner } from '../../Spinner';
 
 export const NoPhotosAvailable = () => (
@@ -50,55 +48,18 @@ Photos.propTypes = {
   photos: PropTypes.arrayOf.isRequired,
 };
 
-export const Comment = ({
-  comment,
-  handleLikeButton,
-  disabledLikeButton,
-  disabledDislikeButton,
-}) => (
+export const Comment = ({ comment }) => (
   <Card key={comment.id}>
     <Card.Header as="h5">{comment.authorName}</Card.Header>
     <Card.Body>
       <Card.Text>{comment.text}</Card.Text>
     </Card.Body>
-    <Card.Footer>
-      <Row>
-        <Col>
-          <Button
-            key={comment.id}
-            variant="outline-success"
-            onClick={handleLikeButton}
-            value="true"
-            id={comment.id}
-            disabled={disabledLikeButton}
-          >
-            <FaThumbsUp />
-          </Button>
-          <span>{comment.likes}</span>
-        </Col>
-        <Col>
-          <Button
-            key={comment.id}
-            variant="outline-danger"
-            onClick={handleLikeButton}
-            value="likeEnum.DISLIKE"
-            id={comment.id}
-            disabled={disabledDislikeButton}
-          >
-            <FaThumbsDown />
-          </Button>
-          <span>{comment.dislikes}</span>
-        </Col>
-      </Row>
-    </Card.Footer>
+    <Card.Footer />
   </Card>
 );
 
 Comment.propTypes = {
   comment: PropTypes.objectOf.isRequired,
-  handleLikeButton: PropTypes.func.isRequired,
-  disabledLikeButton: PropTypes.bool.isRequired,
-  disabledDislikeButton: PropTypes.bool.isRequired,
 };
 
 export const Comments = ({ comments, handleLikeButton }) => (
@@ -368,7 +329,6 @@ const BugReport = ({
         <Modal.Body>
           <h5>
             Created by
-            {' '}
             {bugReport.authorName}
           </h5>
           {loggedIn ? (
@@ -377,7 +337,9 @@ const BugReport = ({
               bugReport={bugReport}
               loadingBugReportRating={isLoadingRating}
             />
-          ) : <div />}
+          ) : (
+            <div />
+          )}
           <br />
           <BodyContainer
             description={bugReport.description}

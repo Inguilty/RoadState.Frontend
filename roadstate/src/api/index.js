@@ -4,25 +4,38 @@ const BASE_URL = '/';
 const GOOGLE_MAPS_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
 const publicKey = 'AIzaSyBeFEC_8v3061wgyMUEO6mJ8EmAXzWedTk';
 
-export const loadCurrentRoad = (latitude, longitude) => {
-  const headers = {
-    Accept: 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'X-Requested-With': 'XMLHttpRequest',
-    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-    'Access-Control-Allow-Headers':
-      'Content-Type, Access-Control-Allow-Headers, authorization , X-Requested-With',
+export const loadCurrentRoad = (latitude, longitude) => axios.get(`${GOOGLE_MAPS_URL}latlng=${latitude},${longitude}&key=${publicKey}`);
+
+export const loadCurrentUser = userId => axios.get(`${BASE_URL}api/users/${userId}`);
+
+export const addComment = (bugReportId, comment) => {
+  const config = {
+    headers: { 'content-type': 'application/json' },
   };
-  return axios.get(`${GOOGLE_MAPS_URL}latlng=${latitude},${longitude}&key=${publicKey}`, headers);
+  return axios.post(
+    `${BASE_URL}api/bugreport/${bugReportId}/comment`,
+    JSON.stringify(comment),
+    config,
+  );
 };
 
 export const getBugReportRectangle = (longMin, longMax, latMin, latMax) => axios.get(
   `${BASE_URL}api/bugreport/?longitudemin=${longMin}&longitudemax=${longMax}&latitudemin=${latMin}&latitudemax=${latMax}`,
 );
 
-export const loadBugReport = id => axios.get(`${BASE_URL}api/bugreport/${id}`);
+export const loadBugReport = (id, userId) => axios.get(`${BASE_URL}api/bugreport/${id}?userId=${userId}`);
 
-export const rateBugReport = (id, rate) => axios.post(`${BASE_URL}api/bugreport/${id}/rate`, rate);
+export const rateBugReport = (id, rate, token) => {
+  const config = {
+    headers: { 'content-type': 'application/json' },
+  };
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  return axios.post(
+    `${BASE_URL}api/bugreport/${id}/rate?`,
+    JSON.stringify({ rate, id, token }),
+    config,
+  );
+};
 
 export const createBugReport = () => new Promise((resolve) => {
   /* const config = {

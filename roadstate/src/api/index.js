@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = '/';
 
-export const loadCurrentRoad = (latitude, longitude) => axios.get(`${BASE_URL}api/bugreport/coords?longitude=${longitude}&latitude=${latitude}`);
+export const loadCurrentRoad = (latitude, longitude) => axios.get(`${BASE_URL}api/geolocation/coords?longitude=${longitude}&latitude=${latitude}`);
 
 export const loadCurrentUser = userId => axios.get(`${BASE_URL}api/users/${userId}`);
 

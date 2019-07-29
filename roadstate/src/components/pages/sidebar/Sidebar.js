@@ -4,6 +4,7 @@ import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { Spinner } from '../../Spinner';
+import './Sidebar.css';
 
 const defineColor = (state) => {
   switch (state) {
@@ -39,8 +40,8 @@ const Sidebar = ({
   <SideNav
     style={{
       backgroundColor: '#343A40',
-      marginTop: '8vh',
-      width: '6rem',
+      marginTop: '5vh',
+      width: '6em',
       overflow: 'hidden',
       height: '101vh',
       zIndex: '0',
@@ -49,13 +50,13 @@ const Sidebar = ({
       onChoose(selected);
     }}
   >
-    <SideNav.Toggle />
+    <SideNav.Toggle style={{ left: '40%' }} />
     <SideNav.Nav style={{ width: '100%', overflow: 'hidden' }} id="nav">
       <Button variant="info" onClick={calculate}>
         Show bug reports
       </Button>
       {isLoading || !bugReports || loadingRoads || !roads ? (
-        <Spinner />
+        <Spinner style={{ marginLeft: '30px', marginTop: '10px' }} />
       ) : (
         bugReports
           .sort((a, b) => stateEnum[b.state] - stateEnum[a.state])

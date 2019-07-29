@@ -10,6 +10,7 @@ import * as rectangleBRactions from './actions';
 import DisplayBg from '../displaybg/DisplayBg';
 import { Spinner } from '../Spinner';
 import Sidebar from '../pages/sidebar/Sidebar';
+import './ViewMap.css';
 
 class ViewMap extends Component {
   state = {

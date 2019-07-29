@@ -93,6 +93,7 @@ class ViewMap extends Component {
   handleClick = (e) => {
     const prevState = this.state;
     const { lat, lng } = e.latlng;
+    //alert(lat + ' ' + lng)
     const latitude = parseFloat(lat.toFixed(5));
     const longitude = parseFloat(lng.toFixed(5));
     const position = {
@@ -314,7 +315,7 @@ class ViewMap extends Component {
           />
           {setBugReport}
 
-          {/* {isLoading || !bugReports || bugReports.length === 0 || !routeCoords ? (
+          {isLoading || !bugReports || bugReports.length === 0 || !routeCoords ? (
             <Row>
               <Col>
                 <Spinner />
@@ -322,12 +323,9 @@ class ViewMap extends Component {
             </Row>
           ) : (
             <DisplayBugReport
-              bugReports={bugReports}
-              roadPoints={routeCoords}
               handler={this.handleBugReportsChange}
-              calculate={this.handleCalculate}
             />
-          )} */}
+          )}
           {setPoints}
           {firstMarker}
           {secondMarker}

@@ -49,7 +49,8 @@ export const loadRoadName = bugReports => async (dispatch) => {
     let address;
     if (response) {
       if (response.status === 200) {
-        address = response.data;
+        address = response.data.results.find(x => x.geometry.location_type === 'GEOMETRIC_CENTER')
+          .formatted_address;
       } else {
         address = 'Unknown location';
       }

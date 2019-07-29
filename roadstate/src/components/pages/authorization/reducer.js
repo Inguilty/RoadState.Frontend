@@ -4,7 +4,7 @@ const initialState = {
   loggedIn: false,
   loggingIn: false,
   loggingOut: false,
-  userId: '',
+  userId: '8723258e-d2c9-4823-bb8d-9b532b24c5cc',
   token: '',
   errorMessage: '',
 };
@@ -44,6 +44,21 @@ const authorizationReducer = (state = initialState, action) => {
       return {
         ...state,
         loggingOut: false,
+        loggedIn: false,
+        userId: '',
+        token: '',
+      };
+
+    case userConstants.CHECK_TOKEN_SUCCESS:
+      return {
+        ...state,
+        loggedIn: true,
+        userId: action.id,
+        token: action.token,
+      };
+    case userConstants.CHECK_TOKEN_FAILURE:
+      return {
+        ...state,
         loggedIn: false,
         userId: '',
         token: '',

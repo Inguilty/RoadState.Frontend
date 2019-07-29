@@ -43,6 +43,12 @@ class SignUp extends React.Component {
     acceptedTerms: Yup.bool(),
   });
 
+  componentDidMount() {
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 27) this.closeModal();
+    });
+  }
+
   handleAlertDismiss = () => {
     const { removeError } = this.props;
     removeError();
@@ -50,7 +56,7 @@ class SignUp extends React.Component {
 
   closeModal = () => {
     const { history } = this.props;
-    history.goBack();
+    history.push('/');
   };
 
   resetUserRegistered = () => {
@@ -109,7 +115,11 @@ class SignUp extends React.Component {
     const { isRegistering, registered, errorMessage } = this.props;
     const { isImageValid, imageErrorType, imagePreviewUrl } = this.state;
     const imageAlertText = errorMessages[imageErrorType];
-    const userImage = imagePreviewUrl && <Image id="userAvatar" src={imagePreviewUrl} />;
+    const userImage = imagePreviewUrl ? (
+      <Image id="userAvatar" src={imagePreviewUrl} />
+    ) : (
+      <Image id="userNoAvatar" />
+    );
     return (
       <Formik
         initialValues={{
@@ -182,7 +192,8 @@ class SignUp extends React.Component {
                     type="text"
                     placeholder="Username*"
                     className={`form-control${
-                      errors.username && touched.username ? ' is-invalid' : ''}`}
+                      errors.username && touched.username ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage name="username" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -203,7 +214,8 @@ class SignUp extends React.Component {
                     type="password"
                     placeholder="Password*"
                     className={`form-control${
-                      errors.password && touched.password ? ' is-invalid' : ''}`}
+                      errors.password && touched.password ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -214,7 +226,8 @@ class SignUp extends React.Component {
                     type="password"
                     placeholder="Confirm password*"
                     className={`form-control${
-                      errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''}`}
+                      errors.confirmPasword && touched.confirmPasword ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage
                     name="confirmPasword"
@@ -229,7 +242,8 @@ class SignUp extends React.Component {
                       name="acceptedTerms"
                       type="checkbox"
                       className={`form-checkbox${
-                        errors.acceptedTerms && touched.acceptedTerms ? ' is-invalid' : ''}`}
+                        errors.acceptedTerms && touched.acceptedTerms ? ' is-invalid' : ''
+                      }`}
                     />
                   </Col>
                   <Col>

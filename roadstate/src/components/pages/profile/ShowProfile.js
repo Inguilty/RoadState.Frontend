@@ -43,9 +43,17 @@ class ShowProfile extends React.Component {
     confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
   });
 
+  componentDidMount() {
+    const { getUserCredentials, userId } = this.props;
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 27) this.closeModal();
+    });
+    getUserCredentials(userId);
+  }
+
   closeModal = () => {
     const { history } = this.props;
-    history.goBack();
+    history.push('/');
   };
 
   resetUserUpdated = () => {
@@ -63,14 +71,14 @@ class ShowProfile extends React.Component {
 
   handleSubmit = (e) => {
     const { image, imagePreviewUrl } = this.state;
-    const { update, userId, token } = this.props;
+    const { update, userId } = this.props;
     const updatedUser = {
       avatar: image,
       avatarUrl: imagePreviewUrl,
       password: e.newPassword,
     };
     if ((updatedUser.password && e.newPassword && e.confirmNewPassword) || image) {
-      update(userId, updatedUser.avatarUrl, e.password, e.confirmNewPassword, token);
+      update(userId, updatedUser.avatarUrl, e.password, e.confirmNewPassword);
     }
   };
 
@@ -108,10 +116,14 @@ class ShowProfile extends React.Component {
   render() {
     const { isImageValid, imageErrorType, imagePreviewUrl } = this.state;
     const {
-      userId, isUpdating, updated, errorMessage,
+      isUpdating, updated, errorMessage, email, userName,
     } = this.props;
     const imageAlertText = errorMessages[imageErrorType];
-    const userImage = imagePreviewUrl && <Image id="userAvatar" src={imagePreviewUrl} />;
+    const userImage = imagePreviewUrl ? (
+      <Image id="userAvatar" src={imagePreviewUrl} />
+    ) : (
+      <Image id="userNoAvatar" />
+    );
     return (
       <Formik
         initialValues={{
@@ -171,10 +183,10 @@ class ShowProfile extends React.Component {
                   {imageAlertText}
                 </Alert>
                 <FormGroup className="Form-group">
-                  <FormControl name="username" type="text" placeholder={userId} readOnly />
+                  <FormControl name="username" type="text" placeholder={userName} readOnly />
                 </FormGroup>
                 <FormGroup className="Form-group">
-                  <FormControl name="email" type="text" readOnly />
+                  <FormControl name="email" type="text" readOnly placeholder={email} />
                 </FormGroup>
                 <Alert
                   show={errorMessage}
@@ -193,7 +205,8 @@ class ShowProfile extends React.Component {
                     type="password"
                     placeholder="Old password"
                     className={`form-control${
-                      errors.password && touched.password ? ' is-invalid' : ''}`}
+                      errors.password && touched.password ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -204,7 +217,8 @@ class ShowProfile extends React.Component {
                     type="password"
                     placeholder="New password"
                     className={`form-control${
-                      errors.newPassword && touched.newPassword ? ' is-invalid' : ''}`}
+                      errors.newPassword && touched.newPassword ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage name="newPassword" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -214,7 +228,8 @@ class ShowProfile extends React.Component {
                     type="password"
                     placeholder="Confirm new password"
                     className={`form-control${
-                      errors.confirmNewPassword && touched.confirmNewPassword ? ' is-invalid' : ''}`}
+                      errors.confirmNewPassword && touched.confirmNewPassword ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage
                     name="confirmNewPassword"
@@ -248,17 +263,20 @@ ShowProfile.propTypes = {
   isUpdating: PropTypes.bool.isRequired,
   updated: PropTypes.bool.isRequired,
   completeUpdating: PropTypes.func.isRequired,
-  token: PropTypes.string.isRequired,
   errorMessage: PropTypes.string.isRequired,
   removeError: PropTypes.func.isRequired,
+  getUserCredentials: PropTypes.func.isRequired,
+  email: PropTypes.objectOf.isRequired,
+  userName: PropTypes.objectOf.isRequired,
 };
 
 const mapStateToProps = state => ({
   userId: state.authorization.userId,
   isUpdating: state.updateUser.isUpdating,
   updated: state.updateUser.updated,
-  token: state.authorization.token,
   errorMessage: state.updateUser.errorMessage,
+  email: state.updateUser.email,
+  userName: state.updateUser.userName,
 });
 
 export default connect(
@@ -267,5 +285,6 @@ export default connect(
     update: updateUser.update,
     completeUpdating: updateUser.completeUpdating,
     removeError: updateUser.removeError,
+    getUserCredentials: updateUser.getUserCredentials,
   },
 )(ShowProfile);

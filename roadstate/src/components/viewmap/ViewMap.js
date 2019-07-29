@@ -10,9 +10,9 @@ import { Row, Col, Button } from 'react-bootstrap';
 import Route from '../route/Route';
 import CreateBugReport from '../createBugReport/CreateBugReport';
 import * as rectangleBRactions from './actions';
-import DisplayBg from '../displaybg/DisplayBg';
 import { Spinner } from '../Spinner';
 import Sidebar from '../pages/sidebar/Sidebar';
+import DisplayBugReport from '../displayBugReport/DisplayBugReport';
 
 const brIcon = L.icon({
   iconUrl:
@@ -185,22 +185,6 @@ class ViewMap extends Component {
     }
   };
 
-  getLats = arr => arr.map(d => d.lat);
-
-  getLngs = arr => arr.map(d => d.lng);
-
-  calculateRectanglePoints = () => {
-    const { routeCoords } = this.state;
-    const { getBugReportRectangle } = this.props;
-    if (routeCoords.length !== 0) {
-      const minLat = Math.min(...this.getLats(routeCoords));
-      const minLng = Math.min(...this.getLngs(routeCoords));
-      const maxLat = Math.max(...this.getLats(routeCoords));
-      const maxLng = Math.max(...this.getLngs(routeCoords));
-      getBugReportRectangle(minLng, maxLng, minLat, maxLat);
-    }
-  };
-
   handleZoomChange = (selected) => {
     const { bugReports } = this.props;
     const selectedLocation = {
@@ -337,7 +321,7 @@ class ViewMap extends Component {
               </Col>
             </Row>
           ) : (
-            <DisplayBg
+            <DisplayBugReport
               bugReports={bugReports}
               roadPoints={routeCoords}
               handler={this.handleBugReportsChange}
@@ -374,7 +358,6 @@ class ViewMap extends Component {
 ViewMap.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   bugReports: PropTypes.objectOf.isRequired,
-  getBugReportRectangle: PropTypes.func.isRequired,
   loadRoadNames: PropTypes.func.isRequired,
   loadingRoads: PropTypes.bool.isRequired,
   roads: PropTypes.arrayOf.isRequired,

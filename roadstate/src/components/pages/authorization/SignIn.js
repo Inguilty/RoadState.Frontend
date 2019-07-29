@@ -19,15 +19,20 @@ class SignIn extends React.Component {
     password: Yup.string().required('Password is required'),
   });
 
+  componentDidMount() {
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 27) this.closeModal();
+    });
+  }
+
   handleAlertDismiss = () => {
     const { removeError } = this.props;
     removeError();
   };
 
-
   closeModal = () => {
     const { history } = this.props;
-    history.goBack();
+    history.push('/');
   };
 
   handleSubmit = (e) => {
@@ -79,7 +84,8 @@ class SignIn extends React.Component {
                     type="text"
                     placeholder="Username"
                     className={`form-control${
-                      errors.username && touched.username ? ' is-invalid' : ''}`}
+                      errors.username && touched.username ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage name="username" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -90,7 +96,8 @@ class SignIn extends React.Component {
                     type="password"
                     placeholder="Password"
                     className={`form-control${
-                      errors.password && touched.password ? ' is-invalid' : ''}`}
+                      errors.password && touched.password ? ' is-invalid' : ''
+                    }`}
                   />
                   <ErrorMessage name="password" component="div" className="invalid-feedback" />
                 </FormGroup>
@@ -104,7 +111,7 @@ class SignIn extends React.Component {
                 <FormGroup className="Form-footer">
                   <NavLink href="#">Forgot Your password?</NavLink>
                   {' '}
-                  Have no account?
+Have no account?
                   {' '}
                   <NavLink to="/signUp">Sign up</NavLink>
                 </FormGroup>

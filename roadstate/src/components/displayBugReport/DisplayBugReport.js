@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { connect } from 'react-redux';
 import { Marker, Popup } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import bugReport from './bugReport.png';
 import WithBugReport from '../pages/bugreport/WithBugReport';
 import { Spinner } from '../Spinner';
 
-class DisplayBg extends Component {
+class DisplayBugReport extends Component {
   state = {
     roadBugReports: [],
   };
@@ -21,20 +21,26 @@ class DisplayBg extends Component {
 
   static propTypes = {
     bugReports: PropTypes.arrayOf.isRequired,
-    roadPoints: PropTypes.arrayOf.isRequired,
+    routeCoords: PropTypes.arrayOf.isRequired,
     handler: PropTypes.func.isRequired,
-    calculate: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired,
   };
 
   componentDidMount() {
-    const { bugReports, roadPoints } = this.props;
-    this.isOnRoadFull(bugReports, roadPoints);
+    const { bugReports, routeCoords, isLoading } = this.props;
+    if (!isLoading) {
+      this.isOnRoadFull(bugReports, routeCoords);
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { roadPoints, calculate } = this.props;
-    if (prevProps.roadPoints !== roadPoints && prevProps.roadPoints.length !== roadPoints.length) {
-      calculate();
+    const { bugReports, routeCoords, isLoading } = this.props;
+    if (
+      !isLoading
+      && prevProps.bugReports !== bugReports
+      && prevProps.routeCoords !== routeCoords
+    ) {
+      this.isOnRoadFull(bugReports, routeCoords);
     }
   }
 
@@ -105,16 +111,14 @@ class DisplayBg extends Component {
   };
 
   render() {
-    const { roadPoints } = this.props;
-    return (
-      <div>
-        {this.renderMarkers()}
-        {roadPoints.map(x => (
-          <div style={{ display: 'none' }}>{`${x.lng} ${x.lat}`}</div>
-        ))}
-      </div>
-    );
+    return <div>{this.renderMarkers()}</div>;
   }
 }
 
-export default DisplayBg;
+const mapStateToProps = state => ({
+  bugReports: state.bugReportRectangle.bugReports,
+  routeCoords: state.bugReportRectangle.routeCoords,
+  isLoading: state.bugReportRectangle.isLoading,
+});
+
+export default connect(mapStateToProps)(DisplayBugReport);

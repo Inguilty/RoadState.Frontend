@@ -40,8 +40,8 @@ const Sidebar = ({
       backgroundColor: '#343A40',
       marginTop: '8vh',
       width: '6rem',
-      overflow: 'hidden',
       height: '101vh',
+      overflow: 'hidden',
       zIndex: '0',
     }}
     onSelect={(selected) => {

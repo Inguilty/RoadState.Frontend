@@ -56,7 +56,8 @@ export const login = (userName, password) => axios.post(`${BASE_URL}api/users/au
 
 export const register = user => axios.post(`${BASE_URL}api/users/register`, user).catch(error => error);
 
-export const update = (id, avatarUrl, oldPassword, newPassword, token) => {
+export const update = (id, avatarUrl, oldPassword, newPassword) => {
+  const token = localStorage.getItem('token');
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
   return axios
     .put(`${BASE_URL}api/users/${id}/update`, {
@@ -66,4 +67,10 @@ export const update = (id, avatarUrl, oldPassword, newPassword, token) => {
       id,
     })
     .catch(error => error);
+};
+
+export const getUserCredentials = (userId) => {
+  const token = localStorage.getItem('token');
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  return axios.get(`${BASE_URL}api/users/getUserCredentials`, userId).catch(error => error);
 };

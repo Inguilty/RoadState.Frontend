@@ -15,6 +15,7 @@ import {
   FaThumbsUp, FaThumbsDown, FaCheck, FaStar, FaComment,
 } from 'react-icons/fa';
 import { Spinner } from '../../Spinner';
+import { getPhotoURL } from '../../../api';
 
 export const NoPhotosAvailable = () => (
   <Card key="emptyImage" style={{ width: '10rem' }}>
@@ -26,14 +27,14 @@ export const NoPhotosAvailable = () => (
   </Card>
 );
 
-/* export const Photo = ({ id }) => (
+export const Photo = ({ id }) => (
   <Card key={id}>
     <Card.Img variant="top" src={getPhotoURL(id)} alt="Not downloaded yet:(" />
   </Card>
 );
 
 Photo.propTypes = {
-  photo: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export const Photos = ({ photos }) => (
@@ -48,7 +49,7 @@ export const Photos = ({ photos }) => (
 
 Photos.propTypes = {
   photos: PropTypes.arrayOf.isRequired,
-}; */
+};
 
 export const Comment = ({
   comment,

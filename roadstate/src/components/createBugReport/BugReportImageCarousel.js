@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { PropTypes } from 'prop-types';
 import {
   Card, CarouselItem, Carousel,
 } from 'react-bootstrap';
 
-const photoLinks = [];
+export default class BugReportImageCarousel extends React.Component {
+  state = { photoLinks: [] }
 
-const BugReportImageCarousel = (photos) => {
-  useEffect(() => {
+  handleImageConvert = () => {
+    const { photos } = this.props;
+    const { photoLinks } = this.state;
     while (photoLinks.length !== 0) {
       URL.revokeObjectURL(photoLinks[0]);
       photoLinks.splice(0, 1);
@@ -14,24 +17,38 @@ const BugReportImageCarousel = (photos) => {
     photos.map(photo => (
       photoLinks.push(URL.createObjectURL(photo))
     ));
-  }, [photos]);
+    this.setState(photoLinks);
+  }
 
-  return (
-    <Carousel>
-      {photoLinks.map(photoLink => (
-        <CarouselItem>
-          <Card>
-            <Card.Img
-              align="center"
-              variant="top"
-              src={photoLink}
-              alt="Wait a moment!"
-            />
-          </Card>
-        </CarouselItem>
-      ))}
-    </Carousel>
-  );
+  componentDidUpdate = (nextProps) => {
+    const { photos } = this.props;
+    if (nextProps.photos !== photos) {
+      this.handleImageConvert();
+    }
+  }
+
+  render() {
+    const { photoLinks } = this.state;
+    return (
+      <Carousel>
+        {photoLinks.map(photoLink => (
+          <CarouselItem>
+            <Card>
+              <Card.Img
+                align="center"
+                variant="top"
+                src={photoLink}
+                alt="Wait a moment!"
+              />
+            </Card>
+          </CarouselItem>
+        ))
+        }
+      </Carousel>
+    );
+  }
+}
+
+BugReportImageCarousel.propTypes = {
+  photos: PropTypes.objectOf.isRequired,
 };
-
-export default BugReportImageCarousel;

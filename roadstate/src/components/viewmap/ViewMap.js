@@ -12,6 +12,7 @@ import CreateBugReport from '../createBugReport/CreateBugReport';
 import * as rectangleBRactions from './actions';
 import { Spinner } from '../Spinner';
 import Sidebar from '../pages/sidebar/Sidebar';
+import './ViewMap.css';
 import DisplayBugReport from '../displayBugReport/DisplayBugReport';
 
 const brIcon = L.icon({

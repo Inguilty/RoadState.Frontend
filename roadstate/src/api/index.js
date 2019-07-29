@@ -4,6 +4,18 @@ const BASE_URL = '/';
 const GOOGLE_MAPS_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
 const publicKey = 'AIzaSyBeFEC_8v3061wgyMUEO6mJ8EmAXzWedTk';
 
+function getAccessToken() {
+  return localStorage.getItem('token');
+}
+
+axios.interceptors.request.use(
+  (request) => {
+    request.headers.Authorization = `Bearer ${getAccessToken()}`;
+    return request;
+  },
+  error => Promise.reject(error),
+);
+
 export const loadCurrentRoad = (latitude, longitude) => axios.get(`${GOOGLE_MAPS_URL}latlng=${latitude},${longitude}&key=${publicKey}`);
 
 export const loadCurrentUser = userId => axios.get(`${BASE_URL}api/users/${userId}`);
@@ -49,30 +61,19 @@ export const createBugReport = () => new Promise((resolve) => {
   }, 2000);
 });
 
-export const checkToken = (token) => {
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-  return axios.get(`${BASE_URL}api/users/checkToken`).catch(error => error);
-};
+export const checkToken = () => axios.get(`${BASE_URL}api/users/checkToken`).catch(error => error);
 
 export const login = (userName, password) => axios.post(`${BASE_URL}api/users/authenticate`, { userName, password }).catch(error => error);
 
 export const register = user => axios.post(`${BASE_URL}api/users/register`, user).catch(error => error);
 
-export const update = (id, avatarUrl, oldPassword, newPassword) => {
-  const token = localStorage.getItem('token');
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-  return axios
-    .put(`${BASE_URL}api/users/${id}/update`, {
-      avatarUrl,
-      password: oldPassword,
-      newPassword,
-      id,
-    })
-    .catch(error => error);
-};
+export const update = (id, avatarUrl, oldPassword, newPassword) => axios
+  .put(`${BASE_URL}api/users/${id}/update`, {
+    avatarUrl,
+    password: oldPassword,
+    newPassword,
+    id,
+  })
+  .catch(error => error);
 
-export const getUserCredentials = (userId) => {
-  const token = localStorage.getItem('token');
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-  return axios.get(`${BASE_URL}api/users/getUserCredentials`, userId).catch(error => error);
-};
+export const getUserCredentials = userId => axios.get(`${BASE_URL}api/users/getUserCredentials`, userId).catch(error => error);

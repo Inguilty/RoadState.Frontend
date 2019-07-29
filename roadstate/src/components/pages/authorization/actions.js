@@ -23,9 +23,9 @@ export const closeErrorAlert = () => (dispatch) => {
 export const CHECK_TOKEN_REQUEST = 'CHECK_TOKEN_REQUEST';
 export const CHECK_TOKEN_SUCCESS = 'CHECK_TOKEN_SUCCESS';
 export const CHECK_TOKEN_FAILURE = 'CHECK_TOKEN_FAILURE';
-export const checkToken = token => async (dispatch) => {
+export const checkToken = () => async (dispatch) => {
   dispatch({ type: CHECK_TOKEN_REQUEST });
-  const result = await userService.checkToken(token);
+  const result = await userService.checkToken();
   if (result.status === 200 && result !== undefined) {
     localStorage.setItem('token', result.data.token);
     dispatch({ type: CHECK_TOKEN_SUCCESS, token: result.data.token, id: result.data.id });

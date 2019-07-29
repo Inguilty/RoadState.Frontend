@@ -15,11 +15,10 @@ import ViewMap from './components/viewmap/ViewMap';
 
 class App extends React.Component {
   componentDidMount() {
-    const token = localStorage.getItem('token');
     const { checkToken } = this.props;
     if (window.performance) {
       if (performance.navigation.type === 1) {
-        checkToken(token);
+        checkToken();
       }
     }
   }
@@ -45,9 +44,7 @@ App.propTypes = {
   checkToken: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  token: state.authorization.token,
-});
+const mapStateToProps = () => ({});
 
 export default connect(
   mapStateToProps,

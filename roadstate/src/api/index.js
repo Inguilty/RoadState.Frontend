@@ -1,10 +1,8 @@
 import axios from 'axios';
 
 const BASE_URL = '/';
-const GOOGLE_MAPS_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
-const publicKey = 'AIzaSyBeFEC_8v3061wgyMUEO6mJ8EmAXzWedTk';
 
-export const loadCurrentRoad = (latitude, longitude) => axios.get(`${GOOGLE_MAPS_URL}latlng=${latitude},${longitude}&key=${publicKey}`);
+export const loadCurrentRoad = (latitude, longitude) => axios.get(`${BASE_URL}api/geolocation/coords?longitude=${longitude}&latitude=${latitude}`);
 
 export const loadCurrentUser = userId => axios.get(`${BASE_URL}api/users/${userId}`);
 

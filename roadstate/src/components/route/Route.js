@@ -1,10 +1,23 @@
 import { MapLayer, withLeaflet } from 'react-leaflet';
 import L from 'leaflet';
+import { connect } from 'react-redux';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/examples/Control.Geocoder';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import * as bugReportRectangleActions from '../viewmap/actions';
 
 class Route extends MapLayer {
+  calculateRectanglePoints = (routeCoords) => {
+    const { getBugReportRectangle } = this.props;
+    if (routeCoords.length !== 0) {
+      const minLat = Math.min(...routeCoords.map(x => x.lat));
+      const minLng = Math.min(...routeCoords.map(x => x.lng));
+      const maxLat = Math.max(...routeCoords.map(x => x.lat));
+      const maxLng = Math.max(...routeCoords.map(x => x.lng));
+      getBugReportRectangle(minLng, maxLng, minLat, maxLat, routeCoords);
+    }
+  };
+
   createLeafletElement() {
     const { from, to, map } = this.props;
 
@@ -42,7 +55,7 @@ class Route extends MapLayer {
       'routeselected',
       (routes) => {
         const routeCoordsNew = routes.route.coordinates;
-        this.props.setState({ routeCoords: routeCoordsNew });
+        this.calculateRectanglePoints(routeCoordsNew);
       },
       this,
     );
@@ -52,4 +65,7 @@ class Route extends MapLayer {
   }
 }
 
-export default withLeaflet(Route);
+export default connect(
+  null,
+  { getBugReportRectangle: bugReportRectangleActions.getBugReportRectangle },
+)(withLeaflet(Route));

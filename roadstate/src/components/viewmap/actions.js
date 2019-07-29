@@ -9,6 +9,7 @@ export const getBugReportRectangle = (
   longitudemax,
   latitudemin,
   latitudemax,
+  routeCoords,
 ) => async (dispatch) => {
   dispatch({ type: BUG_REPORT_RECTANGLE_REQUEST });
   const getBugReports = await api.getBugReportRectangle(
@@ -27,6 +28,7 @@ export const getBugReportRectangle = (
     dispatch({
       type: BUG_REPORT_RECTANGLE_SUCCESS,
       bugReports: getBugReports.data,
+      routeCoords,
     });
   } else {
     dispatch({

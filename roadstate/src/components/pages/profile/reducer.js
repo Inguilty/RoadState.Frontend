@@ -3,8 +3,8 @@ import * as userConstants from './actions';
 const initialState = {
   isUpdating: false,
   updated: false,
-  userId: '',
-  token: '',
+  userName: '',
+  email: '',
   errorMessage: '',
 };
 
@@ -20,8 +20,6 @@ const updateUserReducer = (state = initialState, action) => {
         ...state,
         isUpdating: false,
         updated: true,
-        userId: action.id,
-        token: action.token,
       };
     case userConstants.UPDATE_COMPLETED:
       return { ...state, updated: false };
@@ -36,6 +34,14 @@ const updateUserReducer = (state = initialState, action) => {
         ...state,
         errorMessage: action.errorMessage,
       };
+    case userConstants.GET_USER_CREDENTIALS_SUCCESS:
+      return {
+        ...state,
+        userName: action.userName,
+        email: action.email,
+      };
+    case userConstants.GET_USER_CREDENTIALS_FAILURE:
+      return { ...state, errorMessage: action.errorMessage };
     default:
       return state;
   }

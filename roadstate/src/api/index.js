@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const BASE_URL = '/';
 
+export const getPhotoURL = id => `${BASE_URL}api/photo/${id}`;
+
 export const loadCurrentRoad = (latitude, longitude) => axios.get(`${BASE_URL}api/geolocation/coords?longitude=${longitude}&latitude=${latitude}`);
 
 export const loadCurrentUser = userId => axios.get(`${BASE_URL}api/users/${userId}`);
@@ -35,17 +37,29 @@ export const rateBugReport = (id, rate, token) => {
   );
 };
 
-export const createBugReport = () => new Promise((resolve) => {
-  /* const config = {
-    headers: { 'content-type': 'multipart/form-data' },
+export const createBugReport = (createBR) => {
+  const data = {
+    ProblemLevel: createBR.problemState,
+    Description: createBR.description,
+    Longitude: createBR.longitude,
+    Latitude: createBR.latitude,
+    userId: createBR.userId,
   };
-  return axios.post(`${BASE_URL}/createBugReport`, createBR.photosData, config); */
-  setTimeout(() => {
-    resolve({
-      status: 200,
-    });
-  }, 2000);
-});
+  const json = JSON.stringify(data);
+  const blob = new Blob([json], {
+    type: 'application/json',
+  });
+  const fd = new FormData();
+  fd.append('Data', blob);
+  for (let i = 0; i < createBR.photos.length; i += 1) {
+    const file = createBR.photos[i];
+    fd.append(`Photos[${i}]`, file, file.name);
+  }
+  const config = {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  };
+  return axios.post(`${BASE_URL}api/bugreport`, fd, config);
+};
 
 export const checkToken = (token) => {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;

@@ -13,6 +13,7 @@ import {
 } from 'react-bootstrap';
 import { FaCheck, FaStar, FaComment } from 'react-icons/fa';
 import { Spinner } from '../../Spinner';
+import { getPhotoURL } from '../../../api';
 
 export const NoPhotosAvailable = () => (
   <Card key="emptyImage" style={{ width: '10rem' }}>
@@ -24,21 +25,21 @@ export const NoPhotosAvailable = () => (
   </Card>
 );
 
-export const Photo = ({ photo }) => (
-  <Card key={photo}>
-    <Card.Img variant="top" src={photo} alt="Not downloaded yet:(" />
+export const Photo = ({ id }) => (
+  <Card key={id}>
+    <Card.Img variant="top" src={getPhotoURL(id)} alt="Not downloaded yet:(" />
   </Card>
 );
 
 Photo.propTypes = {
-  photo: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export const Photos = ({ photos }) => (
   <Carousel>
     {photos.map(photo => (
       <CarouselItem>
-        <Photo photo={photo} />
+        <Photo id={photo} />
       </CarouselItem>
     ))}
   </Carousel>

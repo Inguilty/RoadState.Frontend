@@ -18,6 +18,12 @@ export const getBugReportRectangle = (
     latitudemin,
     latitudemax,
   );
+  if (!getBugReports) {
+    dispatch({
+      type: BUG_REPORT_RECTANGLE_FAILURE,
+    });
+    return;
+  }
   if (getBugReports.status === 200) {
     dispatch({
       type: BUG_REPORT_RECTANGLE_SUCCESS,
@@ -41,12 +47,17 @@ export const loadRoadName = bugReports => async (dispatch) => {
     const { latitude, longitude } = bugReport.location;
     const response = await api.loadCurrentRoad(latitude, longitude);
     let address;
-    if (response.status === 200) {
-      address = response.data.results.find(x => x.geometry.location_type === 'GEOMETRIC_CENTER')
-        .formatted_address;
+    if (response) {
+      if (response.status === 200) {
+        address = response.data.results.find(x => x.geometry.location_type === 'GEOMETRIC_CENTER')
+          .formatted_address;
+      } else {
+        address = 'Unknown location';
+      }
     } else {
-      address = 'Unknown location';
+      address = 'Check your connection';
     }
+
     dispatch({ type: LOAD_ROAD_NAME_PROGRESS, roadName: { id: bugReport.id, address } });
   }
   dispatch({ type: LOAD_ROAD_NAME_RECEIVED });

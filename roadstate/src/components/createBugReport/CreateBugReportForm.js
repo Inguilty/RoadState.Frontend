@@ -2,15 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import {
-  Modal, Button, Col, Alert, FormGroup, Row, FormControl,
+  Modal, Button, Col, Alert, FormGroup, Row, FormControl, FormLabel,
 
 } from 'react-bootstrap';
 import {
-  Formik, Field, Form, ErrorMessage,
+  Formik, Form, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
 import * as createBRactions from './actions';
 import { Spinner } from '../Spinner';
+import BugReportImageCarousel from './BugReportImageCarousel';
+import * as rectangleBRactions from '../viewmap/actions';
 
 export const MAX_BUG_REPORT_IMAGE_SIZE = 16 * 1024 * 1024;
 export const MAX_BUG_REPORT_IMAGES_NUMBER = 5;
@@ -25,25 +27,43 @@ const errorImageMessages = {
 };
 
 class CreateBugReportForm extends React.Component {
-  state = {
-    isImageValid: false, isImageAlertShown: false, imageErrorType: '', photos: {},
+  initialState = {
+    isImageValid: false, isImageAlertShown: false, imageErrorType: '', photos: [], problemState: 'Low',
   };
 
+  state = this.initialState;
+
   initialState = {
-    problemLevel: '',
     description: '',
   };
 
   schema = Yup.object().shape({
-    problemLevel: Yup.number()
-      .min(0, 'Problem level must be in between 0 and 10')
-      .integer('Problem level must be an integer in between 0 and 10')
-      .max(10, 'Problem level must be in between 0 and 10')
-      .required('Description is required'),
     description: Yup.string()
       .min(5, 'Description is too small!')
       .required('Description is required'),
   });
+
+  calculateRectanglePoints = (routeCoords) => {
+    const { getBugReportRectangle } = this.props;
+    if (routeCoords.length !== 0) {
+      const minLat = Math.min(...routeCoords.map(x => x.lat));
+      const minLng = Math.min(...routeCoords.map(x => x.lng));
+      const maxLat = Math.max(...routeCoords.map(x => x.lat));
+      const maxLng = Math.max(...routeCoords.map(x => x.lng));
+      getBugReportRectangle(minLng, maxLng, minLat, maxLat, routeCoords);
+    }
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    const { isLoading, isFailed, routeCoordinates } = this.props;
+    if (nextProps.isLoading !== isLoading || nextProps.isFailed !== isFailed) {
+      if (nextProps.isLoading === false && nextProps.isFailed === false) {
+        this.calculateRectanglePoints(routeCoordinates);
+        this.setState(this.initialState);
+        this.handleClose();
+      }
+    }
+  }
 
   handleClose = () => {
     const { onClose } = this.props;
@@ -51,27 +71,40 @@ class CreateBugReportForm extends React.Component {
   }
 
   handleSubmit = (e) => {
-    const { isImageValid, photos } = this.state;
-    const { problemLevel, description } = e;
-    const { createBugReport, locationLongitude, locationLatitude } = this.props;
-
-    if (isImageValid === true) {
-      const photosData = new FormData();
-      try {
-        for (let i = 0; i < photos.length; i += 1) {
-          const file = photos.item(i);
-          photosData.append(`photos[${i}]`, file, file.name);
-        }
-      } catch {
-        this.inputPhotos.value = null;
-        this.setState({ imageErrorType: 'noImage', isImageValid: false });
-        this.handleImageAlertShow();
+    const { isImageValid, photos, problemState } = this.state;
+    const { description } = e;
+    const {
+      createBugReport, locationLongitude, locationLatitude, userId,
+    } = this.props;
+    if (isImageValid === true && userId !== undefined && userId !== '') {
+      if (userId !== undefined && userId !== '') {
+        createBugReport({
+          problemState,
+          description,
+          photos,
+          longitude: locationLongitude,
+          latitude: locationLatitude,
+          userId,
+        });
+      } else {
+        createBugReport({
+          problemState,
+          description,
+          photos,
+          longitude: locationLongitude,
+          latitude: locationLatitude,
+          userId: '8723258e-d2c9-4823-bb8d-9b532b24c5cc',
+        });
       }
-      createBugReport({
-        problemLevel, description, photosData, locationLongitude, locationLatitude,
-      });
+    } else {
+      this.setState({ imageErrorType: 'noImage', isImageValid: false });
+      this.handleImageAlertShow();
     }
   };
+
+  handleProblemChange = (event) => {
+    this.setState({ problemState: event.target.value });
+  }
 
   handleFileChanging = (event) => {
     if (event.target.files.length > MAX_BUG_REPORT_IMAGES_NUMBER) {
@@ -101,7 +134,7 @@ class CreateBugReportForm extends React.Component {
       this.handleImageAlertShow();
       return true;
     }
-    this.setState({ isImageValid: true, photos: event.target.files });
+    this.setState({ isImageValid: true, photos: [...event.target.files] });
     return true;
   };
 
@@ -113,6 +146,8 @@ class CreateBugReportForm extends React.Component {
     const {
       isImageAlertShown,
       imageErrorType,
+      isImageValid,
+      photos,
     } = this.state;
 
     const {
@@ -120,14 +155,15 @@ class CreateBugReportForm extends React.Component {
       isLoading,
     } = this.props;
     const alertText = errorImageMessages[imageErrorType];
-
     return (
       <Formik
         initialValues={this.initialState}
         validationSchema={this.schema}
         onSubmit={this.handleSubmit}
       >
-        {({ errors, touched }) => (
+        {({
+          values, handleChange, errors, touched,
+        }) => (
           <Modal backdrop="static" keyboard="false" show={isActive} onHide={this.handleClose}>
             <Modal.Header>
               <Modal.Title>Create Bug Report</Modal.Title>
@@ -147,31 +183,23 @@ class CreateBugReportForm extends React.Component {
                   {alertText}
                 </Alert>
                 <FormGroup>
-                  <Field
-                    required
-                    name="problemLevel"
-                    type="number"
-                    step="1"
-                    min="0"
-                    max="10"
-                    placeholder="Problem level"
-                    className={
-                      `form-control ${(errors.problemLevel && touched.problemLevel ? ' is-invalid' : '')}`
-                    }
-                  />
-                  <ErrorMessage
-                    name="problemLevel"
-                    component="div"
-                    className="invalid-feedback"
-                  />
+                  <FormLabel>Current road state:</FormLabel>
+                  <FormControl as="select" onChange={this.handleProblemChange}>
+                    <option>Low</option>
+                    <option>Middle</option>
+                    <option>High</option>
+                  </FormControl>
                 </FormGroup>
                 <FormGroup>
-                  <Field
+                  <FormControl
                     required
                     name="description"
                     type="text"
                     as="textarea"
                     placeholder="Description"
+                    value={values.username}
+                    onChange={handleChange}
+                    isInvalid={!!errors.description}
                     className={
                       `form-control ${(errors.description && touched.description ? ' is-invalid' : '')}`
                     }
@@ -188,11 +216,12 @@ class CreateBugReportForm extends React.Component {
                     multiple
                     type="file"
                     accept="image/*"
-                    ref={(inputPhotos) => { this.inputPhotos = inputPhotos; }}
-                    className={
-                      `form-control ${(errors.photos && touched.photos ? ' is-invalid' : '')}`
-                    }
                     onChange={this.handleFileChanging}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <BugReportImageCarousel
+                    photos={isImageValid ? photos : []}
                   />
                 </FormGroup>
                 <br />
@@ -232,17 +261,23 @@ CreateBugReportForm.propTypes = {
   locationLatitude: PropTypes.number.isRequired,
   isActive: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  isFailed: PropTypes.bool.isRequired,
   onClose: PropTypes.objectOf.isRequired,
   createBugReport: PropTypes.func.isRequired,
+  userId: PropTypes.bool.isRequired,
+  routeCoordinates: PropTypes.objectOf.isRequired,
+  getBugReportRectangle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   isLoading: state.createBugReport.isLoading,
   isFailed: state.createBugReport.isFailed,
+  userId: state.authorization.userId,
 });
 
 const mapDispatchToProps = {
   createBugReport: createBRactions.createBugReport,
+  getBugReportRectangle: rectangleBRactions.getBugReportRectangle,
 };
 
 export default connect(

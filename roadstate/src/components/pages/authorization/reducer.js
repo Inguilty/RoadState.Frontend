@@ -60,7 +60,6 @@ const authorizationReducer = (state = initialState, action) => {
       return {
         ...state,
         loggedIn: false,
-        userId: 'fe640abd-37af-4aa7-8b65-04d060200361',
         token: '',
       };
     default:

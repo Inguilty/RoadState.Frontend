@@ -64,14 +64,25 @@ class CreateBugReportForm extends React.Component {
       createBugReport, locationLongitude, locationLatitude, userId,
     } = this.props;
     if (isImageValid === true && userId !== undefined && userId !== '') {
-      createBugReport({
-        problemState,
-        description,
-        photos,
-        longitude: locationLongitude,
-        latitude: locationLatitude,
-        userId,
-      });
+      if (userId !== undefined && userId !== '') {
+        createBugReport({
+          problemState,
+          description,
+          photos,
+          longitude: locationLongitude,
+          latitude: locationLatitude,
+          userId,
+        });
+      } else {
+        createBugReport({
+          problemState,
+          description,
+          photos,
+          longitude: locationLongitude,
+          latitude: locationLatitude,
+          userId: '8723258e-d2c9-4823-bb8d-9b532b24c5cc',
+        });
+      }
     } else {
       this.setState({ imageErrorType: 'noImage', isImageValid: false });
       this.handleImageAlertShow();

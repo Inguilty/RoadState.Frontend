@@ -39,6 +39,14 @@ class WithBugReport extends Component {
     }
   };
 
+  componentDidUpdate = (prevProps) => {
+    const { authorization, loadUserName } = this.props;
+    const { userId } = authorization;
+    if (userId !== prevProps.authorization.userId) {
+      loadUserName(userId);
+    }
+  };
+
   handleOpen = () => {
     this.setState({ isModalOpened: true });
   };

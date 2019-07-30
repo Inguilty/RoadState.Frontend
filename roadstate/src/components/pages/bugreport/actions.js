@@ -62,7 +62,7 @@ export const LOAD_USER_NAME_FAILURE = 'users/LOAD_USER_NAME_FAILURE';
 
 export const loadUserName = id => async (dispatch) => {
   dispatch({ type: LOAD_USER_NAME_REQUEST });
-  const response = await api.loadCurrentUser(id);
+  const response = await api.getUserCredentials(id);
   if (response.status === 200) {
     dispatch({ type: LOAD_USER_NAME_SUCCESS, userName: response.data.userName });
   } else {

@@ -329,6 +329,7 @@ const BugReport = ({
         <Modal.Body>
           <h5>
             Created by
+            {' '}
             {bugReport.authorName}
           </h5>
           {loggedIn ? (

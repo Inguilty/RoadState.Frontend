@@ -262,6 +262,7 @@ class ViewMap extends Component {
         <CreateBugReport
           locationLongitude={todoList.BRLocation.lng}
           locationLatitude={todoList.BRLocation.lat}
+          routeCoordinates={routeCoords}
         />
       </Popup>
     ) : null;

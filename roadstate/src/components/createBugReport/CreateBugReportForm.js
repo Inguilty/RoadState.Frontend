@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import * as createBRactions from './actions';
 import { Spinner } from '../Spinner';
 import BugReportImageCarousel from './BugReportImageCarousel';
+import * as rectangleBRactions from '../viewmap/actions';
 
 export const MAX_BUG_REPORT_IMAGE_SIZE = 16 * 1024 * 1024;
 export const MAX_BUG_REPORT_IMAGES_NUMBER = 5;
@@ -42,10 +43,22 @@ class CreateBugReportForm extends React.Component {
       .required('Description is required'),
   });
 
+  calculateRectanglePoints = (routeCoords) => {
+    const { getBugReportRectangle } = this.props;
+    if (routeCoords.length !== 0) {
+      const minLat = Math.min(...routeCoords.map(x => x.lat));
+      const minLng = Math.min(...routeCoords.map(x => x.lng));
+      const maxLat = Math.max(...routeCoords.map(x => x.lat));
+      const maxLng = Math.max(...routeCoords.map(x => x.lng));
+      getBugReportRectangle(minLng, maxLng, minLat, maxLat, routeCoords);
+    }
+  };
+
   componentWillReceiveProps = (nextProps) => {
-    const { isLoading, isFailed } = this.props;
+    const { isLoading, isFailed, routeCoordinates } = this.props;
     if (nextProps.isLoading !== isLoading || nextProps.isFailed !== isFailed) {
       if (nextProps.isLoading === false && nextProps.isFailed === false) {
+        this.calculateRectanglePoints(routeCoordinates);
         this.setState(this.initialState);
         this.handleClose();
       }
@@ -252,6 +265,8 @@ CreateBugReportForm.propTypes = {
   onClose: PropTypes.objectOf.isRequired,
   createBugReport: PropTypes.func.isRequired,
   userId: PropTypes.bool.isRequired,
+  routeCoordinates: PropTypes.objectOf.isRequired,
+  getBugReportRectangle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -262,6 +277,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   createBugReport: createBRactions.createBugReport,
+  getBugReportRectangle: rectangleBRactions.getBugReportRectangle,
 };
 
 export default connect(

@@ -4,7 +4,7 @@ const initialState = {
   loggedIn: false,
   loggingIn: false,
   loggingOut: false,
-  userId: '8723258e-d2c9-4823-bb8d-9b532b24c5cc',
+  userId: 'fe640abd-37af-4aa7-8b65-04d060200361',
   token: '',
   errorMessage: '',
 };
@@ -60,7 +60,7 @@ const authorizationReducer = (state = initialState, action) => {
       return {
         ...state,
         loggedIn: false,
-        userId: '',
+        userId: 'fe640abd-37af-4aa7-8b65-04d060200361',
         token: '',
       };
     default:
